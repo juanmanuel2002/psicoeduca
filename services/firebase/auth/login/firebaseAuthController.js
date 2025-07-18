@@ -46,7 +46,6 @@ export async function loginWithGoogle(req, res) {
     return res.status(400).json({ error: "Token de Google no proporcionado." });
   }
   try {
-    console.log('client', client);
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience: config.google.clientId,

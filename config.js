@@ -1,6 +1,5 @@
-import dotenv from 'dotenv';
-
-dotenv.config();
+import dotenvx from '@dotenvx/dotenvx';
+dotenvx.config();
 
 const config = {
     firebase: {

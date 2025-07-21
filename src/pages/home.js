@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from 'react';
 import "../styles/home.css";
 import Header from "../components/header";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const services = [
   {
@@ -83,11 +85,14 @@ const books = [
 ];
 
 export default function Home() {
+    useEffect(() => {
+        AOS.init({ duration: 1000, once: false });
+    }, []);
   return (
     <div className="home-container">
       <Header />
 
-      <section className="hero">
+      <section data-aos="fade-up" className="hero">
         <div className="hero-content">
             <div className="hero-text">
             <span className="hero-subtitle">✨ Tu bienestar mental es nuestra prioridad.</span>
@@ -110,7 +115,7 @@ export default function Home() {
 
 
 
-      <section id="services" className="services-section">
+      <section data-aos="fade-up" id="services" className="services-section">
         <h2>Servicios Psicológicos</h2>
         <div className="services-grid">
           {services.map(({ title, description, icon }, idx) => (
@@ -123,7 +128,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="books" className="books-section">
+      <section data-aos="fade-up" id="books" className="books-section">
         <h2>Manuales y Libros</h2>
         <div className="books-desc" style={{fontSize: '1.1rem', color: 'var(--color-text-light)', marginBottom: 32}}>
           Amplía tus conocimientos con nuestra colección de recursos educativos de alta calidad
@@ -141,7 +146,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="english" className="english-section">
+      <section data-aos="fade-up" id="english" className="english-section">
         <h2>Clases de Inglés (Próximamente)</h2>
         <p>
           Apúntate a nuestra lista de espera para recibir noticias sobre nuestras

@@ -1,0 +1,26 @@
+:root {
+  --color-primary: #3B82F6;
+  --color-primary-dark: #2563EB;
+  --color-primary-light: #DBEAFE;
+  --color-secondary: #6D28D9;
+  --color-accent: #10B981;
+  --color-success: #22C55E;
+  --color-warning: #FBBF24;
+  --color-danger: #EF4444;
+  --color-bg: #F9FAFB;
+  --color-bg-alt: #F3F4F6;
+  --color-text: #374151;
+  --color-text-light: #6B7280;
+  --color-white: #fff;
+  --color-card: #fff;
+  --color-card-shadow: rgba(59,130,246,0.15);
+  --color-card-shadow-hover: rgba(59,130,246,0.3);
+  --color-book-shadow: rgba(16,185,129,0.15);
+  --color-book-shadow-hover: rgba(16,185,129,0.3);
+  --color-header: rgb(123, 100, 151);
+}
+
+body, html, #root {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}

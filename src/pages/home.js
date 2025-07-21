@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import "../styles/home.css";
+import Header from "../components/header";
 
 const services = [
   {
@@ -82,27 +83,14 @@ const books = [
 ];
 
 export default function Home() {
-  const [showAllBooks, setShowAllBooks] = useState(false);
-
   return (
     <div className="home-container">
-      <header className="header">
-        <div className="logo">
-            <img src="/baner.png" alt="Logo Psicoeduca" className="logo-image" />
-            <div className="logo-text">Psicoeduca</div>
-        </div>
-        <nav className="nav">
-          <a href="#services">Servicios</a>
-          <a href="#books">Manuales y Libros</a>
-          <a href="#english">Clases de Inglés</a>
-          <a href="#contact">Contacto</a>
-        </nav>
-      </header>
+      <Header />
 
       <section className="hero">
         <div className="hero-content">
             <div className="hero-text">
-            <a className="hero-subtitle">✨ Tu bienestar mental es nuestra prioridad.</a>
+            <span className="hero-subtitle">✨ Tu bienestar mental es nuestra prioridad.</span>
             <h1>Bienestar emocional y aprendizaje a tu alcance</h1>
             <p>
                 Servicios psicológicos, manuales, libros educativos y clases de inglés
@@ -110,7 +98,7 @@ export default function Home() {
             </p>
             <div className="hero-buttons">
                 <button className="btn primary">Agendar Consulta</button>
-                <button className="btn outline">Ver Materiales</button>
+                <button className="btn outline">Ver Materiales </button>
             </div>
             </div>
             <div className="hero-image">
@@ -137,17 +125,20 @@ export default function Home() {
 
       <section id="books" className="books-section">
         <h2>Manuales y Libros</h2>
-        <div className="books-grid">
-          {(showAllBooks ? books : books.slice(0, 3)).map(({ title, description }, idx) => (
-            <div key={idx} className="book-card">
-              <h3>{title}</h3>
-              <p>{description}</p>
-            </div>
-          ))}
+        <div className="books-desc" style={{fontSize: '1.1rem', color: 'var(--color-text-light)', marginBottom: 32}}>
+          Amplía tus conocimientos con nuestra colección de recursos educativos de alta calidad
         </div>
-        <button className="btn ghost" onClick={() => setShowAllBooks(!showAllBooks)}>
-          {showAllBooks ? "Ver menos" : "Ver más"}
-        </button>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+            <div className="books-grid">
+            {books.map(({ title, description }, idx) => (
+                <div key={idx} className="book-card">
+                <img src="/baner.png" alt={title} className="book-img" />
+                <h3>{title}</h3>
+                <p>{description}</p>
+                </div>
+            ))}
+            </div>
+        </div>
       </section>
 
       <section id="english" className="english-section">

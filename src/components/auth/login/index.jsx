@@ -17,7 +17,8 @@ const Login = () => {
             await login(email, password);
             setIsSignedIn(true);
         } catch (error) {
-            setError(error.message || "Usuario o contraseña incorrectos");
+            setError("Usuario o contraseña incorrectos");
+            console.error("Error al iniciar sesión:", error);
         }
     };
 

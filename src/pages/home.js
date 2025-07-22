@@ -1,8 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import "../styles/home.css";
 import Header from "../components/header";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+
+const featuredCourses = {
+  nuevos: [
+    { title: "Curso de Mindfulness", desc: "Aprende técnicas de atención plena para el día a día." },
+    { title: "Gestión del Estrés", desc: "Herramientas prácticas para reducir el estrés laboral y personal." },
+    { title: "Comunicación Asertiva", desc: "Mejora tus relaciones con habilidades de comunicación." },
+  ],
+  recomendados: [
+    { title: "Autoestima y Crecimiento", desc: "Descubre tu potencial y fortalece tu autoestima." },
+    { title: "Psicología Infantil", desc: "Entiende el desarrollo emocional de los niños." },
+    { title: "Terapia Breve", desc: "Soluciones rápidas y efectivas para problemas comunes." },
+  ]
+};
 
 const services = [
   {
@@ -85,9 +98,10 @@ const books = [
 ];
 
 export default function Home() {
-    useEffect(() => {
-        AOS.init({ duration: 1000, once: false });
-    }, []);
+  const [tab, setTab] = useState('nuevos');
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: false });
+  }, []);
   return (
     <div className="home-container">
       <Header />
@@ -95,7 +109,7 @@ export default function Home() {
       <section data-aos="fade-up" className="hero">
         <div className="hero-content">
             <div className="hero-text">
-            <span className="hero-subtitle">✨ Tu bienestar mental es nuestra prioridad.</span>
+            <span className="hero-subtitle">✨ Tu bienestar es nuestra prioridad.</span>
             <h1>Bienestar emocional y aprendizaje a tu alcance</h1>
             <p>
                 Servicios psicológicos, manuales, libros educativos y clases de inglés
@@ -113,8 +127,6 @@ export default function Home() {
         </div>
        </section>
 
-
-
       <section data-aos="fade-up" id="services" className="services-section">
         <h2>Servicios Psicológicos</h2>
         <div className="services-grid">
@@ -128,21 +140,49 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Cursos Destacados */}
+      <section data-aos="fade-up" id="cursos" className="featured-courses-section">
+        <h2> Cursos Destacados</h2>
+        <div style={{display:'flex', justifyContent:'center', gap:16, marginBottom:32}}>
+          <button
+            className={tab === 'nuevos' ? 'btn primary' : 'btn outline'}
+            onClick={() => setTab('nuevos')}
+          >Nuevos</button>
+          <button
+            className={tab === 'recomendados' ? 'btn primary' : 'btn outline'}
+            onClick={() => setTab('recomendados')}
+          >Recomendados</button>
+        </div>
+        <div className="featured-courses-grid">
+          {featuredCourses[tab].map((course, idx) => (
+            <div key={idx} className="featured-course-card">
+              <div className="featured-course-title">{course.title}</div>
+              <div className="featured-course-desc">{course.desc}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section data-aos="fade-up" id="books" className="books-section">
-        <h2>Manuales y Libros</h2>
+        <h2>Recursos Disponibles</h2>
         <div className="books-desc" style={{fontSize: '1.1rem', color: 'var(--color-text-light)', marginBottom: 32}}>
           Amplía tus conocimientos con nuestra colección de recursos educativos de alta calidad
         </div>
         <div style={{ display: "flex", justifyContent: "center" }}>
-            <div className="books-grid">
-            {books.map(({ title, description }, idx) => (
-                <div key={idx} className="book-card">
+          <div className="books-grid">
+            {books.slice(0, 3).map(({ title, description }, idx) => (
+              <div key={idx} className="book-card">
                 <img src="/baner.png" alt={title} className="book-img" />
                 <h3>{title}</h3>
                 <p>{description}</p>
-                </div>
+              </div>
             ))}
-            </div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
+          <button className="btn outline" onClick={() => window.location.href = '/recursos'}>
+            Ver Más
+          </button>
         </div>
       </section>
 

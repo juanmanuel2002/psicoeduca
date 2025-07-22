@@ -10,8 +10,8 @@ export default function Header() {
   const navigate = useNavigate();
   
   useEffect(() => {
-          AOS.init({ duration: 1000, once: false });
-      }, []);
+    AOS.init({ duration: 1000, once: false });
+  }, []);
 
   return (
     <>
@@ -38,10 +38,11 @@ export default function Header() {
       </header>
 
       {/* Barra de navegación */}
-      <nav data-aos="fade-up" className={`nav-bar ${open ? "open" : ""}`}>
+      <nav className={`nav-bar ${open ? "open" : ""}`}>
         <div className="nav-bar-inner">
           <a href="#services" onClick={() => setOpen(false)}>Servicios</a>
-          <a href="#books" onClick={() => setOpen(false)}>Manuales y Libros</a>
+          <a href="#cursos" onClick={() => setOpen(false)}>Cursos</a>
+          <a href="#books" onClick={() => setOpen(false)}>Recursos</a>
           <a href="#english" onClick={() => setOpen(false)}>Clases de Inglés</a>
           <a href="#contact" onClick={() => setOpen(false)}>Contacto</a>
           <div className="header-btns-mobile">
@@ -51,9 +52,6 @@ export default function Header() {
         </div>
         {open && (
           <>
-            {/*<button className="menu-close" aria-label="Cerrar menú" onClick={() => setOpen(false)}>
-              <CloseIcon fontSize="large" />
-            </button>*/}
             <div className="nav-backdrop" onClick={() => setOpen(false)} />
           </>
         )}

@@ -17,11 +17,11 @@ export default function Header() {
     <>
       {/* Barra superior */}
       <header className="header header-top">
-        <div className="logo">
+        <div data-aos="fade-up" className="logo">
           <img src="/baner.png" alt="Logo Psicoeduca" className="logo-image" />
           <div className="logo-text">Psicoeduca</div>
         </div>
-        <div className="header-actions">
+        <div data-aos="fade-up" className="header-actions">
           <div className="header-btns-desktop">
             <button onClick={() => navigate('/login')} className="header-btn">Inicia sesión</button>
             <button onClick={() => navigate('/signup')} className="header-btn">Regístrate</button>
@@ -39,12 +39,12 @@ export default function Header() {
 
       {/* Barra de navegación */}
       <nav className={`nav-bar ${open ? "open" : ""}`}>
-        <div className="nav-bar-inner">
-          <a href="#services" onClick={() => setOpen(false)}>Servicios</a>
-          <a href="#cursos" onClick={() => setOpen(false)}>Cursos</a>
-          <a href="#books" onClick={() => setOpen(false)}>Recursos</a>
-          <a href="#english" onClick={() => setOpen(false)}>Clases de Inglés</a>
-          <a href="#contact" onClick={() => setOpen(false)}>Contacto</a>
+        <div data-aos="fade-up" className="nav-bar-inner">
+          <a href="#services" onClick={() => {navigate('/home');setOpen(false)}}>Servicios</a>
+          <a href="#cursos" onClick={() => {navigate('/home');setOpen(false)}}>Cursos</a>
+          <a href="#books" onClick={() => {navigate('/home');setOpen(false)}}>Recursos</a>
+          <a href="#english" onClick={() => {navigate('/home');setOpen(false)}}>Clases de Inglés</a>
+          <a href="#contact" onClick={() => {navigate('/home');setOpen(false)}}>Contacto</a>
           <div className="header-btns-mobile">
             <button onClick={() => navigate('/login')} className="header-btn">Inicia sesión</button>
             <button onClick={() => navigate('/signup')} className="header-btn">Regístrate</button>

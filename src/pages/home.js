@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import "../styles/home.css";
+import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';
 import Header from "../components/header";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import "../styles/home.css";
 
 const featuredCourses = {
   nuevos: [
@@ -196,8 +197,11 @@ export default function Home() {
         <button className="btn primary">Unirme a la lista</button>
       </section>
 
+      {/* Botón flotante de WhatsApp siempre visible */}
+      <WhatsAppFloat />
+
       <footer id="contact" className="footer">
-        <p>© 2025 PsicoAprende. Todos los derechos reservados.</p>
+        <p>© 2025 Psicoeduca. Todos los derechos reservados.</p>
       </footer>
     </div>
   );

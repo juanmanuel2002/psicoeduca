@@ -4,6 +4,7 @@ import ForgotPassword from './components/auth/forgot-password';
 import Signup from './components/auth/signup';
 import Home from './pages/home';
 import Recursos from './pages/recursos';
+import RecursoDetalle from './pages/recursoDetalle';
 import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/home" element={<Home />} />
                     <Route path="/recursos" element={<Recursos />} />
+                    <Route path="/recurso/:id" element={<RecursoDetalle />} />
                     <Route path="/" element={<Navigate to="/home" />} />
                 </Routes>
             </Router>

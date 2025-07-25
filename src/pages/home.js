@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getRecursos } from '../services/recursosService';
+import { useNavigate } from 'react-router-dom';
 import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';
 import Header from "../components/header";
 import Footer from '../components/footer';
@@ -95,7 +96,7 @@ const services = [
 export default function Home() {
   const [tab, setTab] = useState('nuevos');
   const [recursos, setRecursos] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     AOS.init({ duration: 1000, once: false });
   }, []);
@@ -174,13 +175,20 @@ export default function Home() {
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div className="books-grid">
             {recursos.slice(0, 3).map((recurso, idx) => (
+              <div
+                key={recurso.id || idx}
+                className="book-card"
+                style={{ cursor: 'pointer' }}
+                onClick={() => navigate(`/recurso/${recurso.id}`)}
+              >
               <div key={recurso.id || idx} className="book-card">
                 <img src={recurso.imagenFutura || "/baner.png"} alt={recurso.nombre} className="book-img" />
                 <h3>{recurso.nombre}</h3>
                 <p>{recurso.descripcion}</p>
-                {typeof recurso.costo === 'number' && recurso.costo > 0 && (
-                  <div className="book-cost">${recurso.costo}</div>
+                {typeof recurso.costo === 'number' && (
+                  <div className="book-cost">{recurso.costo > 0 ? `$${recurso.costo}` : 'Gratis'}</div>
                 )}
+              </div>
               </div>
             ))}
           </div>

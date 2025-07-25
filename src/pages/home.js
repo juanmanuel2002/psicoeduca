@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { getRecursos } from '../services/recursosService';
 import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';
 import Header from "../components/header";
+import Footer from '../components/footer';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import "../styles/home.css";
@@ -89,20 +91,20 @@ const services = [
   },
 ];
 
-const books = [
-  { title: "Mindfulness para Todos", description: "Una guía práctica para la atención plena." },
-  { title: "Manual de Ansiedad", description: "Estrategias para superar la ansiedad cotidiana." },
-  { title: "Psicología Infantil", description: "Comprendiendo el desarrollo emocional de los niños." },
-  { title: "Comunicación Asertiva", description: "Mejora tus relaciones con técnicas efectivas." },
-  { title: "Autoestima y Crecimiento", description: "Construye una mejor versión de ti mismo." },
-  { title: "Gestión del Estrés", description: "Técnicas para mantener la calma en tiempos difíciles." },
-];
 
 export default function Home() {
   const [tab, setTab] = useState('nuevos');
+  const [recursos, setRecursos] = useState([]);
+
   useEffect(() => {
     AOS.init({ duration: 1000, once: false });
   }, []);
+
+    useEffect(() => {
+    getRecursos().then(data => setRecursos(data));
+  }, []);
+
+  
   return (
     <div className="home-container">
       <Header />
@@ -171,11 +173,14 @@ export default function Home() {
         </div>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div className="books-grid">
-            {books.slice(0, 3).map(({ title, description }, idx) => (
-              <div key={idx} className="book-card">
-                <img src="/baner.png" alt={title} className="book-img" />
-                <h3>{title}</h3>
-                <p>{description}</p>
+            {recursos.slice(0, 3).map((recurso, idx) => (
+              <div key={recurso.id || idx} className="book-card">
+                <img src={recurso.imagenFutura || "/baner.png"} alt={recurso.nombre} className="book-img" />
+                <h3>{recurso.nombre}</h3>
+                <p>{recurso.descripcion}</p>
+                {typeof recurso.costo === 'number' && recurso.costo > 0 && (
+                  <div className="book-cost">${recurso.costo}</div>
+                )}
               </div>
             ))}
           </div>
@@ -200,9 +205,7 @@ export default function Home() {
       {/* Botón flotante de WhatsApp siempre visible */}
       <WhatsAppFloat />
 
-      <footer id="contact" className="footer">
-        <p>© 2025 Psicoeduca. Todos los derechos reservados.</p>
-      </footer>
+      <Footer />
     </div>
   );
 }

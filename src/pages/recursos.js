@@ -1,17 +1,16 @@
-import React from "react";
+import React, {useEffect, useState } from "react";
 import "../styles/home.css";
 import Header from "../components/header";
+import Footer from '../components/footer';
+import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';
+import { getRecursos } from '../services/recursosService';
 
-const books = [
-  { title: "Mindfulness para Todos", description: "Una guía práctica para la atención plena." },
-  { title: "Manual de Ansiedad", description: "Estrategias para superar la ansiedad cotidiana." },
-  { title: "Psicología Infantil", description: "Comprendiendo el desarrollo emocional de los niños." },
-  { title: "Comunicación Asertiva", description: "Mejora tus relaciones con técnicas efectivas." },
-  { title: "Autoestima y Crecimiento", description: "Construye una mejor versión de ti mismo." },
-  { title: "Gestión del Estrés", description: "Técnicas para mantener la calma en tiempos difíciles." },
-];
 
 export default function Recursos() {
+  const [recursos, setRecursos] = useState([]);
+  useEffect(() => {
+      getRecursos().then(data => setRecursos(data));
+    }, []);
   return (
     <div className="home-container">
       <Header />
@@ -22,16 +21,21 @@ export default function Recursos() {
         </div>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div className="books-grid">
-            {books.map(({ title, description }, idx) => (
-              <div key={idx} className="book-card">
-                <img src="/baner.png" alt={title} className="book-img" />
-                <h3>{title}</h3>
-                <p>{description}</p>
+            {recursos.map((recurso, idx) => (
+              <div key={recurso.id || idx} className="book-card">
+                <img src={recurso.imagenFutura || "/baner.png"} alt={recurso.nombre} className="book-img" />
+                <h3>{recurso.nombre}</h3>
+                <p>{recurso.descripcion}</p>
+                {typeof recurso.costo === 'number' && recurso.costo > 0 && (
+                  <div className="book-cost">${recurso.costo}</div>
+                )}
               </div>
             ))}
           </div>
         </div>
       </section>
+      <WhatsAppFloat />
+      <Footer />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {Navigate, Link} from "react-router-dom";
-import { login, loginWithGoogle, getLoginWithGoogle } from "../../../services/authService";
+import { login, loginWithGoogle} from "../../../services/authService";
 import '../../../styles/login.css';
 
 const Login = () => {
@@ -26,7 +26,7 @@ const Login = () => {
     useEffect(() => {
       async function fetchGoogleClientIdAndInit() {
         try {
-         const clientId = await getLoginWithGoogle();
+         const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
           if (!clientId) {
             throw new Error("No se pudo obtener Google Client ID");
           }

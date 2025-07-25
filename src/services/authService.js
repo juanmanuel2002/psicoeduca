@@ -10,11 +10,11 @@ export const login = async (email, password) => {
   return res.json();
 };
 
-export const register = async (email, password) => {
+export const register = async (email, password, name) => {
   const res = await fetch(`${API_URL}/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, password, name }),
   });
   if (!res.ok) throw new Error(await res.text());
   return res.json();

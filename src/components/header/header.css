@@ -204,6 +204,7 @@
   font-weight: 700;
   font-size: 1.5rem;
   -webkit-user-select: none;
+  user-select: none;
   color: var(--color-header);
   display: flex;
   align-items: center;

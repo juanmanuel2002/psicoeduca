@@ -4,6 +4,7 @@ import { register } from "../../../services/authService";
 import '../../../styles/login.css';
 
 const Signup = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -39,7 +40,7 @@ const Signup = () => {
     }
     setLoading(true);
     try {
-      await register(email, password);
+      await register(email, password, name);
       setIsSignedUp(true);
     } catch (err) {
       if (err.code === "auth/email-already-in-use") {
@@ -100,6 +101,19 @@ const Signup = () => {
           )
         )}
         <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="nombre">Nombre:</label>
+            <input
+              type="name"
+              id="name"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+                if (error) setError("");
+              }}
+              required
+            />
+          </div>
           <div className="form-group">
             <label htmlFor="email">Email:</label>
             <input

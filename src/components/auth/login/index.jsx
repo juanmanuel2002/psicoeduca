@@ -19,7 +19,7 @@ const Login = () => {
         try {
             let userData = await login(email, password);
             setIsSignedIn(true);
-            setAuthUser(userData.user);
+            setAuthUser(userData.cliente);
         } catch (error) {
             setError("Usuario o contraseña incorrectos");
             console.error("Error al iniciar sesión:", error);

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getRecursos } from '../services/recursosService';
+import { getCursos } from '../services/cursosService';
 import { useNavigate } from 'react-router-dom';
 import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';
 import Header from "../components/header";
@@ -7,19 +8,6 @@ import Footer from '../components/footer';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import "../styles/home.css";
-
-const featuredCourses = {
-  nuevos: [
-    { title: "Curso de Mindfulness", desc: "Aprende técnicas de atención plena para el día a día." },
-    { title: "Gestión del Estrés", desc: "Herramientas prácticas para reducir el estrés laboral y personal." },
-    { title: "Comunicación Asertiva", desc: "Mejora tus relaciones con habilidades de comunicación." },
-  ],
-  recomendados: [
-    { title: "Autoestima y Crecimiento", desc: "Descubre tu potencial y fortalece tu autoestima." },
-    { title: "Psicología Infantil", desc: "Entiende el desarrollo emocional de los niños." },
-    { title: "Terapia Breve", desc: "Soluciones rápidas y efectivas para problemas comunes." },
-  ]
-};
 
 const services = [
   {
@@ -96,6 +84,7 @@ const services = [
 export default function Home() {
   const [tab, setTab] = useState('nuevos');
   const [recursos, setRecursos] = useState([]);
+  const [cursos, setCursos] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
     AOS.init({ duration: 1000, once: false });
@@ -104,6 +93,14 @@ export default function Home() {
     useEffect(() => {
     getRecursos().then(data => setRecursos(data));
   }, []);
+
+  useEffect(() => {
+    getCursos().then(data => setCursos(data));
+  }, []);
+
+    // Filtrar cursos por estado
+  const cursosNuevos = cursos.filter(c => (c.estado || '').toLowerCase() === 'nuevo');
+  const cursosRecomendados = cursos.filter(c => (c.estado || '').toLowerCase() === 'recomendado');
 
   
   return (
@@ -158,10 +155,19 @@ export default function Home() {
           >Recomendados</button>
         </div>
         <div className="featured-courses-grid">
-          {featuredCourses[tab].map((course, idx) => (
-            <div key={idx} className="featured-course-card">
-              <div className="featured-course-title">{course.title}</div>
-              <div className="featured-course-desc">{course.desc}</div>
+          {(tab === 'nuevos' ? cursosNuevos : cursosRecomendados).map((curso, idx) => (
+            <div
+              key={curso.id || idx}
+              className="featured-course-card"
+              style={{ cursor: 'pointer' }}
+              onClick={() => navigate(`/curso/${curso.id}`)}
+            >
+              <img src={curso.imagenFutura || "/baner.png"} alt={curso.nombre} style={{width: '100%', maxWidth: 120, height: 80, objectFit: 'cover', borderRadius: 8, marginBottom: 12, background:'#f5f5f5'}} />
+              <div className="featured-course-title">{curso.nombre}</div>
+              <div className="featured-course-desc">{curso.descripcion}</div>
+              {typeof curso.costo === 'number' && (
+                <div className="book-cost">{curso.costo > 0 ? `$${curso.costo}` : 'Gratis'}</div>
+              )}
             </div>
           ))}
         </div>

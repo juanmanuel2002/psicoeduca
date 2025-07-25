@@ -1,3 +1,4 @@
+import { getCitas, createCita, updateCita, deleteCita } from './dbController.js';
 import express from 'express';
 import { getCursos, getRecursos, createCurso, createRecurso, updateRecursos, updateCursos} from './dbController.js';
 import { firebaseAuthMiddleware } from '../middleware/firebaseAuthMiddleware.js';
@@ -11,5 +12,9 @@ router.put('/cursos', firebaseAuthMiddleware, updateCursos);
 router.post('/recursos', firebaseAuthMiddleware, createRecurso);
 router.put('/recursos', firebaseAuthMiddleware, updateRecursos);
 
+router.get('/citas', firebaseAuthMiddleware, getCitas);
+router.post('/citas', firebaseAuthMiddleware, createCita);
+router.put('/citas', firebaseAuthMiddleware, updateCita);
+router.delete('/citas', firebaseAuthMiddleware, deleteCita);
 
 export default router;

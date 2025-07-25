@@ -5,6 +5,7 @@ import {
   sendPasswordResetEmail,
 } from 'firebase/auth';
 import config from '../../../../config.js';
+import admin from 'firebase-admin';
 import { OAuth2Client } from 'google-auth-library';
 
 const client = new OAuth2Client(config.google.clientId);
@@ -12,23 +13,37 @@ const client = new OAuth2Client(config.google.clientId);
 export async function loginWithEmail(req, res) {
   const { email, password } = req.body;
   try {
-    console.log('Attempting to log in with email:', email);
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    res.status(200).json({ user: userCredential.user });
+    const user = userCredential.user;
+    const clientesSnap = await admin.firestore().collection('usuarios').where('email', '==', email).get();
+    let cliente = null;
+    if (!clientesSnap.empty) {
+      cliente = clientesSnap.docs[0].data();
+      cliente.id = clientesSnap.docs[0].id;
+    }
+    res.status(200).json({ user, cliente });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 }
 
 export async function registerWithEmail(req, res) {
-  const { email, password } = req.body;
+  const { email, password, name } = req.body;
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    res.status(201).json({ user: userCredential.user });
+    const user = userCredential.user;
+    await admin.firestore().collection('usuarios').add({
+      email,
+      name,
+      uid: user.uid,
+      createdAt: new Date()
+    });
+    res.status(201).json({ user });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 }
+
 
 export async function getLoginWithGoogle(req, res) {
   try{

@@ -1,7 +1,67 @@
-
 import admin from 'firebase-admin';
 import { db } from '../setup.js';
 import { collection, getDocs} from 'firebase/firestore';
+
+export async function getCitas(req, res) {
+  try {
+    const citasSnapshot = await admin.firestore().collection('citas').get();
+    const citas = citasSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    res.status(200).json(citas);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export async function createCita(req, res) {
+  if (!req.user || !req.user.uid) {
+    return res.status(401).json({ error: 'No autorizado. Debes iniciar sesión.' });
+  }
+  const { fecha, hora, usuarioId, descripcion } = req.body;
+  try {
+    const docRef = await admin.firestore().collection('citas').add({
+      fecha,
+      hora,
+      usuarioId,
+      descripcion,
+      createdBy: req.user.uid
+    });
+    res.status(201).json({ id: docRef.id });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export async function updateCita(req, res) {
+  if (!req.user || !req.user.uid) {
+    return res.status(401).json({ error: 'No autorizado. Debes iniciar sesión.' });
+  }
+  const { id, ...data } = req.body;
+  if (!id) {
+    return res.status(400).json({ error: 'El campo id es requerido.' });
+  }
+  try {
+    await admin.firestore().collection('citas').doc(id).update(data);
+    res.status(200).json({ message: 'Cita actualizada correctamente.' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export async function deleteCita(req, res) {
+  if (!req.user || !req.user.uid) {
+    return res.status(401).json({ error: 'No autorizado. Debes iniciar sesión.' });
+  }
+  const { id } = req.body;
+  if (!id) {
+    return res.status(400).json({ error: 'El campo id es requerido.' });
+  }
+  try {
+    await admin.firestore().collection('citas').doc(id).delete();
+    res.status(200).json({ message: 'Cita eliminada correctamente.' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
 
 export async function getCursos(req, res) {
   try {

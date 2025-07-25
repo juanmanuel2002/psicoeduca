@@ -17,7 +17,7 @@ export default function Header() {
     <>
       {/* Barra superior */}
       <header className="header header-top">
-        <div data-aos="fade-up" className="logo">
+        <div data-aos="fade-up" className="logo" onClick={() => navigate('/home')}>
           <img src="/baner.png" alt="Logo Psicoeduca" className="logo-image" />
           <div className="logo-text">Psicoeduca</div>
         </div>

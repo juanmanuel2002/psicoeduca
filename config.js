@@ -14,6 +14,9 @@ const config = {
     google: {
         clientId: process.env.GOOGLE_CLIENT_ID,
     },
+    firebaseAdmin: {
+        service: process.env.FIREBASE,
+    },
 };
 
 export default config;

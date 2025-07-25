@@ -1,21 +1,25 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {Navigate, Link} from "react-router-dom";
 import { login, loginWithGoogle} from "../../../services/authService";
 import '../../../styles/login.css';
+
+import { AuthContext } from '../../../contexts/authContext/AuthContext';
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isSignedIn, setIsSignedIn] = useState(false);   
     const [error, setError] = useState("");
+    const { login: setAuthUser } = useContext(AuthContext);
 
 
     const onSubmit = async (e) => {
         e.preventDefault();
         setError("");
         try {
-            await login(email, password);
+            let userData = await login(email, password);
             setIsSignedIn(true);
+            setAuthUser(userData.user);
         } catch (error) {
             setError("Usuario o contraseña incorrectos");
             console.error("Error al iniciar sesión:", error);
@@ -36,8 +40,9 @@ const Login = () => {
               callback: async (response) => {
                 try {
                   const { credential } = response;
-                  await loginWithGoogle(credential);
+                  let userData = await loginWithGoogle(credential);
                   setIsSignedIn(true);
+                  setAuthUser( userData.user ); // Ajusta según datos reales
                 } catch (err) {
                   setError("No se pudo iniciar sesión con Google");
                 }
@@ -53,6 +58,7 @@ const Login = () => {
         }
       }
       fetchGoogleClientIdAndInit();
+      // eslint-disable-next-line
     }, []);
 
 

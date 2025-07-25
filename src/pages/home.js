@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { AuthContext } from '../contexts/authContext/AuthContext';
 import { getRecursos } from '../services/recursosService';
 import { getCursos } from '../services/cursosService';
 import { useNavigate } from 'react-router-dom';
@@ -85,7 +86,9 @@ export default function Home() {
   const [tab, setTab] = useState('nuevos');
   const [recursos, setRecursos] = useState([]);
   const [cursos, setCursos] = useState([]);
+  const [showModal, setShowModal] = useState(true);
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
   useEffect(() => {
     AOS.init({ duration: 1000, once: false });
   }, []);
@@ -106,7 +109,7 @@ export default function Home() {
   return (
     <div className="home-container">
       <Header />
-
+      
       <section data-aos="fade-up" className="hero">
         <div className="hero-content">
             <div className="hero-text">

@@ -1,4 +1,5 @@
 import React from 'react';
+import {AuthProvider} from './contexts/authContext/AuthContext';
 import Login from './components/auth/login';
 import ForgotPassword from './components/auth/forgot-password';
 import Signup from './components/auth/signup';
@@ -10,6 +11,7 @@ import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom
 
 const App = () => {
     return (
+        <AuthProvider>
             <Router>
                 <Routes>
                     <Route path="/login" element={<Login />} />
@@ -22,6 +24,7 @@ const App = () => {
                     <Route path="/" element={<Navigate to="/home" />} />
                 </Routes>
             </Router>
+        </AuthProvider>
     );
 };
 

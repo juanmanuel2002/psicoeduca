@@ -89,16 +89,16 @@ export async function updateCursos(req, res) {
   if (!req.user || !req.user.uid) {
     return res.status(401).json({ error: 'No autorizado. Debes iniciar sesión.' });
   }
-  const recursos = req.body;
-  if (!Array.isArray(recursos)) {
-    return res.status(400).json({ error: 'El cuerpo debe ser un array de recursos.' });
+  const cursos = req.body;
+  if (!Array.isArray(cursos)) {
+    return res.status(400).json({ error: 'El cuerpo debe ser un array de cursos.' });
   }
   try {
     const batch = admin.firestore().batch();
-    recursos.forEach(recurso => {
-      if (!recurso.id) return;
-      const docRef = admin.firestore().collection('cursos').doc(recurso.id);
-      const { id, ...data } = recurso;
+    cursos.forEach(curso => {
+      if (!curso.id) return;
+      const docRef = admin.firestore().collection('cursos').doc(curso.id);
+      const { id, ...data } = curso;
       batch.update(docRef, data);
     });
     await batch.commit();

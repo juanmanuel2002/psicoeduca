@@ -26,6 +26,12 @@ export default function RecursoDetalle() {
       AOS.init({ duration: 1000, once: false });
     }, []);
 
+  const descargarPDF = () => {
+    if (!recurso || !recurso.archivoDriveId) return;
+    const url = `https://drive.google.com/uc?export=download&id=${recurso.archivoDriveId}`;
+    window.open(url, '_blank');
+  }
+  
   if (loading) return <div className="home-container"><Header /><div style={{textAlign:'center', display: 'center',marginTop:64}}><CircularProgress /><p>Cargando...</p></div></div>;
   
   if (!recurso) return <div className="home-container"><Header /><div style={{textAlign:'center',marginTop:64}}>Recurso no encontrado</div></div>;
@@ -43,7 +49,18 @@ export default function RecursoDetalle() {
               {recurso.costo > 0 ? `$${recurso.costo}` : 'Gratis'}
             </div>
           )}
-          <button className="btn primary">Adquirir</button>
+          <button
+            className="btn primary"
+            onClick={() => {
+              if (recurso.costo === 0) {
+                descargarPDF();
+              } else {
+                alert('Funcionalidad de pago aún no implementada.');
+              }
+            }}
+          >
+            Adquirir
+          </button>
         </div>
       </section>
       <WhatsAppFloat />

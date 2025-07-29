@@ -73,7 +73,7 @@ useEffect(() => {
       await crearCita({
         fecha: citaData.fecha,
         hora: citaData.hora,
-        usuarioId: user?.email || user?.id || user?.nombre,
+        usuarioId: user?.name || user?.email || user?.id ,
         descripcion: citaData.descripcion,
       });
       setSuccess(true);

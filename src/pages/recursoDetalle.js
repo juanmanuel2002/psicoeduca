@@ -57,7 +57,7 @@ export default function RecursoDetalle() {
               if (recurso.costo === 0) {
                 descargarPDF();
               } else {
-                window.location.href = `/checkout/${recurso.id}`;
+                window.location.href = `/checkout`;
               }
             }}
           >

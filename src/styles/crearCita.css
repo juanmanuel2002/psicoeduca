@@ -1,5 +1,3 @@
-/* crearCita.css */
-
 .crear-cita-section {
   max-width: 400px;
   margin: 70px auto;
@@ -16,11 +14,13 @@
 .success-message {
   color: green;
   margin-bottom: 12px;
+  margin-top: 15px;
 }
 
 .error-message {
   color: red;
   margin-bottom: 12px;
+  margin-top: 15px;
 }
 
 .crear-cita-form-group {

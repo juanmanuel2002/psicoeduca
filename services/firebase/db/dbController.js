@@ -1,6 +1,8 @@
 import admin from 'firebase-admin';
+import config from '../../../config.js';
 import { db } from '../setup.js';
 import { collection, getDocs} from 'firebase/firestore';
+import { isSlotAvailable, createCalendarEvent} from '../../utils/googleCalendar.js';
 
 export async function getCitas(req, res) {
   try {
@@ -17,6 +19,25 @@ export async function createCita(req, res) {
     return res.status(401).json({ error: 'No autorizado. Debes iniciar sesión.' });
   }
   const { fecha, hora, usuarioId, descripcion } = req.body;
+  const calendarId = config.google.calendarId; 
+
+  // Rango de tiempo del evento
+  const start = new Date(`${fecha}T${hora}:00`);
+  const end = new Date(start.getTime() + 60 * 60 * 1000); // 1 hora después
+
+  
+  const disponible = await isSlotAvailable(calendarId, start.toISOString(), end.toISOString());
+  if (!disponible) {
+    return res.status(409).json({ error: 'El horario ya está ocupado en el calendario.' });
+  }
+
+  await createCalendarEvent(calendarId, {
+    summary: 'Cita Psicoeduca',
+    descripcion,
+    start: { dateTime: start.toISOString(), timeZone: 'America/Mexico_City' },
+    end: { dateTime: end.toISOString(), timeZone: 'America/Mexico_City' },
+  });
+
   try {
     const docRef = await admin.firestore().collection('citas').add({
       fecha,

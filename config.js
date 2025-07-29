@@ -1,4 +1,5 @@
 import dotenvx from '@dotenvx/dotenvx';
+
 dotenvx.config();
 
 const config = {
@@ -13,6 +14,7 @@ const config = {
     },
     google: {
         clientId: process.env.GOOGLE_CLIENT_ID,
+        calendarId: process.env.CALENDAR_ID,
     },
     firebaseAdmin: {
         service: process.env.FIREBASE,

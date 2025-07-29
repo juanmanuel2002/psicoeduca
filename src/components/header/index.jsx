@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useCart } from '../../contexts/cartContext/CartContext';
 import "./header.css";
 import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -10,8 +11,10 @@ import { AuthContext } from '../../contexts/authContext/AuthContext';
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
   const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
+  const { cart, removeFromCart, clearCart } = useCart();
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: false });
@@ -36,9 +39,13 @@ export default function Header() {
               <AccountCircleIcon fontSize="large" />
             </button>
           )}
-          <button className="header-btn cart-btn" aria-label="Carrito">
+          <button className="header-btn cart-btn" aria-label="Carrito" onClick={() => setCartOpen(true)}>
             <ShoppingCartIcon fontSize="medium" />
+            {cart.length > 0 && (
+              <span className="cart-badge">{cart.length}</span>
+            )}
           </button>
+      
           <button className="menu-toggle" aria-label="Abrir menú" onClick={() => setOpen(!open)}>
             <span className="menu-icon">
               <MenuIcon fontSize="large" />
@@ -46,6 +53,7 @@ export default function Header() {
           </button>
         </div>
       </header>
+      
 
       {/* Barra de navegación */}
       <nav className={`nav-bar ${open ? "open" : ""}`}>
@@ -89,6 +97,56 @@ export default function Header() {
           </aside>
         </div>
       )}
+
+      {/* Sidebar del carrito */}
+      {cartOpen && (
+        <div className="cart-sidebar-overlay" onClick={() => setCartOpen(false)}>
+          <aside className="cart-sidebar" onClick={(e) => e.stopPropagation()}>
+            <div className="cart-sidebar-header">
+              <h3>Mi Carrito</h3>
+              <button className="close-btn" onClick={() => setCartOpen(false)}>×</button>
+            </div>
+            {cart.length === 0 ? (
+              <p className="empty-cart-text">Tu carrito está vacío</p>
+            ) : (
+              <div className="cart-items">
+                {cart.map((item, index) => (
+                  <div key={index} className="cart-item" style={{display:'flex', alignItems:'center', marginBottom:16, borderBottom:'1px solid #eee', paddingBottom:8, position:'relative'}}>
+                    <img src={item.imagenFutura || '/baner.png'} alt={item.nombre} style={{width:48, height:48, objectFit:'cover', borderRadius:8, marginRight:12}} />
+                    <div style={{flex:1, display:'flex', flexDirection:'column', justifyContent:'center'}}>
+                      <div style={{fontWeight:'bold', fontSize:15}}>{item.nombre}</div>
+                      <button 
+                        className="remove-btn"
+                        style={{fontSize:11, color:'#e74c3c', background:'none', border:'none', marginTop:4, alignSelf:'flex-start', cursor:'pointer', padding:0}}
+                        onClick={() => removeFromCart(item.id)}
+                      >Eliminar</button>
+                    </div>
+                    <div style={{fontWeight:'bold', fontSize:15, marginLeft:8, minWidth:60, textAlign:'right'}}>
+                      {item.costo > 0 ? `$${item.costo}` : 'Gratis'}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {/* Subtotal y total */}
+            {cart.length > 0 && (
+              <div className="cart-sidebar-footer" style={{borderTop:'1px solid #eee', paddingTop:12, marginTop:8}}>
+                <div style={{display:'flex', justifyContent:'space-between', fontWeight:'bold', fontSize:15, marginBottom:4}}>
+                  <span>Subtotal:</span>
+                  <span>{`$${cart.reduce((acc, item) => acc + (item.costo > 0 ? item.costo : 0), 0)}`}</span>
+                </div>
+                <div style={{display:'flex', justifyContent:'space-between', fontWeight:'bold', fontSize:17, marginBottom:12}}>
+                  <span>Total:</span>
+                  <span>{`$${cart.reduce((acc, item) => acc + (item.costo > 0 ? item.costo : 0), 0)}`}</span>
+                </div>
+                <button className="clear-cart-btn" onClick={clearCart}>Vaciar carrito</button>
+                <button className="checkout-btn" onClick={() => { navigate('/checkout'); setCartOpen(false); }}>Ir a pagar</button>
+              </div>
+            )}
+          </aside>
+        </div>
+      )}
+
     </>
   );
 }

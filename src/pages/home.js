@@ -130,7 +130,7 @@ export default function Home() {
             </p>
             <div className="hero-buttons">
                 <button className="btn primary">Agendar Consulta</button>
-                <button className="btn outline">Ver Materiales </button>
+                <button className="btn outline" onClick={()=>(navigate('/recursos'))}>Ver Materiales </button>
             </div>
             </div>
             <div className="hero-image">

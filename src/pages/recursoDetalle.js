@@ -8,8 +8,10 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import "../styles/recursoDetalle.css";
 import CircularProgress from '@mui/material/CircularProgress';
+import { useCart } from '../contexts/cartContext/CartContext';
 
 export default function RecursoDetalle() {
+  const { addToCart } = useCart();
   const { id } = useParams();
   const [recurso, setRecurso] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -55,11 +57,20 @@ export default function RecursoDetalle() {
               if (recurso.costo === 0) {
                 descargarPDF();
               } else {
-                alert('Funcionalidad de pago aún no implementada.');
+                window.location.href = `/checkout/${recurso.id}`;
               }
             }}
           >
             Adquirir
+          </button>
+          <button
+            className="btn outline"
+            style={{marginTop: 12}}
+            onClick={() => {
+              addToCart(recurso);
+            }}
+          >
+            Agregar al carrito
           </button>
         </div>
       </section>

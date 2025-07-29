@@ -3,6 +3,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
+  signInWithCustomToken,
 } from 'firebase/auth';
 import config from '../../../../config.js';
 import admin from 'firebase-admin';
@@ -66,7 +67,24 @@ export async function loginWithGoogle(req, res) {
       audience: config.google.clientId,
     });
     const payload = ticket.getPayload();
-    res.status(200).json({ user: payload });
+
+    let userRecord;
+    try {
+      userRecord = await admin.auth().getUserByEmail(payload.email);
+    } catch (e) {
+      userRecord = await admin.auth().createUser({
+        email: payload.email,
+        displayName: payload.name,
+        photoURL: payload.picture,
+        emailVerified: payload.email_verified,
+      });
+    }
+
+    const customToken = await admin.auth().createCustomToken(userRecord.uid);
+    const userCredential = await signInWithCustomToken(auth, customToken);
+    payload.stsTokenManager = userCredential.user.stsTokenManager;
+
+    res.status(200).json({ user: payload});
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

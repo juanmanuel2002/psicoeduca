@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();
 
@@ -15,6 +15,12 @@ export function AuthProvider({ children }) {
     setUser(null);
     localStorage.removeItem('token');
   };
+
+  useEffect(() => {
+    window.onbeforeunload = () => {
+      localStorage.removeItem('token');
+    };
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

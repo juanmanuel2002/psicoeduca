@@ -40,8 +40,8 @@ export default function Recursos() {
                 <img src={recurso.imagenFutura || "/baner.png"} alt={recurso.nombre} className="book-img" />
                 <h3>{recurso.nombre}</h3>
                 <p>{recurso.descripcion}</p>
-                {typeof recurso.costo === 'number' && recurso.costo > 0 && (
-                  <div className="book-cost">${recurso.costo}</div>
+                {typeof recurso.costo === 'number' &&  (
+                  <div className="book-cost">{recurso.costo > 0 ? `$${recurso.costo}` : 'Gratis'}</div>
                 )}
               </div>
             ))}

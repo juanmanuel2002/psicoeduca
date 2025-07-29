@@ -4,6 +4,8 @@ import Header from "../components/header";
 import Footer from '../components/footer';
 import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';
 import { getCursos } from '../services/cursosService';
+import { useNavigate } from 'react-router-dom';
+import { useCart } from '../contexts/cartContext/CartContext';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import "../styles/cursoDetalle.css";
@@ -11,8 +13,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 export default function CursoDetalle() {
   const { id } = useParams();
+  const { addToCart } = useCart();
   const [curso, setCurso] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getCursos().then(data => {
@@ -37,13 +41,16 @@ export default function CursoDetalle() {
         <div className="curso-detalle-card">
           <img src={curso.imagenFutura || "/baner.png"} alt={curso.nombre} />
           <h2>{curso.nombre}</h2>
+          <p>{curso.tipo}</p>
           <p>{curso.descripcionLarga}</p>
           {typeof curso.costo === 'number' && (
             <div className="book-cost">
               {curso.costo > 0 ? `$${curso.costo}` : 'Gratis'}
             </div>
           )}
-          <button className="btn primary">Adquirir</button>
+          {curso.tipo === "Asíncrono" ? <button className="btn primary" onClick={()=>{addToCart(curso); navigate('/checkout')}}>Adquirir</button> : 
+          <button className="btn primary">Inscribirse</button>
+          }
         </div>
       </section>
       <WhatsAppFloat />

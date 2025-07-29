@@ -88,7 +88,7 @@ export default function Home() {
   const [tab, setTab] = useState('nuevos');
   const [recursos, setRecursos] = useState([]);
   const [cursos, setCursos] = useState([]);
-  const [tipoCurso, setTipoCurso] = useState();
+  const [tipoCurso, setTipoCurso] = useState('sincronos');
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
@@ -149,12 +149,32 @@ export default function Home() {
               message="Redirigiendo..."
             />
             </div>
+            
             <div className="hero-image">
                 <img src="/baner.png" alt="Banner Psicología y Educación" />
                 <div className="hero-overlay">4.9/5 ⭐ <br />+200 clientes</div>
             </div>
+
+            {/*
+            <div className="hero-image-flip">
+              <div className="flip-inner">
+                <div className="flip-front">
+                  <div className="hero-image">
+                    <img src="/baner.png" alt="Banner Psicología y Educación" />
+                    <div className="hero-overlay">4.9/5 ⭐ <br />+200 clientes</div>
+                  </div>
+                </div>
+                <div className="flip-back">
+                  <div className="hero-image-back">
+                    <p className="flip-text">Bienvenido a Psicología y Educación</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            */}
+
         </div>
-       </section>
+      </section>
 
       <section data-aos="fade-up" id="services" className="services-section">
         <h2>Servicios Psicológicos</h2>

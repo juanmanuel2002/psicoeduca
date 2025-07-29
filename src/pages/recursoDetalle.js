@@ -63,15 +63,18 @@ export default function RecursoDetalle() {
           >
             Adquirir
           </button>
-          <button
-            className="btn outline"
-            style={{marginTop: 12}}
-            onClick={() => {
-              addToCart(recurso);
-            }}
-          >
-            Agregar al carrito
-          </button>
+          {recurso.costo !== 0 && 
+            <button
+              className="btn outline"
+              style={{marginTop: 12}}
+              onClick={() => {
+                
+                addToCart(recurso);
+              }}
+            >
+              Agregar al carrito
+            </button>
+          }
         </div>
       </section>
       <WhatsAppFloat />

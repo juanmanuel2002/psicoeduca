@@ -2,7 +2,6 @@ import React, {useState, useEffect, useContext} from "react";
 import {Navigate, Link} from "react-router-dom";
 import { login, loginWithGoogle} from "../../../services/authService";
 import '../../../styles/login.css';
-
 import { AuthContext } from '../../../contexts/authContext/AuthContext';
 
 const Login = () => {
@@ -19,7 +18,7 @@ const Login = () => {
         try {
             let userData = await login(email, password);
             setIsSignedIn(true);
-            setAuthUser(userData.cliente);
+            setAuthUser(userData.user);
         } catch (error) {
             setError("Usuario o contraseña incorrectos");
             console.error("Error al iniciar sesión:", error);
@@ -42,7 +41,7 @@ const Login = () => {
                   const { credential } = response;
                   let userData = await loginWithGoogle(credential);
                   setIsSignedIn(true);
-                  setAuthUser( userData.user ); // Ajusta según datos reales
+                  setAuthUser( userData.user); 
                 } catch (err) {
                   setError("No se pudo iniciar sesión con Google");
                 }

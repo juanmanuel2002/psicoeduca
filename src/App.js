@@ -9,6 +9,7 @@ import Recursos from './pages/recursos';
 import RecursoDetalle from './pages/recursoDetalle';
 import CursoDetalle from './pages/cursoDetalle';
 import Checkout from './pages/checkout';
+import CrearCita from './pages/crearCita'
 import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
                         <Route path="/recursos" element={<Recursos />} />
                         <Route path="/recurso/:id" element={<RecursoDetalle />} />
                         <Route path="/curso/:id" element={<CursoDetalle />} />
+                        <Route path="/crear-cita" element={<CrearCita />} />
                         <Route path="/" element={<Navigate to="/home" />} />
                     </Routes>
                 </Router>

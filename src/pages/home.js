@@ -129,7 +129,7 @@ export default function Home() {
                 diseñadas para tu desarrollo integral.
             </p>
             <div className="hero-buttons">
-                <button className="btn primary">Agendar Consulta</button>
+                <button className="btn primary"onClick={()=>(navigate('/crear-cita'))}>Agendar Consulta</button>
                 <button className="btn outline" onClick={()=>(navigate('/recursos'))}>Ver Materiales </button>
             </div>
             </div>

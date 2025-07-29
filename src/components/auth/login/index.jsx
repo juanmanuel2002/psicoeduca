@@ -1,13 +1,14 @@
 import React, {useState, useEffect, useContext} from "react";
-import {Navigate, Link} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import { login, loginWithGoogle} from "../../../services/authService";
 import '../../../styles/login.css';
 import { AuthContext } from '../../../contexts/authContext/AuthContext';
 
 const Login = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [isSignedIn, setIsSignedIn] = useState(false);   
+    const [password, setPassword] = useState("");  
     const [error, setError] = useState("");
     const { login: setAuthUser } = useContext(AuthContext);
 
@@ -17,8 +18,12 @@ const Login = () => {
         setError("");
         try {
             let userData = await login(email, password);
-            setIsSignedIn(true);
             setAuthUser(userData.user);
+            if (location.state && location.state.redirectTo === '/crear-cita') {
+                navigate('/crear-cita', { replace: true });
+            } else {
+                navigate('/home', { replace: true });
+            }
         } catch (error) {
             setError("Usuario o contraseña incorrectos");
             console.error("Error al iniciar sesión:", error);
@@ -40,8 +45,12 @@ const Login = () => {
                 try {
                   const { credential } = response;
                   let userData = await loginWithGoogle(credential);
-                  setIsSignedIn(true);
                   setAuthUser( userData.user); 
+                  if (location.state && location.state.redirectTo === '/crear-cita') {
+                    navigate('/crear-cita', { replace: true });
+                  } else {
+                    navigate('/home', { replace: true });
+                  }
                 } catch (err) {
                   setError("No se pudo iniciar sesión con Google");
                 }
@@ -59,12 +68,6 @@ const Login = () => {
       fetchGoogleClientIdAndInit();
       // eslint-disable-next-line
     }, []);
-
-
-
-if (isSignedIn) {
-  return <Navigate to="/home" />;
-}
 
 return (
   <div className="login-main-container">

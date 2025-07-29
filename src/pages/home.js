@@ -4,6 +4,7 @@ import { getRecursos } from '../services/recursosService';
 import { getCursos } from '../services/cursosService';
 import { useNavigate } from 'react-router-dom';
 import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';
+import InfoModal from '../components/ui/InfoModal';
 import Header from "../components/header";
 import Footer from '../components/footer';
 import AOS from 'aos';
@@ -88,14 +89,14 @@ export default function Home() {
   const [recursos, setRecursos] = useState([]);
   const [cursos, setCursos] = useState([]);
   const [tipoCurso, setTipoCurso] = useState();
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   useEffect(() => {
     AOS.init({ duration: 1000, once: false });
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     getRecursos().then(data => setRecursos(data));
   }, []);
 
@@ -129,9 +130,24 @@ export default function Home() {
                 diseñadas para tu desarrollo integral.
             </p>
             <div className="hero-buttons">
-                <button className="btn primary"onClick={()=>(navigate('/crear-cita'))}>Agendar Consulta</button>
+                <button className="btn primary" onClick={() => {
+                  if (user) {
+                    navigate('/crear-cita');
+                  } else {
+                    setShowModal(true);
+                    setTimeout(() => {
+                      navigate('/login', { state: { redirectTo: '/crear-cita' } });
+                    }, 2500);
+                  }
+                }}>Agendar Consulta</button>
                 <button className="btn outline" onClick={()=>(navigate('/recursos'))}>Ver Materiales </button>
             </div>
+            {/* Modal en caso de no estar logeado y querer crear una cita */}
+            <InfoModal
+              open={showModal}
+              title="Debes iniciar sesión para poder agendar una cita."
+              message="Redirigiendo..."
+            />
             </div>
             <div className="hero-image">
                 <img src="/baner.png" alt="Banner Psicología y Educación" />

@@ -86,9 +86,64 @@ const services = [
   },
 ];
 
-const comunidadImgs = [
-  'carla.jpg','claudia.jpg','emma.jpg','evelyn.jpg','fernanda.jpg','irais.jpg','regina.jpg'
+const testimonios = [
+  {
+    nombre: 'Carla',
+    servicio: 'Taller: Me quiero conocer',
+    comentario:
+      'Sí me gustó, me ayudó, me ayudó a ver que no es tan difícil, solo es prestar atención 5 minutos al día.',
+    img: 'Carla.jpg',
+  },
+  {
+    nombre: 'Claudia',
+    servicio: 'Servicios Psicológicos',
+    comentario:
+      'Me gustó especialmente la flexibilidad de las sesiones en línea, que me permitieron acceder a la ayuda que necesitaba desde la comodidad de mi hogar.',
+    img: 'Claudia.jpg',
+  },
+  {
+    nombre: 'Fernanda',
+    servicio: 'Taller: Explorando mis emociones',
+    comentario:
+      'Al principio me sentí un poco frustrada por no poder saber o explicar cómo sentía mis emociones... me sigue encantando.',
+    img: 'Fernanda.jpg',
+  },
+  {
+    nombre: 'Emma',
+    servicio: 'Taller: Estimulación temprana, creatividad e implementación',
+    comentario:
+      'Me gustó mucho porque te van guiando de manera muy amena sobre cómo ir tratando a las infancias.',
+    img: 'Emma.jpg',
+  },
+  {
+    nombre: 'Evelyn',
+    servicio: 'Taller: Estimulación temprana, creatividad e implementación',
+    comentario:
+      'Me voy satisfecha y también con muchas ideas de los tipos de juegos... me doy cuenta de situaciones que incluso vivimos de niños.',
+    img: 'Evelyn.jpg',
+  },
+  {
+    nombre: 'Regina',
+    servicio: 'Taller: Me quiero conocer',
+    comentario:
+      'Me permitió comprender mejor mis pensamientos, emociones y comportamientos. Me gustó la combinación perfecta de teoría y práctica.',
+    img: 'Regina.jpg',
+  },
+  {
+    nombre: 'Irais',
+    servicio: 'Taller: ¿Te dejaré ir?',
+    comentario:
+      'El taller ofrece herramientas prácticas para manejar emociones y pensar con claridad. Se enfoca en aceptar, abrazar y sentir las emociones.',
+    img: 'Irais.jpg',
+  },
 ];
+
+function truncate(text, maxLength = 55) {
+  if (!text) return '';
+  return text.length > maxLength
+    ? text.slice(0, maxLength).trim() + '...'
+    : text;
+}
 
 export default function Home() {
   const [tab, setTab] = useState('nuevos');
@@ -99,6 +154,10 @@ export default function Home() {
   const navigate = useNavigate();
   const comunidadRef = useRef();
   const { user } = useContext(AuthContext);
+  
+  const [imagenActiva, setImagenActiva] = useState(null);
+  const cerrarModal = () => setImagenActiva(null);
+  
   useEffect(() => {
     AOS.init({ duration: 1000, once: false });
   }, []);
@@ -331,18 +390,32 @@ export default function Home() {
         
         <div className="comunidad-carousel" ref={comunidadRef}>
           <div className="comunidad-track">
-            {[...comunidadImgs, ...comunidadImgs].map((img, idx) => (
-              <div key={img + idx} className="comunidad-item">
-                <img src={`/${img}`} alt={img.replace('.jpg', '')} />
-                <div className="comunidad-nombre">{img.replace('.jpg', '').toLocaleUpperCase()}</div>
-                <div className="comunidad-comentario">
-                  "Excelente experiencia, recomiendo ampliamente los servicios de Psicoeduca."
-                </div>
+            {[...testimonios, ...testimonios].map((testimonio, idx) => (
+              <div key={testimonio.nombre + idx} className="comunidad-item">
+                <img
+                  src={`/${testimonio.img}`}
+                  alt={testimonio.nombre}
+                  onClick={() => setImagenActiva(`/${testimonio.img}`)}
+                  style={{ cursor: 'pointer' }}
+                />
+                <div className="comunidad-nombre">{testimonio.nombre}</div>
+                <div className="comunidad-servicio">{testimonio.servicio}</div>
+                <div className="comunidad-comentario"> “{truncate(testimonio.comentario, 55)}”</div>
               </div>
             ))}
+
           </div>
         </div>
       </section>
+
+      {/* Modal */}
+      {imagenActiva && (
+        <div className="modal-overlay" onClick={cerrarModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <img src={imagenActiva} alt="Imagen ampliada" />
+          </div>
+        </div>
+      )}
 
   
 

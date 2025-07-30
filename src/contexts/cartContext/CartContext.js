@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-import { AuthContext } from '../authContext/AuthContext';
 const CartContext = React.createContext();
 
 export function useCart() {
@@ -16,17 +15,6 @@ export function CartProvider({ children }) {
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
-
-  const { user } = useContext(AuthContext); 
-  useEffect(() => {
-    window.onbeforeunload = () => {
-      if(!user || user === null) {
-        localStorage.removeItem('cart');
-        clearCart();
-      }
-    };
-  //eslint-disable-next-line
   }, [cart]);
 
   const addToCart = (item) => {

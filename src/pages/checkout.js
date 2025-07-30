@@ -33,7 +33,11 @@ export default function Checkout() {
             }
         }, 100);
       };
-      return () => { document.body.removeChild(script); };
+      return () => {
+        if (script && script.parentNode === document.body) {
+            document.body.removeChild(script);
+        }
+      };
     } else {
       renderPaypal();
     }

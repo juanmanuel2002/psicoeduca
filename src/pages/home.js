@@ -367,7 +367,7 @@ export default function Home() {
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
-          <button className="btn outline" onClick={() => window.location.href = '/recursos'}>
+          <button className="btn outline" onClick={() => navigate('/recursos')}>
             Ver Más
           </button>
         </div>

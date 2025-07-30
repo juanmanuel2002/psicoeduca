@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext} from "react";
 import { useParams } from "react-router-dom";
 import Header from "../components/header";
 import Footer from '../components/footer';
@@ -10,12 +10,17 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import "../styles/cursoDetalle.css";
 import CircularProgress from '@mui/material/CircularProgress';
+import InfoModal from '../components/ui/InfoModal';
+import { AuthContext } from '../contexts/authContext/AuthContext';
 
 export default function CursoDetalle() {
   const { id } = useParams();
   const { addToCart } = useCart();
   const [curso, setCurso] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showModalAdquirir, setShowModalAdquirir] = useState(false);
+  const [showModalInscribirse, setShowModalInscribirse] = useState(false);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,11 +53,46 @@ export default function CursoDetalle() {
               {curso.costo > 0 ? `$${curso.costo}` : 'Gratis'}
             </div>
           )}
-          {curso.tipo === "Asíncrono" ? <button className="btn primary" onClick={()=>{addToCart(curso); navigate('/checkout')}}>Adquirir</button> : 
-          <button className="btn primary">Inscribirse</button>
+          {curso.tipo === "Asíncrono" ? <button className="btn primary" 
+          onClick={()=>{
+            if (!user) {
+              localStorage.setItem("pendingCartItem", JSON.stringify(curso));
+              setShowModalAdquirir(true);
+              setTimeout(() => {
+                navigate('/login', { state: { redirectTo: '/checkout' } });
+              }, 2500);
+            } else{
+              addToCart(curso);
+              navigate('/checkout');
+            }}}
+          >Adquirir</button> : 
+          <button className="btn primary"
+          onClick={()=>{
+            if (!user) {
+                localStorage.setItem("pendingCartItem", JSON.stringify(curso));
+                console.log("pendingCartItem:", localStorage);
+                setShowModalInscribirse(true);
+                setTimeout(() => {
+                  navigate('/login', { state: { redirectTo: '/checkout' } });
+                }, 2500);
+              } else{
+                addToCart(curso);
+                navigate('/checkout');
+              }}}
+          >Inscribirse</button>
           }
         </div>
       </section>
+      <InfoModal
+        open={showModalAdquirir}
+        title="Debes iniciar sesión para poder adquirir este curso."
+        message="Redirigiendo..."
+      />
+      <InfoModal
+        open={showModalInscribirse}
+        title="Debes iniciar sesión para poder inscribirte a este curso."
+        message="Redirigiendo..."
+      />
       <WhatsAppFloat />
       <Footer />
     </div>

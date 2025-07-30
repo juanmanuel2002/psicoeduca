@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import Footer from '../components/footer';
 import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';
@@ -8,13 +8,19 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import "../styles/recursoDetalle.css";
 import CircularProgress from '@mui/material/CircularProgress';
+import InfoModal from '../components/ui/InfoModal';
 import { useCart } from '../contexts/cartContext/CartContext';
+import { AuthContext } from '../contexts/authContext/AuthContext';
 
 export default function RecursoDetalle() {
   const { addToCart } = useCart();
   const { id } = useParams();
   const [recurso, setRecurso] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showModalAdquirir, setShowModalAdquirir] = useState(false);
+  const [showModalCarrito, setShowModalCarrito] = useState(false);
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     getRecursos().then(data => {
@@ -56,8 +62,16 @@ export default function RecursoDetalle() {
             onClick={() => {
               if (recurso.costo === 0) {
                 descargarPDF();
-              } else {
-                window.location.href = `/checkout`;
+              } 
+              if (!user) {
+                localStorage.setItem("pendingCartItem", JSON.stringify(recurso));
+                setShowModalAdquirir(true);
+                setTimeout(() => {
+                  navigate('/login', { state: { redirectTo: '/checkout' } });
+                }, 2500);
+              } else{
+                addToCart(recurso);
+                navigate('/checkout');
               }
             }}
           >
@@ -68,15 +82,35 @@ export default function RecursoDetalle() {
               className="btn outline"
               style={{marginTop: 12}}
               onClick={() => {
-                
+              if (!user) {
+                localStorage.setItem("pendingCartItem", JSON.stringify(recurso));
+                setShowModalCarrito(true);
+                setTimeout(() => {
+                  navigate('/login', { state: { redirectTo: `/recurso/${recurso.id}` } });
+                }, 2500);
+              } else{
                 addToCart(recurso);
+              }
               }}
             >
               Agregar al carrito
             </button>
           }
+        
         </div>
+        
       </section>
+      
+      <InfoModal
+        open={showModalAdquirir}
+        title="Debes iniciar sesión para poder comenzar a agregar artitulos al carrito."
+        message="Redirigiendo..."
+      />
+      <InfoModal
+        open={showModalCarrito}
+        title="Debes iniciar sesión para poder inscribirte a este curso."
+        message="Redirigiendo..."
+      />
       <WhatsAppFloat />
       <Footer />
     </div>

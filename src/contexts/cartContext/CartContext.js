@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { AuthContext } from "../authContext/AuthContext";
 const CartContext = React.createContext();
 
 export function useCart() {
@@ -6,16 +7,35 @@ export function useCart() {
 }
 
 export function CartProvider({ children }) {
-  
+  const { user } = useContext(AuthContext);
 
   const [cart, setCart] = useState(() => {
-    const stored = localStorage.getItem('cart');
-    return stored ? JSON.parse(stored) : [];
+    if(user){
+      const stored = localStorage.getItem('cart');
+      return stored ? JSON.parse(stored) : [];
+    }
+    return [];
   });
 
+  // Cuando cambia el usuario, resetea el carrito si no hay usuario
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
+    if (!user) {
+      setCart([]);
+      localStorage.removeItem('cart'); 
+    } else {
+      
+      const stored = localStorage.getItem('cart');
+      setCart(stored ? JSON.parse(stored) : []);
+    }
+    // eslint-disable-next-line
+  }, [user]);
+
+  // Solo persiste el carrito si hay usuario
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+  }, [cart, user]);
 
   const addToCart = (item) => {
     setCart(prev => {

@@ -3,6 +3,7 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import { login, loginWithGoogle} from "../../../services/authService";
 import '../../../styles/login.css';
 import { AuthContext } from '../../../contexts/authContext/AuthContext';
+import { useCart } from '../../../contexts/cartContext/CartContext';
 
 const Login = () => {
     const location = useLocation();
@@ -10,6 +11,7 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");  
     const [error, setError] = useState("");
+    const { addToCart } = useCart();
     const { login: setAuthUser } = useContext(AuthContext);
 
 
@@ -19,10 +21,18 @@ const Login = () => {
         try {
             let userData = await login(email, password);
             setAuthUser(userData.user);
-            if (location.state && location.state.redirectTo === '/crear-cita') {
-                navigate('/crear-cita', { replace: true });
-            } else {
-                navigate('/home', { replace: true });
+            const pendingItem = localStorage.getItem("pendingCartItem");
+            if (pendingItem) {
+              const parsedItem = JSON.parse(pendingItem);
+              setTimeout(() => {
+                  addToCart(parsedItem); 
+                  localStorage.removeItem("pendingCartItem");
+                }, 200); 
+              }
+            if (location.state && location.state.redirectTo) {
+                navigate(location.state.redirectTo, { replace: true });
+            }else {
+              navigate('/home', { replace: true });
             }
         } catch (error) {
             setError("Usuario o contraseña incorrectos");
@@ -34,7 +44,7 @@ const Login = () => {
     useEffect(() => {
       async function fetchGoogleClientIdAndInit() {
         try {
-         const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+          const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
           if (!clientId) {
             throw new Error("No se pudo obtener Google Client ID");
           }
@@ -45,10 +55,22 @@ const Login = () => {
                 try {
                   const { credential } = response;
                   let userData = await loginWithGoogle(credential);
-                  setAuthUser( userData.user); 
-                  if (location.state && location.state.redirectTo === '/crear-cita') {
-                    navigate('/crear-cita', { replace: true });
-                  } else {
+                  console.log("localStorage:", localStorage);
+                  setAuthUser( userData.user);
+                  const pendingItem = localStorage.getItem("pendingCartItem");
+                  console.log("pendingItem:", pendingItem);
+                  if (pendingItem) {
+                    const parsedItem = JSON.parse(pendingItem);
+                    setTimeout(() => {
+                      addToCart(parsedItem); 
+                      localStorage.removeItem("pendingCartItem");
+                    }, 200);
+              
+                  }
+                  console.log("localStorageAfter AddToCart:", localStorage);
+                  if (location.state && location.state.redirectTo) {
+                      navigate(location.state.redirectTo, { replace: true });
+                  }else {
                     navigate('/home', { replace: true });
                   }
                 } catch (err) {

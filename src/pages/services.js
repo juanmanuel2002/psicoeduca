@@ -1,11 +1,13 @@
-import React, {useEffect}from 'react';
+import React, {useEffect, useState}from 'react';
 import AOS from 'aos';
-import 'aos/dist/aos.css';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';
-import '../styles/services.css';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useNavigate, useParams } from 'react-router-dom';
+import 'aos/dist/aos.css';
+import '../styles/services.css';
+
 
 const servicios = [
   {
@@ -32,10 +34,22 @@ export default function Services() {
   const navigate = useNavigate();
   const { id } = useParams();
   const servicio = servicios.find(s => s.id === id);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: false });
   }, []);
+
+  useEffect(() => {
+    if (servicio) {
+      setLoading(false);
+    } else {
+      setLoading(true);
+    }
+  }, [servicio]);
+  
+  if (loading) return <div className="home-container"><Header /><div style={{textAlign:'center', display: 'center',marginTop:64}}><CircularProgress /><p>Cargando...</p></div></div>;
+    
 
   return (
     <div className="home-container">

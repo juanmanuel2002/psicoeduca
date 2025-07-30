@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { AuthContext } from '../contexts/authContext/AuthContext';
 import { getRecursos } from '../services/recursosService';
 import { getCursos } from '../services/cursosService';
@@ -86,6 +86,9 @@ const services = [
   },
 ];
 
+const comunidadImgs = [
+  'carla.jpg','claudia.jpg','emma.jpg','evelyn.jpg','fernanda.jpg','irais.jpg','regina.jpg'
+];
 
 export default function Home() {
   const [tab, setTab] = useState('nuevos');
@@ -94,6 +97,7 @@ export default function Home() {
   const [tipoCurso, setTipoCurso] = useState('sincronos');
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  const comunidadRef = useRef();
   const { user } = useContext(AuthContext);
   useEffect(() => {
     AOS.init({ duration: 1000, once: false });
@@ -105,6 +109,21 @@ export default function Home() {
 
   useEffect(() => {
     getCursos().then(data => setCursos(data));
+  }, []);
+  // Efecto para animar el carrusel infinito
+  useEffect(() => {
+    let pos = 0;
+    const track = comunidadRef.current?.firstChild;
+    if (!track) return;
+    let frame;
+    function animate() {
+      pos += 0.5; // velocidad
+      if (pos > track.scrollWidth / 2) pos = 0;
+      track.style.transform = `translateX(-${pos}px)`;
+      frame = requestAnimationFrame(animate);
+    }
+    frame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   // Filtrar cursos por estado y tipo
@@ -118,6 +137,7 @@ export default function Home() {
     return arr
   };
 
+  // Efecto para animar el carrusel infinito
   
   return (
     <div className="home-container">
@@ -303,6 +323,28 @@ export default function Home() {
         <input type="email" placeholder="Tu correo electrónico" className="email-input" />
         <button className="btn primary">Unirme a la lista</button>
       </section>
+
+      {/* Comunidad/Testimonios - Galería infinita */}
+      <section data-aos="fade-up" id="comunidad" className="comunidad-section">
+        <h2>Comunidad Psicoeduca</h2>
+        <p>Estos son algunos testimonios de personas que han tomado nuestros cursos o servicios.</p>
+        
+        <div className="comunidad-carousel" ref={comunidadRef}>
+          <div className="comunidad-track">
+            {[...comunidadImgs, ...comunidadImgs].map((img, idx) => (
+              <div key={img + idx} className="comunidad-item">
+                <img src={`/${img}`} alt={img.replace('.jpg', '')} />
+                <div className="comunidad-nombre">{img.replace('.jpg', '').toLocaleUpperCase()}</div>
+                <div className="comunidad-comentario">
+                  "Excelente experiencia, recomiendo ampliamente los servicios de Psicoeduca."
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+  
 
       {/* Botón flotante de WhatsApp siempre visible */}
       <WhatsAppFloat />

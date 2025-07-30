@@ -55,10 +55,8 @@ const Login = () => {
                 try {
                   const { credential } = response;
                   let userData = await loginWithGoogle(credential);
-                  console.log("localStorage:", localStorage);
                   setAuthUser( userData.user);
                   const pendingItem = localStorage.getItem("pendingCartItem");
-                  console.log("pendingItem:", pendingItem);
                   if (pendingItem) {
                     const parsedItem = JSON.parse(pendingItem);
                     setTimeout(() => {
@@ -67,7 +65,6 @@ const Login = () => {
                     }, 200);
               
                   }
-                  console.log("localStorageAfter AddToCart:", localStorage);
                   if (location.state && location.state.redirectTo) {
                       navigate(location.state.redirectTo, { replace: true });
                   }else {

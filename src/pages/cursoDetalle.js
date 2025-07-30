@@ -70,7 +70,6 @@ export default function CursoDetalle() {
           onClick={()=>{
             if (!user) {
                 localStorage.setItem("pendingCartItem", JSON.stringify(curso));
-                console.log("pendingCartItem:", localStorage);
                 setShowModalInscribirse(true);
                 setTimeout(() => {
                   navigate('/login', { state: { redirectTo: '/checkout' } });

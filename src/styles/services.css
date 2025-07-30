@@ -1,0 +1,51 @@
+.service-detail-section {
+     padding: 32px 0;
+     display: flex;
+     justify-content: center;
+}
+ .service-detail-card {
+     background: #fff;
+     border-radius: 12px;
+     box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+     padding: 32px;
+     max-width: 500px;
+     width: 100%;
+     text-align: center;
+}
+ .service-detail-img {
+     width: 100%;
+     max-width: 220px;
+     border-radius: 10px;
+     margin-bottom: 18px;
+}
+ .service-detail-card h2 {
+     color: var(--color-primary);
+     margin-bottom: 12px;
+}
+ .service-detail-card p {
+     color: var(--color-text);
+     margin-bottom: 18px;
+}
+ .service-contact-info {
+     margin-top: 18px;
+}
+ .btn.primary {
+     background: var(--color-primary);
+     color: #fff;
+     border: none;
+     border-radius: 6px;
+     padding: 10px 24px;
+     font-weight: bold;
+     cursor: pointer;
+}
+
+.service-info{
+    text-align: center;
+    margin-top: -40px;
+    padding: 0 auto;
+}
+.service-info p{
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin-bottom: 5px;
+}

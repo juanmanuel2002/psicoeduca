@@ -14,6 +14,7 @@ import MisCitas from './pages/misCitas';
 import MisCursos from './pages/misCursos';
 import MisRecursos from './pages/misRecursos';
 import Perfil from './pages/perfil';
+import Servicios from './pages/services.js';
 import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
                         <Route path="/recursos" element={<Recursos />} />
                         <Route path="/recurso/:id" element={<RecursoDetalle />} />
                         <Route path="/curso/:id" element={<CursoDetalle />} />
+                        <Route path="/servicio/:id" element={<Servicios />} />
                         <Route path="/crear-cita" element={<CrearCita />} />
                         <Route path="/mis-citas" element={<MisCitas />} />
                         <Route path="/mis-cursos" element={<MisCursos />} />

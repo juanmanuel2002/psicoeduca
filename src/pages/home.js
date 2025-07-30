@@ -14,6 +14,7 @@ import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied
 
 const services = [
   {
+    id: 'terapia-individual',
     title: "Terapia Individual",
     description: "Atención personalizada para adultos en búsqueda de bienestar emocional.",
     icon: (
@@ -35,6 +36,7 @@ const services = [
     ),
   },
   {
+    id: 'terapia-adolescentes',
     title: "Terapia para Adolescentes",
     description: "Apoyo profesional para jóvenes en etapas clave de su desarrollo.",
     icon: (
@@ -56,6 +58,7 @@ const services = [
     ),
   },
   {
+    id: 'asesoria-linea',
     title: "Asesoría en Línea",
     description: "Sesiones virtuales desde la comodidad de tu hogar.",
     icon: (
@@ -179,8 +182,8 @@ export default function Home() {
       <section data-aos="fade-up" id="services" className="services-section">
         <h2>Servicios Psicológicos</h2>
         <div className="services-grid">
-          {services.map(({ title, description, icon }, idx) => (
-            <div key={idx} className="service-card">
+          {services.map(({ title, description, icon, id }, idx) => (
+            <div key={idx} className="service-card" onClick={() => navigate(`/servicio/${id}`)}>
               {icon}
               <h3>{title}</h3>
               <p>{description}</p>

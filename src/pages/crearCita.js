@@ -1,4 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import { AuthContext } from '../contexts/authContext/AuthContext';
@@ -64,6 +66,10 @@ useEffect(() => {
     setHorasDisponibles(getAvailableHours(citaData.fecha, citas));
   }, [citaData.fecha, citas]);
 
+   useEffect(() => {
+      AOS.init({ duration: 1000, once: false });
+    }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -93,7 +99,7 @@ useEffect(() => {
   return (
     <div className="home-container">
       <Header />
-      <section className="crear-cita-section">
+      <section data-aos="fade-up" className="crear-cita-section">
         <h2>Agendar Consulta</h2>
         {success && <div className="success-message">¡Cita agendada exitosamente!</div>}
         {error && <div className="error-message">{error}</div>}
@@ -144,7 +150,7 @@ useEffect(() => {
         </form>
         <InfoModal open={showModal} title="¡Cita agendada exitosamente!" message="Te esperamos en tu consulta." />
       </section>
-      <section className = "otras-citas-section">
+      <section data-aos="fade-up" className = "otras-citas-section">
         <div className="otras-citas-header">
           <p>Si no encuentras un horario que se ajuste a tus necesidades, por favor contáctanos a través de nuestras redes sociales o correo electrónico.</p>
           <p>Estamos aquí para ayudarte a encontrar el mejor momento para tu consulta.</p>

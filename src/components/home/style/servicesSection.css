@@ -49,3 +49,8 @@
   color: var(--color-text-light);
 }
 
+@media (max-width: 600px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}

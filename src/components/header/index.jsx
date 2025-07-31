@@ -61,7 +61,7 @@ export default function Header() {
           <a href="#services" onClick={() => { navigate('/home'); setOpen(false); }}>Servicios</a>
           <a href="#cursos" onClick={() => { navigate('/home'); setOpen(false); }}>Cursos</a>
           <a href="#books" onClick={() => { navigate('/home'); setOpen(false); }}>Recursos</a>
-          <a href="#english" onClick={() => { navigate('/home'); setOpen(false); }}>Clases de Inglés</a>
+          <a href="#english" onClick={() => { navigate('/english'); setOpen(false); }}>Clases de Inglés</a>
           <a href="#comunidad" onClick={() => { navigate('/home'); setOpen(false); }}>Comunidad</a>
           <a href="#contact" onClick={() => { navigate('/home'); setOpen(false); }}>Contacto</a>
           {!user ? (

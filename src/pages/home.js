@@ -8,7 +8,6 @@ import HeroSection from '../components/home/HeroSection';
 import ServicesSection from '../components/home/ServicesSection';
 import FeaturedCoursesSection from '../components/home/FeaturedCoursesSection';
 import BooksSection from '../components/home/BooksSection';
-import EnglishSection from '../components/home/EnglishSection';
 import ComunidadSection from '../components/home/ComunidadSection';
 import ModalImagen from '../components/home/ModalImagen';
 import AOS from 'aos';
@@ -135,7 +134,6 @@ export default function Home() {
         filtrarPorTipo={filtrarPorTipo}
       />
       <BooksSection recursos={recursos} />
-      <EnglishSection />
       <ComunidadSection
         testimonios={testimonios}
         comunidadRef={comunidadRef}

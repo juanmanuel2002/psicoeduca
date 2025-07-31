@@ -15,6 +15,7 @@ import MisCursos from './pages/misCursos';
 import MisRecursos from './pages/misRecursos';
 import Perfil from './pages/perfil';
 import Servicios from './pages/services.js';
+import EnglishSection from './pages/EnglishSection.js';
 import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
 
 const App = () => {
@@ -36,6 +37,7 @@ const App = () => {
                         <Route path="/mis-cursos" element={<MisCursos />} />
                         <Route path="/mis-recursos" element={<MisRecursos />} />
                         <Route path="/perfil" element={<Perfil />} />
+                        <Route path="/english" element={<EnglishSection />} />
                         <Route path="/checkout" element={<Checkout />} />
                         <Route path="/" element={<Navigate to="/home" />} />
                     </Routes>

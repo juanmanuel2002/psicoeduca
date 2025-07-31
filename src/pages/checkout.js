@@ -1,13 +1,18 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';
 import { useCart } from '../contexts/cartContext/CartContext';
+import { AuthContext } from '../contexts/authContext/AuthContext';
+import {sendEmailCompra} from '../services/sendEmailService';
+import { useNavigate } from 'react-router-dom';
 import '../styles/checkout.css';
 
 export default function Checkout() {
   const { cart, clearCart } = useCart();
   const paypalRef = useRef();
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
   const total = cart.reduce((acc, item) => acc + (item.costo > 0 ? item.costo : 0), 0);
 
   useEffect(() => {
@@ -58,15 +63,28 @@ export default function Checkout() {
             }],
             });
         },
-        onApprove: (data, actions) => {
-            return actions.order.capture().then((details) => {
-            alert('Pago completado por ' + details.payer.name.given_name);
+        onApprove: async (data, actions) => {
+        try {
+            const details = await actions.order.capture();
+            alert('✅ Pago completado por ' + details.payer.name.given_name);
+
+            // Espera que el correo se mande
+            const response = await sendEmailCompra({ correo: user.email, nombre: user.name, cart });
+
+            if (!response.ok) {
+            throw new Error('Error al enviar el correo de compra');
+            }
+
             clearCart();
-            });
+            navigate('/home', { replace: true });
+        } catch (err) {
+            console.error('Error tras completar el pago:', err);
+            alert('✅ El pago se procesó correctamente, pero hubo un error al enviar los recursos. Por favor contáctanos para que podamos ayudarte lo antes posible.');
+        }
         },
         onError: (err) => {
             console.error('Error en el pago:', err);
-            alert('Error en el pago');
+            alert('Error en el pago, favor de intentar nuevamente');
         }
         }).render(paypalRef.current);
     }

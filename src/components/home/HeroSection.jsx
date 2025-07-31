@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../contexts/authContext/AuthContext';
 import InfoModal from '../ui/InfoModal';
 import { useNavigate } from 'react-router-dom';
+import './style/heroSection.css';
 
 export default function HeroSection() {
   const { user } = useContext(AuthContext);

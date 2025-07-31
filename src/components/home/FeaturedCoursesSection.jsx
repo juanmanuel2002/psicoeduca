@@ -1,6 +1,7 @@
 import React from 'react';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import { useNavigate } from 'react-router-dom';
+import './style/coursesSection.css';
 
 export default function FeaturedCoursesSection({ tab, setTab, tipoCurso, setTipoCurso, cursosNuevos, cursosRecomendados, filtrarPorTipo }) {
   const navigate = useNavigate();

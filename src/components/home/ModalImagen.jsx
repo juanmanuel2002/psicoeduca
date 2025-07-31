@@ -1,4 +1,5 @@
 import React from 'react';
+import './style/modalImagen.css';
 
 export default function ModalImagen({ imagenActiva, cerrarModal }) {
   if (!imagenActiva) return null;

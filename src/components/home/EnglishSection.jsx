@@ -1,4 +1,5 @@
 import React from 'react';
+import './style/englishSection.css';
 
 export default function EnglishSection() {
   return (

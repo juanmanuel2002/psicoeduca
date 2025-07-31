@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './style/booksSection.css'; 
 
 export default function BooksSection({ recursos }) {
   const navigate = useNavigate();

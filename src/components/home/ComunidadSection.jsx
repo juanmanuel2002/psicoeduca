@@ -1,4 +1,5 @@
 import React from 'react';
+import './style/comunidadSection.css';
 
 export default function ComunidadSection({ testimonios, comunidadRef, setImagenActiva, truncate }) {
   return (

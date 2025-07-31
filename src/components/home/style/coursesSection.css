@@ -1,0 +1,64 @@
+/* Cursos Destacados */
+.featured-courses-section {
+  width: 100%;
+  max-width: 1100px;
+  margin: -50px auto 150px auto;
+  padding: 40px 0px 0 20px;
+}
+
+.featured-courses-section h2 {
+  font-size: 2.4rem;
+  margin-bottom: 40px;
+  color: var(--color-secondary);
+  text-align: center;
+}
+.featured-courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 28px;
+  justify-items: center;
+}
+.featured-course-card {
+  background: var(--color-card);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px var(--color-book-shadow);
+  padding: 28px 20px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 320px;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.featured-course-card:hover {
+  box-shadow: 0 8px 28px var(--color-book-shadow-hover);
+  transform: translateY(-4px) scale(1.03);
+}
+.featured-course-title {
+  font-size: 2.4rem;
+  margin-bottom: 40px;
+  color: var(--color-primary-dark);
+  font-size: 1.2rem;
+  font-weight: 600;
+  /*color: var(--color-primary-dark);
+  margin-bottom: 8px;*/
+}
+.featured-course-desc {
+  color: var(--color-text-light);
+  font-size: 1rem;
+}
+
+.no-courses-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--color-text-light);
+  padding: 48px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background-color: var(--color-bg-light);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}

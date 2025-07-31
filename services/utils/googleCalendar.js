@@ -4,7 +4,7 @@ import config from '../../config.js';
 
 const serviceAccount = JSON.parse(config.firebaseAdmin.service);
 
-const SCOPES = ['https://www.googleapis.com/auth/calendar'];
+const SCOPES = [config.google.apiCalendar];
 
 const auth = new JWT({
   email: serviceAccount.client_email,

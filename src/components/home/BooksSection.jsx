@@ -6,7 +6,7 @@ export default function BooksSection({ recursos }) {
   const navigate = useNavigate();
   return (
     <section data-aos="fade-up" id="books" className="books-section">
-      <h2>Recursos Disponibles</h2>
+      <h2>Recursos Psicológicos Disponibles</h2>
       <div className="books-desc" style={{fontSize: '1.1rem', color: 'var(--color-text-light)', marginBottom: 32}}>
         Amplía tus conocimientos con nuestra colección de recursos educativos de alta calidad
       </div>

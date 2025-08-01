@@ -42,12 +42,11 @@ export default function EnglishSection() {
           Apúntate a nuestra lista de espera para recibir noticias sobre nuestras
           clases de inglés con enfoque conversacional y psicológico.
         </p>
-        <form onSubmit={handleSubmit} style={{display:'flex', flexDirection:'column', alignItems:'center', gap:16, maxWidth:340, margin:'0 auto'}}>
+        <form onSubmit={handleSubmit} className="email-form">
           <input
             type="text"
             placeholder="Tu nombre"
             className="email-input"
-            style={{width:'100%', padding:'10px', borderRadius:8, border:'1px solid var(--color-primary)', fontSize:'1rem'}}
             value={nombre}
             onChange={e => setNombre(e.target.value)}
             required
@@ -56,15 +55,13 @@ export default function EnglishSection() {
             type="email"
             placeholder="Tu correo electrónico"
             className="email-input"
-            style={{width:'100%', padding:'10px', borderRadius:8, border:'1px solid var(--color-primary)', fontSize:'1rem'}}
             value={correo}
             onChange={e => setCorreo(e.target.value)}
             required
           />
-          <button className="btn primary" type="submit" disabled={enviando} style={{width:'100%'}}>
+          <button className="btn primary" type="submit" disabled={enviando}>
             {enviando ? 'Enviando...' : 'Unirme a la lista'}
           </button>
-          
         </form>
       </section>
       <InfoModal open={showModal} title="¡Solicitud enviada correctamente!" message="Esta al tanto de tu correo, ¡Pronto te contactaremos!" />

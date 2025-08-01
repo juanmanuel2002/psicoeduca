@@ -158,7 +158,7 @@ const Signup = () => {
           </button>
         </form>
         <div className="login-links">
-          <Link to="/" className="forgot-link">¿Ya tienes cuenta? Inicia sesión</Link>
+          <Link to="/login" className="forgot-link">¿Ya tienes cuenta? Inicia sesión</Link>
         </div>
       </div>
     </div>

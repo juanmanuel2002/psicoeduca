@@ -35,3 +35,21 @@ export async function sendEmailCompra({ correo, nombre, cart }) {
   if (!res.ok) throw new Error('Error al enviar solicitud');
   return await res.json();
 }
+
+export async function updateProductOrResources({ correo, cart }) {
+  const body = {
+    correo,
+    items:[cart]
+  };
+  const token = localStorage.getItem('token');
+  const res = await fetch(`${API_URL}/asignar-recursos-cursos`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error('Error al enviar solicitud');
+  return await res.json();
+}

@@ -4,7 +4,7 @@ import Footer from '../components/footer';
 import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';
 import { useCart } from '../contexts/cartContext/CartContext';
 import { AuthContext } from '../contexts/authContext/AuthContext';
-import {sendEmailCompra} from '../services/sendEmailService';
+import { sendEmailCompra, updateProductOrResources} from '../services/sendEmailService';
 import { useNavigate } from 'react-router-dom';
 import '../styles/checkout.css';
 
@@ -70,9 +70,10 @@ export default function Checkout() {
 
             // Espera que el correo se mande
             const response = await sendEmailCompra({ correo: user.email, nombre: user.name, cart });
+            const updateUser = await updateProductOrResources({correo: user.email, cart})
 
-            if (!response.ok) {
-            throw new Error('Error al enviar el correo de compra');
+            if (!response.ok || !updateUser.ok) {
+            throw new Error('Error al enviar el correo de compra o actualizar usuario en db');
             }
 
             clearCart();

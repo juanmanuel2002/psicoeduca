@@ -78,6 +78,15 @@ export async function loginWithGoogle(req, res) {
         photoURL: payload.picture,
         emailVerified: payload.email_verified,
       });
+
+      await admin.firestore().collection('usuarios').add({
+        name: payload.name,
+        email: payload.email,
+        foto: payload.picture,
+        uid: userRecord.uid,
+        createdAt: new Date().toISOString(),
+        rol: 'usuario', 
+      });
     }
 
     const customToken = await admin.auth().createCustomToken(userRecord.uid);

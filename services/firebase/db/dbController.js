@@ -4,6 +4,19 @@ import { db } from '../setup.js';
 import { collection, getDocs} from 'firebase/firestore';
 import { isSlotAvailable, createCalendarEvent} from '../../utils/googleCalendar.js';
 
+const allowedFields = [
+  'costo',
+  'descripcion',
+  'descripcionLarga',
+  'nombre',
+  'tipo',
+  'imagen',
+  'type',
+  'archivoDriveId',
+  'estado'
+];
+
+
 export async function getCitas(req, res) {
   try {
     const citasSnapshot = await admin.firestore().collection('citas').get();
@@ -108,14 +121,44 @@ export async function createCurso(req, res) {
   if (!req.user || !req.user.uid) {
     return res.status(401).json({ error: 'No autorizado. Debes iniciar sesión.' });
   }
-  const { costo, descripcion, nombre, tipo, imagen } = req.body;
+
+  const extraFields = Object.keys(req.body).filter(
+    key => !allowedFields.includes(key)
+  );
+
+  if (extraFields.length > 0) {
+    return res.status(400).json({
+      error: `Campos no permitidos: ${extraFields.join(', ')}`
+    });
+  }
+
+  const { costo, descripcion, descripcionLarga, nombre, tipo, imagen, type, archivoDriveId, estado} = req.body;
+
+  if (
+    typeof type !== 'boolean' ||
+    typeof costo !== 'number' || isNaN(costo) ||
+    typeof descripcion !== 'string' || !descripcion.trim() ||
+    typeof descripcionLarga !== 'string' || !descripcionLarga.trim() ||
+    typeof nombre !== 'string' || !nombre.trim() ||
+    typeof tipo !== 'string' || !tipo.trim() ||
+    typeof imagen !== 'string' || !imagen.trim() ||
+    typeof archivoDriveId !== 'string' || !archivoDriveId.trim() ||
+    typeof estado !== 'string' || !estado.trim()
+  ) {
+    return res.status(400).json({ error: 'Datos inválidos o incompletos' });
+  }
+
   try {
     const docRef = await admin.firestore().collection('cursos').add({
       costo,
       descripcion,
+      descripcionLarga,
       nombre,
       tipo,
       imagen,
+      type,
+      archivoDriveId,
+      estado,
       createdBy: req.user.uid
     });
     res.status(201).json({ id: docRef.id });
@@ -128,13 +171,38 @@ export async function createRecurso(req, res) {
   if (!req.user || !req.user.uid) {
     return res.status(401).json({ error: 'No autorizado. Debes iniciar sesión.' });
   }
-  const { costo, descripcion, nombre, imagen } = req.body;
+   const extraFields = Object.keys(req.body).filter(
+    key => !allowedFields.includes(key)
+  );
+
+  if (extraFields.length > 0) {
+    return res.status(400).json({
+      error: `Campos no permitidos: ${extraFields.join(', ')}`
+    });
+  }
+  const { costo, descripcion, descripcionLarga, nombre, imagen, type, archivoDriveId } = req.body;
+
+   if (
+    typeof type !== 'boolean' ||
+    typeof costo !== 'number' || isNaN(costo) ||
+    typeof descripcion !== 'string' || !descripcion.trim() ||
+    typeof descripcionLarga !== 'string' || !descripcionLarga.trim() ||
+    typeof nombre !== 'string' || !nombre.trim() ||
+    typeof imagen !== 'string' || !imagen.trim() ||
+    typeof archivoDriveId !== 'string' || !archivoDriveId.trim()
+  ) {
+    return res.status(400).json({ error: 'Datos inválidos o incompletos' });
+  }
+
   try {
     const docRef = await admin.firestore().collection('recursos').add({
       costo,
       descripcion,
+      descripcionLarga,
       nombre,
       imagen,
+      type,
+      archivoDriveId,
       createdBy: req.user.uid
     });
     res.status(201).json({ id: docRef.id });
@@ -184,6 +252,31 @@ export async function updateCursos(req, res) {
     });
     await batch.commit();
     res.status(200).json({ message: 'Cursos actualizados correctamente.' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export async function asignarRecursosCursos(req, res) {
+  const { items, email } = req.body;
+  if (!email || !Array.isArray(items)) {
+    return res.status(400).json({ error: 'Email e items son requeridos.' });
+  }
+  try {
+    const usuariosSnap = await admin.firestore().collection('usuarios').where('email', '==', email).get();
+    if (usuariosSnap.empty) {
+      return res.status(404).json({ error: 'Usuario no encontrado.' });
+    }
+    const usuarioRef = usuariosSnap.docs[0].ref;
+    
+    const recursosIds = items.filter(i => i.type === 'recurso').map(i => i.id);
+    const cursosIds = items.filter(i => i.type === 'curso').map(i => i.id);
+    
+    await usuarioRef.set({
+      recursos: admin.firestore.FieldValue.arrayUnion(...recursosIds),
+      cursos: admin.firestore.FieldValue.arrayUnion(...cursosIds)
+    }, { merge: true });
+    res.status(200).json({ message: 'Recursos y cursos asignados correctamente.' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

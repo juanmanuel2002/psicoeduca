@@ -95,7 +95,7 @@ export default function Header() {
               <button className="account-sidebar-btn" onClick={() => { navigate('/mis-cursos'); setSidebarOpen(false); }}>Mis Cursos</button>
               <button className="account-sidebar-btn" onClick={() => { navigate('/mis-recursos'); setSidebarOpen(false); }}>Mis Recursos</button>
               <button className="account-sidebar-btn" onClick={() => { navigate('/mis-citas'); setSidebarOpen(false); }}>Mis Citas</button>
-              <button className="account-sidebar-btn logout" onClick={() => { logout(); setSidebarOpen(false); }}>Cerrar sesión</button>
+              <button className="account-sidebar-btn logout" onClick={() => { logout(); setSidebarOpen(false); navigate('/')}}>Cerrar sesión</button>
             </div>
           </aside>
         </div>

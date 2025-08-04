@@ -1,1 +1,100 @@
-.mis-cursos-section { padding: 32px; background: #fff; border-radius: 12px; margin: 32px auto; max-width: 600px; box-shadow: 0 2px 16px rgba(0,0,0,0.07); }
+.mis-cursos-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+.mis-cursos-section h2 {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 25px;
+  color: var(--color-primary);
+}
+
+.cursos-loading,
+.cursos-error {
+  text-align: center;
+  font-size: 1.1rem;
+  padding: 20px;
+  color: var(--color-text-light);
+}
+
+.no-courses-message {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.no-courses-icon {
+  font-size: 48px;
+  color: var(--color-accent);
+  margin-bottom: 10px;
+}
+
+.no-courses-title {
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.no-courses-text {
+  max-width: 400px;
+  margin: 0 auto 25px;
+  font-size: 1rem;
+  color: var(--color-text-light);
+}
+
+.mis-cursos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.mis-recurso-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mis-recurso-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.mis-recurso-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.mis-recurso-info {
+  padding: 15px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.mis-recurso-title {
+  color: var(--color-primary);
+  margin-bottom: 6px;
+  font-size: 1.1rem;
+}
+
+.mis-recurso-short {
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+
+.mis-recurso-long {
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.mis-recurso-download {
+  margin-top: auto;
+  font-size: 0.9rem;
+}

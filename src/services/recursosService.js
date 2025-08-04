@@ -10,3 +10,16 @@ export async function getRecursos() {
     return [];
   }
 }
+
+export async function getRecursosUsuario(uid) {
+  const token = localStorage.getItem('token');
+  const res = await fetch(`${API_URL}/usuario/${uid}/recursos`,{
+  method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  if (!res.ok) throw new Error('No se pudieron obtener los recursos');
+  return await res.json();
+}

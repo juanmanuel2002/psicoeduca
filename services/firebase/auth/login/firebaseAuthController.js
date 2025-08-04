@@ -92,6 +92,7 @@ export async function loginWithGoogle(req, res) {
     const customToken = await admin.auth().createCustomToken(userRecord.uid);
     const userCredential = await signInWithCustomToken(auth, customToken);
     payload.stsTokenManager = userCredential.user.stsTokenManager;
+    payload.uid = userRecord.uid;
 
     res.status(200).json({ user: payload});
   } catch (error) {

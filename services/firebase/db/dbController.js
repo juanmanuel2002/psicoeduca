@@ -372,3 +372,18 @@ export async function getRecursosUsuario(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
+
+export async function getCitasUsuario(req,res){
+  const{ uid } = req.params;
+  if (!uid) return res.status(400).json({ error: 'Falta el uid.' });
+   try {
+    const totalCitas = await admin.firestore().collection('citas').where('createdBy', '==', uid).get();
+
+    if (totalCitas.empty) return res.status(200).json([]);
+    const citas = totalCitas.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    
+    res.status(200).json(citas);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}

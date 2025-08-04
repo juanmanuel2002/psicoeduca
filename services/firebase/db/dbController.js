@@ -29,8 +29,11 @@ export async function getCitas(req, res) {
 
 export async function createCita(req, res) {
   if (!req.user || !req.user.uid) {
-    return res.status(401).json({ error: 'No autorizado. Debes iniciar sesión.' });
+    const response = { error: 'No autorizado. Debes iniciar sesión.' }
+    res.locals.responseBody = response;
+    return res.status(401).json(response);
   }
+
   const { fecha, hora, usuarioId, descripcion } = req.body;
   const calendarId = config.google.calendarId; 
 
@@ -41,7 +44,9 @@ export async function createCita(req, res) {
   
   const disponible = await isSlotAvailable(calendarId, start.toISOString(), end.toISOString());
   if (!disponible) {
-    return res.status(409).json({ error: 'El horario ya está ocupado en el calendario.' });
+    const response = { error: 'El horario ya está ocupado en el calendario.' }
+    res.locals.responseBody = response;
+    return res.status(409).json(response);
   }
 
   await createCalendarEvent(calendarId, {
@@ -59,9 +64,13 @@ export async function createCita(req, res) {
       descripcion,
       createdBy: req.user.uid
     });
-    res.status(201).json({ id: docRef.id });
+    const response = { id: docRef.id }
+    res.locals.responseBody = response
+    res.status(201).json();
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    const response = { error: error.message }
+    res.locals.responseBody = response
+    res.status(500).json();
   }
 }
 
@@ -119,7 +128,9 @@ export async function getRecursos(req, res) {
 
 export async function createCurso(req, res) {
   if (!req.user || !req.user.uid) {
-    return res.status(401).json({ error: 'No autorizado. Debes iniciar sesión.' });
+    const response = {error:'No autorizado. Debes iniciar sesión.'};
+    res.locals.responseBody = response
+    return res.status(401).json(response);
   }
 
   const extraFields = Object.keys(req.body).filter(
@@ -127,15 +138,15 @@ export async function createCurso(req, res) {
   );
 
   if (extraFields.length > 0) {
-    return res.status(400).json({
-      error: `Campos no permitidos: ${extraFields.join(', ')}`
-    });
+    const response = { error: `Campos no permitidos: ${extraFields.join(', ')}` };
+    res.locals.responseBody = response;
+    return res.status(400).json(response);
   }
 
   const { costo, descripcion, descripcionLarga, nombre, tipo, imagen, type, archivoDriveId, estado} = req.body;
 
   if (
-    typeof type !== 'boolean' ||
+    typeof type !== 'string' || !type.trim() ||
     typeof costo !== 'number' || isNaN(costo) ||
     typeof descripcion !== 'string' || !descripcion.trim() ||
     typeof descripcionLarga !== 'string' || !descripcionLarga.trim() ||
@@ -145,7 +156,9 @@ export async function createCurso(req, res) {
     typeof archivoDriveId !== 'string' || !archivoDriveId.trim() ||
     typeof estado !== 'string' || !estado.trim()
   ) {
-    return res.status(400).json({ error: 'Datos inválidos o incompletos' });
+    const response = { error: 'Datos inválidos o incompletos' };
+    res.locals.responseBody = response;
+    return res.status(400).json(response);
   }
 
   try {
@@ -161,29 +174,35 @@ export async function createCurso(req, res) {
       estado,
       createdBy: req.user.uid
     });
-    res.status(201).json({ id: docRef.id });
+    const response = { id: docRef.id };
+    res.locals.responseBody = response;
+    res.status(201).json(response);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    const response = { error: error.message };
+    res.locals.responseBody = response;
+    res.status(500).json(response);
   }
 }
 
 export async function createRecurso(req, res) {
   if (!req.user || !req.user.uid) {
-    return res.status(401).json({ error: 'No autorizado. Debes iniciar sesión.' });
+    const response = {error:'No autorizado. Debes iniciar sesión.'};
+    res.locals.responseBody = response
+    return res.status(401).json(response);
   }
    const extraFields = Object.keys(req.body).filter(
     key => !allowedFields.includes(key)
   );
 
   if (extraFields.length > 0) {
-    return res.status(400).json({
-      error: `Campos no permitidos: ${extraFields.join(', ')}`
-    });
+    const response = { error: `Campos no permitidos: ${extraFields.join(', ')}` };
+    res.locals.responseBody = response;
+    return res.status(400).json(response);
   }
   const { costo, descripcion, descripcionLarga, nombre, imagen, type, archivoDriveId } = req.body;
 
    if (
-    typeof type !== 'boolean' ||
+    typeof type !== 'string' || !type.trim() ||
     typeof costo !== 'number' || isNaN(costo) ||
     typeof descripcion !== 'string' || !descripcion.trim() ||
     typeof descripcionLarga !== 'string' || !descripcionLarga.trim() ||
@@ -191,7 +210,9 @@ export async function createRecurso(req, res) {
     typeof imagen !== 'string' || !imagen.trim() ||
     typeof archivoDriveId !== 'string' || !archivoDriveId.trim()
   ) {
-    return res.status(400).json({ error: 'Datos inválidos o incompletos' });
+    const response = { error: 'Datos inválidos o incompletos' };
+    res.locals.responseBody = response;
+    return res.status(400).json(response);
   }
 
   try {
@@ -205,20 +226,30 @@ export async function createRecurso(req, res) {
       archivoDriveId,
       createdBy: req.user.uid
     });
-    res.status(201).json({ id: docRef.id });
+    const response = { id: docRef.id };
+    res.locals.responseBody = response;
+    res.status(201).json(response);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    const response = { error: error.message };
+    res.locals.responseBody = response;
+    res.status(500).json(response);
   }
 }
 
 export async function updateRecursos(req, res) {
   if (!req.user || !req.user.uid) {
-    return res.status(401).json({ error: 'No autorizado. Debes iniciar sesión.' });
+    const response = { error: 'No autorizado. Debes iniciar sesión.' }
+    res.locals.responseBody = response;
+    return res.status(401).json(response);
   }
+
   const recursos = req.body;
   if (!Array.isArray(recursos)) {
-    return res.status(400).json({ error: 'El cuerpo debe ser un array de recursos.' });
+    const response = { error: 'El cuerpo debe ser un array de recursos.' }
+    res.locals.responseBody = response;
+    return res.status(400).json(response);
   }
+
   try {
     const batch = admin.firestore().batch();
     recursos.forEach(recurso => {
@@ -227,20 +258,31 @@ export async function updateRecursos(req, res) {
       const { id, ...data } = recurso;
       batch.update(docRef, data);
     });
+
     await batch.commit();
-    res.status(200).json({ message: 'Recursos actualizados correctamente.' });
+    const response = { message: 'Recursos actualizados correctamente.' }
+    res.locals.responseBody = response;
+    res.status(200).json(response);
+
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    const response = { error: error.message }
+    res.locals.responseBody = response;
+    res.status(500).json(response);
   }
 }
 
 export async function updateCursos(req, res) {
   if (!req.user || !req.user.uid) {
-    return res.status(401).json({ error: 'No autorizado. Debes iniciar sesión.' });
+    const response = { error: 'No autorizado. Debes iniciar sesión.' }
+    res.locals.responseBody = response;
+    return res.status(401).json(response);
   }
+
   const cursos = req.body;
   if (!Array.isArray(cursos)) {
-    return res.status(400).json({ error: 'El cuerpo debe ser un array de cursos.' });
+    const response = { error: 'El cuerpo debe ser un array de cursos.' }
+    res.locals.responseBody = response;
+    return res.status(400).json(response);
   }
   try {
     const batch = admin.firestore().batch();
@@ -251,21 +293,31 @@ export async function updateCursos(req, res) {
       batch.update(docRef, data);
     });
     await batch.commit();
-    res.status(200).json({ message: 'Cursos actualizados correctamente.' });
+  
+    const response = { message: 'Cursos actualizados correctamente.' }
+    res.locals.responseBody = response;
+    res.status(200).json(response);
+
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    const response = { error: error.message }
+    res.locals.responseBody = response;
+    res.status(500).json(response);
   }
 }
 
 export async function asignarRecursosCursos(req, res) {
   const { items, email } = req.body;
   if (!email || !Array.isArray(items)) {
-    return res.status(400).json({ error: 'Email e items son requeridos.' });
+    const response = { error: 'Email e items son requeridos.' }
+    res.locals.responseBody = response;
+    return res.status(400).json(response);
   }
   try {
     const usuariosSnap = await admin.firestore().collection('usuarios').where('email', '==', email).get();
     if (usuariosSnap.empty) {
-      return res.status(404).json({ error: 'Usuario no encontrado.' });
+      const response = { error: 'Usuario no encontrado.' }
+      res.locals.responseBody = response;
+      return res.status(404).json(response);
     }
     const usuarioRef = usuariosSnap.docs[0].ref;
     
@@ -276,8 +328,13 @@ export async function asignarRecursosCursos(req, res) {
       recursos: admin.firestore.FieldValue.arrayUnion(...recursosIds),
       cursos: admin.firestore.FieldValue.arrayUnion(...cursosIds)
     }, { merge: true });
-    res.status(200).json({ message: 'Recursos y cursos asignados correctamente.' });
+
+    const response = { message: 'Recursos y cursos asignados correctamente.' }
+    res.locals.responseBody = response;
+    res.status(200).json(response);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    const response = { error: error.message };
+    res.locals.responseBody = response;
+    res.status(500).json(response);
   }
 }

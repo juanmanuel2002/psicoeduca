@@ -338,3 +338,37 @@ export async function asignarRecursosCursos(req, res) {
     res.status(500).json(response);
   }
 }
+
+export async function getCursosUsuario(req, res) {
+  const { uid } = req.params;
+  if (!uid) return res.status(400).json({ error: 'Falta el uid.' });
+  try {
+    const usuariosSnap = await admin.firestore().collection('usuarios').where('uid', '==', uid).get();
+    if (usuariosSnap.empty) return res.status(404).json({ error: 'Usuario no encontrado.' });
+    const usuario = usuariosSnap.docs[0].data();
+    const cursosIds = usuario.cursos || [];
+    if (!cursosIds.length) return res.status(200).json([]);
+    const cursosSnap = await admin.firestore().collection('cursos').where(admin.firestore.FieldPath.documentId(), 'in', cursosIds).get();
+    const cursos = cursosSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    res.status(200).json(cursos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export async function getRecursosUsuario(req, res) {
+  const { uid } = req.params;
+  if (!uid) return res.status(400).json({ error: 'Falta el uid.' });
+  try {
+    const usuariosSnap = await admin.firestore().collection('usuarios').where('uid', '==', uid).get();
+    if (usuariosSnap.empty) return res.status(404).json({ error: 'Usuario no encontrado.' });
+    const usuario = usuariosSnap.docs[0].data();
+    const recursosIds = usuario.recursos || [];
+    if (!recursosIds.length) return res.status(200).json([]);
+    const recursosSnap = await admin.firestore().collection('recursos').where(admin.firestore.FieldPath.documentId(), 'in', recursosIds).get();
+    const recursos = recursosSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    res.status(200).json(recursos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}

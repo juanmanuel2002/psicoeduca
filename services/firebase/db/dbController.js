@@ -57,20 +57,37 @@ export async function createCita(req, res) {
   });
 
   try {
+
+    const fechaClave = fecha.replace(/-/g, '');
+    const counterRef = admin.firestore().collection('counters').doc(fechaClave);
+
+    const consecutivo = await admin.firestore().runTransaction(async (t) => {
+      const doc = await t.get(counterRef);
+      let count = 1;
+      if (doc.exists) {
+        count = doc.data().count + 1;
+      }
+      t.set(counterRef, { count }, { merge: true });
+      return count;
+    });
+
+    const citaId = `${fechaClave}${String(consecutivo).padStart(3, '0')}`;
+
     const docRef = await admin.firestore().collection('citas').add({
       fecha,
       hora,
       usuarioId,
       descripcion,
+      citaId,
       createdBy: req.user.uid
     });
     const response = { id: docRef.id }
     res.locals.responseBody = response
-    res.status(201).json();
+    res.status(201).json(response);
   } catch (error) {
     const response = { error: error.message }
     res.locals.responseBody = response
-    res.status(500).json();
+    res.status(500).json(response);
   }
 }
 
@@ -381,7 +398,7 @@ export async function getCitasUsuario(req,res){
 
     if (totalCitas.empty) return res.status(200).json([]);
     const citas = totalCitas.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    
+
     res.status(200).json(citas);
   } catch (error) {
     res.status(500).json({ error: error.message });

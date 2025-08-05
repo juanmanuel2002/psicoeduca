@@ -22,8 +22,8 @@ export async function crearCita({ fecha, hora, usuarioId, descripcion }) {
     }
     throw new Error(errorMessage || 'Error al crear la cita');
   } 
-
-  return res.json();
+  const response = await res.json();
+  return response;
 }
 
 export async function getCitas() {
@@ -47,4 +47,17 @@ export async function getCitas() {
   } 
 
   return res.json();
+}
+
+export async function getCitasUsuario(uid) {
+  const token = localStorage.getItem('token');
+  const res = await fetch(`${API_URL}/usuario/${uid}/citas`,{
+  method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  if (!res.ok) throw new Error('No se pudieron obtener las citas');
+  return await res.json();
 }

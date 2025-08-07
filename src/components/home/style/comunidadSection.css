@@ -1,11 +1,13 @@
-
-/* Comunidad Section */
 .comunidad-section {
-  width: 100%;
-  height: 100%;
-  margin: 48px auto;
-  padding: 0 20px;
+  padding: 40px 20px;
   text-align: center;
+}
+
+.comunidad-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 32px;
+  margin-top: 32px;
 }
 
 .comunidad-section h2 {
@@ -20,62 +22,127 @@
   margin-bottom: 32px;
 }
 
-/* Carousel container */
-.comunidad-carousel {
-  overflow: hidden;
-  width: 100%;
-  max-width: 100vw;
-  position: relative;
-  height: 300px;
-  margin-top: 50px;
-}
-
-/* Track (slider) */
-.comunidad-track {
-  display: flex;
-  gap: 48px;
-  align-items: center;
-  width: max-content;
-  will-change: transform;
-  transition: transform 0.3s;
-}
-
-/* Individual testimonial item */
-.comunidad-item {
+.comunidad-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  padding: 24px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 220px;
-  max-width: 220px;
+  min-height: 220px;
+  transition: transform 0.3s ease;
 }
 
-.comunidad-item img {
-  width: 170px;
-  height: 170px;
-  object-fit: cover;
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
-  margin-bottom: 12px;
-  border: 3px solid var(--color-primary);
+.comunidad-card:hover {
+  transform: translateY(-4px);
 }
 
+/* Star Circle */
+.star-circle {
+  width: 56px;
+  height: 56px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+  margin: 0 auto 12px auto;
+  gap: 6px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+
+.star-icon {
+  color: #ffd600;
+  font-size: 24px;
+}
+
+.star-value {
+  font-size: 24px;
+  color: #000;
+}
+
+/* Nombre del usuario */
 .comunidad-nombre {
   font-weight: bold;
   color: var(--color-primary);
-  font-size: 18px;
+  font-size: 16px;
   margin-bottom: 4px;
 }
 
-.comunidad-comentario {
+/* Servicio tomado */
+.comunidad-servicio {
   color: #666;
-  font-size: 15px;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+/* Comentario del testimonio */
+.comunidad-comentario {
+  color: #444;
+  font-size: 14px;
   text-align: center;
 }
 
-.comunidad-servicio {
-  font-size: 14px;
+/* Botón para expandir/ver más */
+.comunidad-expand {
   color: var(--color-primary);
-  margin-bottom: 6px;
-  font-style: italic;
-  text-align: center;
+  cursor: pointer;
+  font-weight: bold;
+  margin-left: 4px;
+  transition: color 0.3s;
+}
+
+.comunidad-expand:hover {
+  color: #004488;
+}
+
+/* ... estilos anteriores ... */
+
+/* 🔽 Responsive Design */
+@media (max-width: 1440px) {
+  .comunidad-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .comunidad-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .comunidad-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .comunidad-card {
+    padding: 20px 12px;
+    min-height: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .comunidad-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .comunidad-card {
+    margin: 0 auto;
+    width: 90%;
+    padding: 20px 16px;
+  }
+
+  .star-circle {
+    width: 48px;
+    height: 48px;
+    font-size: 16px;
+  }
+
+  .comunidad-comentario {
+    font-size: 13px;
+  }
 }

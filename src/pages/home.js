@@ -19,54 +19,53 @@ const testimonios = [
     nombre: 'Carla',
     servicio: 'Taller: Me quiero conocer',
     comentario:
-      'Sí me gustó, me ayudó, me ayudó a ver que no es tan difícil, solo es prestar atención 5 minutos al día.',
+      'Si me gustó, me ayudó, me ayudo a ver que es tan difícil solo es como prestar atención 5 minutos al día para poder conectar con tu cuerpo... las actividades me ayudaron a ver que no es tan difícil... todas las herramientas que necesitas para conocerte están a tu disposición, solo necesitas conectarte unos minutitos y no es tan difícil.',
     img: 'Carla.jpg',
+    calificacion: 4.5,
   },
   {
     nombre: 'Claudia',
     servicio: 'Servicios Psicológicos',
     comentario:
-      'Me gustó especialmente la flexibilidad de las sesiones en línea, que me permitieron acceder a la ayuda que necesitaba desde la comodidad de mi hogar.',
+      'Me gustó especialmente la flexibilidad de las sesiones en línea, que me permitieron acceder a la ayuda que necesitaba desde la comodidad de mi hogar. Los psicólogos son excelentes, con una gran empatía y comprensión. Y lo mejor de todo es que los precios son muy razonables, sin sacrificar la calidad del servicio.',
     img: 'Claudia.jpg',
+    calificacion: 4,
   },
   {
     nombre: 'Fernanda',
     servicio: 'Taller: Explorando mis emociones',
     comentario:
-      'Al principio me sentí un poco frustrada por no poder saber o explicar cómo sentía mis emociones... me sigue encantando.',
+      'Al principio me sentí un poco frustrada por no poder saber exactamente o explicar donde sentía, como sentía mis emociones ... me sigue encantando, me sigue gustando, me sigue llamando muchísimo la atención esto, cada cosa que explica me llama mas la atención para yo seguir buscando por mi cuenta y conocer mas del tema, yo me sentí muy a gusto.',
     img: 'Fernanda.jpg',
+    calificacion: 4.5
   },
   {
     nombre: 'Emma',
     servicio: 'Taller: Estimulación temprana, creatividad e implementación',
     comentario:
-      'Me gustó mucho porque te van guiando de manera muy amena sobre cómo ir tratando a las infancias.',
+      'A mi me gusto mucho porque te van guiando de manera muy amena sobre como ir tratando a las infancias... me gusto mucho principalmente los juegos, porque son juegos que no creí que fueran tan útiles para los niños, es decir no quebrarte tanto la cabeza, pueden ayudar mucho...',
     img: 'Emma.jpg',
-  },
-  {
-    nombre: 'Evelyn',
-    servicio: 'Taller: Estimulación temprana, creatividad e implementación',
-    comentario:
-      'Me voy satisfecha y también con muchas ideas de los tipos de juegos... me doy cuenta de situaciones que incluso vivimos de niños.',
-    img: 'Evelyn.jpg',
+    calificacion: 5
   },
   {
     nombre: 'Regina',
     servicio: 'Taller: Me quiero conocer',
     comentario:
-      'Me permitió comprender mejor mis pensamientos, emociones y comportamientos. Me gustó la combinación perfecta de teoría y práctica.',
+      'Me permitió comprender mejor mis pensamientos, emociones y comportamientos, lo que más me gustó del taller fue la combinación perfecta de teoría y práctica, lo mejor de todo es que el costo es muy accesible. No te dejaras intimidar por el precio, ya que es una inversion en tu bienestar y crecimiento personal que vale mucho más.',
     img: 'Regina.jpg',
+    calificacion: 4
   },
   {
     nombre: 'Irais',
     servicio: 'Taller: ¿Te dejaré ir?',
     comentario:
-      'El taller ofrece herramientas prácticas para manejar emociones y pensar con claridad. Se enfoca en aceptar, abrazar y sentir las emociones.',
+      'El taller ofrece herramientas prácticas para aprender a manejar las emociones y pensar con claridad en moments de tensión, se enfoca en la importancia de aceptar, abrazar y sentir las emociones, en lugar de reprimirlas, es un espacio seguro para explorar el proceso del duelo y entender que es un proceso; los materiales el taller, como videos y mensajes, son útiles para ilustrar y reforzar los conceptos aprendidos, el taller cumplió con su objetivo y me brindo un aprendizaje valioso para seguir adelante.',
     img: 'Irais.jpg',
+    calificacion: 5,
   },
 ];
 
-function truncate(text, maxLength = 55) {
+function truncate(text, maxLength = 65) {
   if (!text) return '';
   return text.length > maxLength
     ? text.slice(0, maxLength).trim() + '...'

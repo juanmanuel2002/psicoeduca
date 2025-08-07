@@ -63,13 +63,13 @@ export default function RecursoDetalle() {
               if (recurso.costo === 0) {
                 descargarPDF();
               } 
-              if (!user) {
+              if (!user && recurso.costo !== 0) {
                 localStorage.setItem("pendingCartItem", JSON.stringify(recurso));
                 setShowModalAdquirir(true);
                 setTimeout(() => {
                   navigate('/login', { state: { redirectTo: '/checkout' } });
                 }, 2500);
-              } else{
+              } else if(recurso.costo !== 0){
                 addToCart(recurso);
                 navigate('/checkout');
               }

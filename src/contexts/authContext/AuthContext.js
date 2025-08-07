@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
+import { refreshToken } from  '../../services/authService'
 
 export const AuthContext = createContext();
 
@@ -21,6 +22,45 @@ export function AuthProvider({ children }) {
       localStorage.removeItem('token');
     };
   }, []);
+
+  useEffect(() => {
+    const checkToken = async() => {
+      const token = localStorage.getItem('token');
+      const expiration = user?.stsTokenManager?.expirationTime;
+      const refreshTokenData = user?.stsTokenManager?.refreshToken;
+      const now = Date.now();
+      
+      if (token && expiration) {
+        if (now > expiration) {
+          logout();
+        } else {
+          // Si faltan menos de 2 minutos, refresca el token
+          if (expiration - now < 2 * 60 * 1000) {
+              const refreshed = await refreshToken({refreshTokenData});
+              if (refreshed?.accessToken) {
+                localStorage.setItem('token', refreshed.accessToken);
+
+                setUser({
+                  ...user,
+                  stsTokenManager: {
+                    ...user.stsTokenManager,
+                    accessToken: refreshed.accessToken,
+                    expirationTime: refreshed.expirationTime,
+                  },
+                });
+              } else {
+                logout();
+              }
+             
+          }
+        }
+      }
+    };
+
+    // Verifica cada minuto
+    const interval = setInterval(checkToken, 60 * 1000);
+    return () => clearInterval(interval);
+  }, [user]);
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

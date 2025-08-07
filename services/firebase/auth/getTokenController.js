@@ -44,7 +44,7 @@ export async function getRefreshToken(req, res){
 
     return res.status(200).json({
       accessToken: id_token,
-      expirationTime: parseInt(expires_in, 10) * 1000, 
+      expirationTime: Date.now() + parseInt(expires_in, 10) * 1000, 
     });
 
   } catch (error) {

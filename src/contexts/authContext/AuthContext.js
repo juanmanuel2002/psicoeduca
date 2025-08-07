@@ -5,6 +5,7 @@ export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [lastActivity, setLastActivity] = useState(Date.now());
 
   const login = (userData) => {
     setUser(userData);
@@ -23,6 +24,21 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
+    // Detectar actividad del usuario
+  useEffect(() => {
+    const updateActivity = () => setLastActivity(Date.now());
+
+    window.addEventListener('mousemove', updateActivity);
+    window.addEventListener('keydown', updateActivity);
+    window.addEventListener('click', updateActivity);
+
+    return () => {
+      window.removeEventListener('mousemove', updateActivity);
+      window.removeEventListener('keydown', updateActivity);
+      window.removeEventListener('click', updateActivity);
+    };
+  }, []);
+
   useEffect(() => {
     const checkToken = async() => {
       const token = localStorage.getItem('token');
@@ -34,23 +50,23 @@ export function AuthProvider({ children }) {
         if (now > expiration) {
           logout();
         } else {
+          const timeLeft = expiration - now;
           // Si faltan menos de 2 minutos, refresca el token
-          if (expiration - now < 2 * 60 * 1000) {
-              const refreshed = await refreshToken({refreshTokenData});
-              if (refreshed?.accessToken) {
-                localStorage.setItem('token', refreshed.accessToken);
-
-                setUser({
-                  ...user,
-                  stsTokenManager: {
-                    ...user.stsTokenManager,
-                    accessToken: refreshed.accessToken,
-                    expirationTime: refreshed.expirationTime,
-                  },
-                });
-              } else {
-                logout();
-              }
+          if (timeLeft < 2 * 60 * 1000 && now - lastActivity < 2 * 60 * 1000) {
+            const refreshed = await refreshToken({refreshTokenData});
+            if (refreshed?.accessToken) {
+              localStorage.setItem('token', refreshed.accessToken);
+              setUser({
+                ...user,
+                stsTokenManager: {
+                  ...user.stsTokenManager,
+                  accessToken: refreshed.accessToken,
+                  expirationTime: refreshed.expirationTime,
+                },
+              });
+            }else {
+              logout();
+            }
              
           }
         }

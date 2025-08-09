@@ -39,7 +39,15 @@ export async function registerWithEmail(req, res) {
       uid: user.uid,
       createdAt: new Date()
     });
-    res.status(201).json({ user });
+    
+    const userWithName = {
+      uid: user.uid,
+      email: user.email,
+      stsTokenManager: user.stsTokenManager,
+      name: name
+    };
+
+    res.status(201).json({ user: userWithName });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

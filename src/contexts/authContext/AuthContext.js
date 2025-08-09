@@ -76,7 +76,7 @@ export function AuthProvider({ children }) {
     // Verifica cada minuto
     const interval = setInterval(checkToken, 60 * 1000);
     return () => clearInterval(interval);
-  }, [user]);
+  }, [user, lastActivity]);
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

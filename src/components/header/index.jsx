@@ -32,7 +32,7 @@ export default function Header() {
           {!user ? (
             <div className="header-btns-desktop">
               <button onClick={() => navigate('/login')} className="header-btn">Inicia sesión</button>
-              <button onClick={() => navigate('/signup')} className="header-btn">Regístrate</button>
+              {/*<button onClick={() => navigate('/signup')} className="header-btn">Regístrate</button>*/}
             </div>
           ) : (
             <button className="header-btn account-btn" aria-label="Cuenta" onClick={() => setSidebarOpen(true)}>

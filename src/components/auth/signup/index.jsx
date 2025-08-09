@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { register } from "../../../services/authService";
-import '../../../styles/login.css';
+import { AuthContext } from "../../../contexts/authContext/AuthContext";
+import "./register.css";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -12,6 +13,7 @@ const Signup = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { login: setAuthUser } = useContext(AuthContext);
 
   const reglasTraduccion = {
     "Password must contain at least 8 characters": "Debe tener al menos 8 caracteres",
@@ -20,6 +22,16 @@ const Signup = () => {
     "Password must contain a numeric character": "Debe contener un número",
     "Password must contain a non-alphanumeric character": "Debe contener un carácter especial",
   };
+
+  function getPasswordChecks(password) {
+    return {
+      length: password.length >= 8,
+      upper: /[A-Z]/.test(password),
+      lower: /[a-z]/.test(password),
+      number: /[0-9]/.test(password),
+      special: /[^A-Za-z0-9]/.test(password),
+    };
+  }
 
   useEffect(() => {
     if (isSignedUp) {
@@ -34,33 +46,33 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
     if (password !== confirmPassword) {
       setError("Las contraseñas no coinciden");
       return;
     }
+
     setLoading(true);
     try {
-      await register(email, password, name);
+      let userData = await register(email, password, name);
+      setAuthUser(userData.user);
       setIsSignedUp(true);
     } catch (err) {
-      if (err.code === "auth/email-already-in-use") {
+      if (err.message.includes("auth/email-already-in-use")) {
         setError("Este correo ya está en uso.");
-      } else if (err.code === "auth/weak-password") {
-        setError("La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.");
-      } else if (err.code === "auth/invalid-email") {
+      } else if (err.message.includes("auth/invalid-email")) {
         setError("El correo no es válido.");
-      } else if (err.code === "auth/password-does-not-meet-requirements"){
+      } else if (err.message.includes("auth/password-does-not-meet-requirements")) {
         const reglas = [];
-        // Extraer la lista entre corchetes del mensaje de error
         const match = err.message.match(/\[(.*?)\]/);
         if (match && match[1]) {
-            const reglasEnIngles = match[1].split(', ');
-            for (const regla of reglasEnIngles) {
+          const reglasEnIngles = match[1].split(", ");
+          for (const regla of reglasEnIngles) {
             const traducida = reglasTraduccion[regla.trim()];
             if (traducida) {
-                reglas.push(traducida);
+              reglas.push(traducida);
             }
-            }
+          }
         }
         setError(
           reglas.length > 0
@@ -74,14 +86,15 @@ const Signup = () => {
     setLoading(false);
   };
 
-
   if (isSignedUp && !showSuccess) {
     return <Navigate to="/home" />;
   }
 
+  const passwordChecks = getPasswordChecks(password);
+
   return (
-    <div className="login-bg-container">
-      <div className="login-form-section">
+    <div className="register-container">
+      <div className="register-form-section">
         <h2>Registrarse</h2>
         {isSignedUp && showSuccess && (
           <p className="success-message">¡Registro exitoso! Redirigiendo...</p>
@@ -100,6 +113,7 @@ const Signup = () => {
             </div>
           )
         )}
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="nombre">Nombre:</label>
@@ -114,6 +128,7 @@ const Signup = () => {
               required
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="email">Email:</label>
             <input
@@ -127,6 +142,7 @@ const Signup = () => {
               required
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="password">Contraseña:</label>
             <input
@@ -139,7 +155,28 @@ const Signup = () => {
               }}
               required
             />
+
+            {/* Lista de requisitos */}
+             <ul className="password-rules">
+              <li className={passwordChecks.length ? "valid" : "invalid"}>
+                Mínimo 8 caracteres
+              </li>
+              <li className={passwordChecks.upper ? "valid" : "invalid"}>
+                Al menos una letra mayúscula
+              </li>
+              <li className={passwordChecks.lower ? "valid" : "invalid"}>
+                Al menos una letra minúscula
+              </li>
+              <li className={passwordChecks.number ? "valid" : "invalid"}>
+                Al menos un número
+              </li>
+              <li className={passwordChecks.special ? "valid" : "invalid"}>
+                Al menos un carácter especial
+              </li>
+            </ul>
+
           </div>
+
           <div className="form-group">
             <label htmlFor="confirmPassword">Confirmar contraseña:</label>
             <input
@@ -153,12 +190,16 @@ const Signup = () => {
               required
             />
           </div>
+
           <button type="submit" className="login-btn" disabled={loading}>
             {loading ? "Registrando..." : "Registrarse"}
           </button>
         </form>
+
         <div className="login-links">
-          <Link to="/login" className="forgot-link">¿Ya tienes cuenta? Inicia sesión</Link>
+          <Link to="/login" className="forgot-link">
+            ¿Ya tienes cuenta? Inicia sesión
+          </Link>
         </div>
       </div>
     </div>

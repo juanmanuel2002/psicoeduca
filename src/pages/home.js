@@ -5,6 +5,7 @@ import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';
 import Header from "../components/header";
 import Footer from '../components/footer';
 import HeroSection from '../components/home/HeroSection';
+import QuienesSection from '../components/home/QuienesSection';
 import ServicesSection from '../components/home/ServicesSection';
 import FeaturedCoursesSection from '../components/home/FeaturedCoursesSection';
 import BooksSection from '../components/home/BooksSection';
@@ -121,8 +122,9 @@ export default function Home() {
   return (
     <div className="home-container">
       <Header />
-      <HeroSection />
-      <ServicesSection />
+  <HeroSection />
+  <QuienesSection />
+  <ServicesSection />
       <FeaturedCoursesSection
         tab={tab}
         setTab={setTab}

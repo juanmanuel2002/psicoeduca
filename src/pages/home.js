@@ -122,9 +122,14 @@ export default function Home() {
   return (
     <div className="home-container">
       <Header />
-  <HeroSection />
-  <QuienesSection />
-  <ServicesSection />
+      <HeroSection />
+      <div className=""  id="conocenos">
+      <QuienesSection />
+      </div>
+      <div className=""  id="services">
+      <ServicesSection/> 
+      </div>
+      <div className=""  id="cursos">
       <FeaturedCoursesSection
         tab={tab}
         setTab={setTab}
@@ -134,13 +139,18 @@ export default function Home() {
         cursosRecomendados={cursosRecomendados}
         filtrarPorTipo={filtrarPorTipo}
       />
+      </div>
+      <div className="" id="books">
       <BooksSection recursos={recursos} />
+      </div>
+      <div className=""  id="comunidad">
       <ComunidadSection
         testimonios={testimonios}
         comunidadRef={comunidadRef}
         setImagenActiva={setImagenActiva}
         truncate={truncate}
       />
+      </div>
       <ModalImagen imagenActiva={imagenActiva} cerrarModal={cerrarModal} />
       <WhatsAppFloat />
       <Footer />

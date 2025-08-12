@@ -58,6 +58,7 @@ export default function Header() {
       {/* Barra de navegación */}
       <nav className={`nav-bar ${open ? "open" : ""}`}>
         <div data-aos="fade-up" className="nav-bar-inner">
+          <a href="#conocenos" onClick={() => { navigate('/home'); setOpen(false); }}>Conocenos</a>
           <a href="#services" onClick={() => { navigate('/home'); setOpen(false); }}>Servicios</a>
           <a href="#cursos" onClick={() => { navigate('/home'); setOpen(false); }}>Cursos</a>
           <a href="#books" onClick={() => { navigate('/home'); setOpen(false); }}>Recursos Psicológicos</a>

@@ -183,6 +183,8 @@
     padding: 0 20px 20px;
     box-shadow: none;
     background: transparent;
+    
+    align-self: center;
   }
 
   .login-banner {
@@ -235,7 +237,7 @@
 }
 
 /* AJUSTAR PARA TABLES*/
-@media (min-width: 601px) and (max-width: 1200px) {
+@media (max-width: 1200px) {
   .login-main-container {
     flex-direction: column;
     padding: 40px 0;
@@ -249,6 +251,7 @@
     align-items: center;
     justify-content: center;
     display: flex;
+    align-self: center;
   }
 
   .login-banner {

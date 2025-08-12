@@ -15,7 +15,7 @@ export default function ComunidadSection({ testimonios }) {
   const handleExpand = idx => setExpanded(e => ({ ...e, [idx]: !e[idx] }));
 
   return (
-    <section data-aos="fade-up" id="comunidad" className="comunidad-section">
+    <section data-aos="fade-up" className="comunidad-section">
       <h2>Comunidad Psicoeduca</h2>
       <p>Estos son algunos testimonios de personas que han tomado nuestros cursos o servicios.</p>
       <div className="comunidad-grid">

@@ -41,8 +41,8 @@ const services = [
 export default function ServicesSection() {
   const navigate = useNavigate();
   return (
-    <section data-aos="fade-up" id="services" className="services-section">
-      <h2>Servicios Psicológicos</h2>
+    <section data-aos="fade-up" className="services-section">
+      <h2 >Conoce nuestros servicios </h2>
       <div className="services-grid">
         {services.map(({ title, description, icon, id }, idx) => (
           <div key={idx} className="service-card" onClick={() => navigate(`/servicio/${id}`)}>

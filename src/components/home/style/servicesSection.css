@@ -54,3 +54,9 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 1200px){
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -6,7 +6,7 @@ import './style/coursesSection.css';
 export default function FeaturedCoursesSection({ tab, setTab, tipoCurso, setTipoCurso, cursosNuevos, cursosRecomendados, filtrarPorTipo }) {
   const navigate = useNavigate();
   return (
-    <section data-aos="fade-up" id="cursos" className="featured-courses-section">
+    <section data-aos="fade-up"  className="featured-courses-section">
       <h2> Cursos Destacados</h2>
       <div style={{display:'flex', justifyContent:'center', gap:25, marginBottom:16}}>
         <button

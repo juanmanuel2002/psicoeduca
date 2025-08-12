@@ -140,3 +140,13 @@
     font-size: 2rem;
   }
 }
+
+@media(max-width: 1200px){
+  .hero-image  {
+    max-height: 300px;
+    align-self: center;
+  }
+  .hero-image img {
+    max-height: 300px;
+  }
+}

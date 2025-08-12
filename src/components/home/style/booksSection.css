@@ -28,6 +28,7 @@
   flex-wrap: wrap;
   gap: 32px;
   margin-bottom: 30px;
+  justify-content: center;
 }
 
 .book-card {
@@ -36,12 +37,11 @@
   box-shadow: 0 6px 15px var(--color-book-shadow);
   transition: box-shadow 0.3s ease;
   cursor: default;
-  flex-grow: 2;
-  flex-basis: 400px;
+
+  flex: 0 0 400px;
   aspect-ratio: 3/2;
   align-content: center;
   justify-self: center;
-  width: 400px;
   max-height: 100%;
 }
 

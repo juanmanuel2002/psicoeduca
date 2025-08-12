@@ -12,12 +12,16 @@
   color: var(--color-secondary);
   text-align: center;
 }
+
 .featured-courses-grid {
-  display: grid;
+  display: flex; flex-wrap: wrap;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 28px;
-  justify-items: center;
+  justify-content: center;
+  justify-items: center;  
 }
+
+
 .featured-course-card {
   background: var(--color-card);
   border-radius: 16px;
@@ -41,8 +45,6 @@
   color: var(--color-primary-dark);
   font-size: 1.2rem;
   font-weight: 600;
-  /*color: var(--color-primary-dark);
-  margin-bottom: 8px;*/
 }
 .featured-course-desc {
   color: var(--color-text-light);

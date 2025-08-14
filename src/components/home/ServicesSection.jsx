@@ -4,7 +4,7 @@ import './style/servicesSection.css';
 
 const services = [
   {
-    id: 'terapia-individual',
+    id: '/servicio/terapia-individual',
     title: "Terapia individual (adultos online)",
     description: "Atención psicológica personalizada para adultos, 100% online, enfocada en tu bienestar emocional y desarrollo personal.",
     icon: (
@@ -12,7 +12,7 @@ const services = [
     ),
   },
   {
-    id: 'cursos-psicologicos',
+    id: '/cursos',
     title: "Cursos psicológicos",
     description: "Capacítate y aprende sobre psicología aplicada a la vida diaria, con cursos prácticos y accesibles para todos.",
     icon: (
@@ -68,7 +68,7 @@ export default function ServicesSection() {
       <h2 >Conoce nuestros servicios </h2>
       <div className="services-grid">
         {services.map(({ title, description, icon, id }, idx) => (
-          <div key={idx} className="service-card" onClick={() => navigate(`/servicio/${id}`)}>
+          <div key={idx} className="service-card" onClick={() => navigate(`${id}`)}>
             {icon}
             <h3>{title}</h3>
             <p>{description}</p>

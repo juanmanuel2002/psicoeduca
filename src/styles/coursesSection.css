@@ -2,8 +2,12 @@
 .featured-courses-section {
   width: 100%;
   max-width: 1100px;
-  margin: -50px auto 150px auto;
+  margin-top: 10px;
+  margin-bottom: 70px;
   padding: 40px 0px 0 20px;
+  align-self: center;
+  justify-self: center;
+
 }
 
 .featured-courses-section h2 {

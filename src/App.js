@@ -16,6 +16,7 @@ import MisRecursos from './pages/misRecursos';
 import Perfil from './pages/perfil';
 import Servicios from './pages/services.js';
 import EnglishSection from './pages/EnglishSection.js';
+import FeaturedCoursesSection from './pages/cursos.js'
 import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
 
 const App = () => {
@@ -30,6 +31,7 @@ const App = () => {
                         <Route path="/home" element={<Home />} />
                         <Route path="/recursos" element={<Recursos />} />
                         <Route path="/recurso/:id" element={<RecursoDetalle />} />
+                        <Route path="/cursos" element={<FeaturedCoursesSection />}/>
                         <Route path="/curso/:id" element={<CursoDetalle />} />
                         <Route path="/servicio/:id" element={<Servicios />} />
                         <Route path="/crear-cita" element={<CrearCita />} />

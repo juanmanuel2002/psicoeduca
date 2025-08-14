@@ -1,5 +1,5 @@
 import React, {useEffect, useState } from "react";
-import "../styles/home.css";
+import "../styles/recursos.css";
 import Header from "../components/header";
 import Footer from '../components/footer';
 import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';

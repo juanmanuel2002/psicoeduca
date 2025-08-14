@@ -1,14 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { getRecursos } from '../services/recursosService';
-import { getCursos } from '../services/cursosService';
+
 import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';
 import Header from "../components/header";
 import Footer from '../components/footer';
 import HeroSection from '../components/home/HeroSection';
 import QuienesSection from '../components/home/QuienesSection';
 import ServicesSection from '../components/home/ServicesSection';
-import FeaturedCoursesSection from '../components/home/FeaturedCoursesSection';
-import BooksSection from '../components/home/BooksSection';
 import ComunidadSection from '../components/home/ComunidadSection';
 import ModalImagen from '../components/home/ModalImagen';
 import AOS from 'aos';
@@ -72,12 +69,10 @@ function truncate(text, maxLength = 65) {
     ? text.slice(0, maxLength).trim() + '...'
     : text;
 }
+ 
 
 export default function Home() {
-  const [tab, setTab] = useState('nuevos');
-  const [recursos, setRecursos] = useState([]);
-  const [cursos, setCursos] = useState([]);
-  const [tipoCurso, setTipoCurso] = useState('sincronos');
+  
   const comunidadRef = useRef();
   
   const [imagenActiva, setImagenActiva] = useState(null);
@@ -87,14 +82,7 @@ export default function Home() {
     AOS.init({ duration: 1000, once: false });
   }, []);
 
-  useEffect(() => {
-    getRecursos().then(data => setRecursos(data));
-  }, []);
-
-  useEffect(() => {
-    getCursos().then(data => setCursos(data));
-  }, []);
- 
+  
   useEffect(() => {
     let pos = 0;
     const track = comunidadRef.current?.firstChild;
@@ -110,14 +98,7 @@ export default function Home() {
     return () => cancelAnimationFrame(frame);
   }, []);
 
-  const cursosNuevos = cursos.filter(c => (c.estado || '').toLowerCase() === 'nuevo');
-  const cursosRecomendados = cursos.filter(c => (c.estado || '').toLowerCase() === 'recomendado');
-
-  const filtrarPorTipo = (arr) => {
-    if (tipoCurso === 'sincronos') return arr.filter(c => (c.tipo || '').toLowerCase() === 'síncrono');
-    if (tipoCurso === 'asincronos') return arr.filter(c => (c.tipo || '').toLowerCase() === 'asíncrono');
-    return arr
-  };
+  
 
   return (
     <div className="home-container">
@@ -128,20 +109,6 @@ export default function Home() {
       </div>
       <div className=""  id="services">
       <ServicesSection/> 
-      </div>
-      <div className=""  id="cursos">
-      <FeaturedCoursesSection
-        tab={tab}
-        setTab={setTab}
-        tipoCurso={tipoCurso}
-        setTipoCurso={setTipoCurso}
-        cursosNuevos={cursosNuevos}
-        cursosRecomendados={cursosRecomendados}
-        filtrarPorTipo={filtrarPorTipo}
-      />
-      </div>
-      <div className="" id="books">
-      <BooksSection recursos={recursos} />
       </div>
       <div className=""  id="comunidad">
       <ComunidadSection

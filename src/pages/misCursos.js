@@ -25,7 +25,7 @@ export default function MisCursos() {
   }, [user]);
 
   const handleVerCursos = () => {
-    navigate('/home#cursos');
+    navigate('/cursos');
     setTimeout(() => {
       const section = document.getElementById('cursos');
       if (section) {

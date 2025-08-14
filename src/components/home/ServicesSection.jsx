@@ -5,35 +5,58 @@ import './style/servicesSection.css';
 const services = [
   {
     id: 'terapia-individual',
-    title: "Terapia Individual",
-    description: "Atención personalizada para adultos en búsqueda de bienestar emocional.",
+    title: "Terapia individual (adultos online)",
+    description: "Atención psicológica personalizada para adultos, 100% online, enfocada en tu bienestar emocional y desarrollo personal.",
     icon: (
-      <svg className="service-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2a4 4 0 014-4h1" />
-        <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth={2} />
-      </svg>
+      <span role="img" aria-label="terapia" className="service-icon">🧑‍💼</span>
     ),
   },
   {
-    id: 'terapia-adolescentes',
-    title: "Terapia para Adolescentes",
-    description: "Apoyo profesional para jóvenes en etapas clave de su desarrollo.",
+    id: 'cursos-psicologicos',
+    title: "Cursos psicológicos",
+    description: "Capacítate y aprende sobre psicología aplicada a la vida diaria, con cursos prácticos y accesibles para todos.",
     icon: (
-      <svg className="service-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 14h.01M16 10h.01M9 16h6" />
-        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth={2} />
-      </svg>
+      <span role="img" aria-label="cursos" className="service-icon">📚</span>
     ),
   },
   {
-    id: 'asesoria-linea',
-    title: "Asesoría en Línea",
-    description: "Sesiones virtuales desde la comodidad de tu hogar.",
+    id: 'seminarios-gratuitos',
+    title: "Seminarios gratuitos",
+    description: "Participa en seminarios y charlas sin costo, impartidos por profesionales, para tu crecimiento personal y emocional.",
     icon: (
-      <svg className="service-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l4 2" />
-      </svg>
+      <span role="img" aria-label="seminarios" className="service-icon">🎤</span>
+    ),
+  },
+  {
+    id: 'consulta-psicologica',
+    title: "Consulta psicológica",
+    description: "Sesiones de consulta para orientación, diagnóstico y acompañamiento psicológico en diferentes áreas de tu vida.",
+    icon: (
+      <span role="img" aria-label="consulta" className="service-icon">💬</span>
+    ),
+  },
+  {
+    id: 'terapia-breve',
+    title: "Terapia breve",
+    description: "Intervenciones psicológicas de corta duración, enfocadas en resolver problemas específicos de manera efectiva.",
+    icon: (
+      <span role="img" aria-label="terapia breve" className="service-icon">⏱️</span>
+    ),
+  },
+  {
+    id: 'ingles-psicologia',
+    title: "Inglés desde la psicología",
+    description: "Aprende inglés con un enfoque psicológico, potenciando tus habilidades cognitivas y emocionales para el aprendizaje de idiomas.",
+    icon: (
+      <span role="img" aria-label="ingles" className="service-icon">🇬🇧</span>
+    ),
+  },
+  {
+    id: 'recursos-gratuitos',
+    title: "Recursos gratuitos",
+    description: "Accede a materiales, guías y herramientas gratuitas para tu bienestar y desarrollo personal.",
+    icon: (
+      <span role="img" aria-label="recursos" className="service-icon">🆓</span>
     ),
   },
 ];

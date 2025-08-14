@@ -260,7 +260,7 @@
   }
 
   .login-form-section {
-    flex: none;          /* importantísimo para que no crezca */
+    flex: none;          
     width: 100%;
     max-width: 480px;
     margin: 0 auto;
@@ -273,4 +273,10 @@
     font-size: 26px;
     text-align: center;
   }
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
 }

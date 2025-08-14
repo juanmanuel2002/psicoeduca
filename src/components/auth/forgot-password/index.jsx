@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { resetPassword } from "../../../services/authService";
-import '../../../styles/login.css';
+import './forgot.css';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -18,6 +20,10 @@ const ForgotPassword = () => {
       return () => clearTimeout(timer);
     }
   }, [message]);
+
+  useEffect(() => {
+      AOS.init({ duration: 1000, once: false });
+    }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,7 +45,7 @@ const ForgotPassword = () => {
 
   return (
     <div className="login-bg-container">
-      <div className="login-form-section">
+      <div className="login-form-section" data-aos="fade-up">
         <h2>Recuperar contraseña</h2>
         {message && <p className="success-message">{message} Redirigiendo...</p>}
         {error && <p className="error">{error}</p>}

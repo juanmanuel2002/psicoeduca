@@ -4,6 +4,8 @@ import { login, loginWithGoogle} from "../../../services/authService";
 import '../../../styles/login.css';
 import { AuthContext } from '../../../contexts/authContext/AuthContext';
 import { useCart } from '../../../contexts/cartContext/CartContext';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const Login = () => {
     const location = useLocation();
@@ -40,6 +42,9 @@ const Login = () => {
         }
     };
 
+    useEffect(() => {
+      AOS.init({ duration: 1000, once: false });
+    }, []);
 
     useEffect(() => {
       async function fetchGoogleClientIdAndInit() {
@@ -90,10 +95,10 @@ const Login = () => {
 
 return (
   <div className="login-main-container">
-    <div className="login-image-section">
-      <img src={process.env.PUBLIC_URL + '/baner.png'} alt="Banner" className="login-banner" />
+    <div className="login-image-section" data-aos="fade-up">
+      <img src={process.env.PUBLIC_URL + '/baner.png'} alt="Banner" className="login-banner" onClick={()=>{navigate('/')}}/>
     </div>
-    <div className="login-form-section">
+    <div className="login-form-section" data-aos="fade-up">
       <h2>Iniciar sesión</h2>
       {error && <p className="error">{error}</p>}
       <form onSubmit={onSubmit}>

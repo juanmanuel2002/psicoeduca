@@ -76,3 +76,26 @@
   font-size: 0.95rem;
   color: var(--color-text);
 }
+
+.recursos-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.recursos-filtro {
+  flex: 0 0 260px;
+  position: relative;
+  top: 100px; 
+}
+
+.books-section {
+  flex: 1;
+  background-color: var(--color-bg-alt);
+  padding: 40px 30px;
+  border-radius: 12px;
+  text-align: center;
+}

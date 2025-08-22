@@ -28,6 +28,12 @@
   gap: 40px;
   margin-bottom: 70px;
 }
+
+.english-hero h3{
+  font-size: 1.8rem;
+  color: var(--color-primary);
+  margin-bottom: 40px;
+}
 .english-hero-text {
   flex: 1;
   text-align: left;
@@ -50,7 +56,6 @@
   color: var(--color-accent, #2563EB);
   background: #e0e7ff;
   border-radius: 50%;
-  padding: 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
@@ -84,6 +89,14 @@
 .english-section .english-card .card-desc {
   color: #475569;
   font-size: 1.1rem;
+  margin-bottom: 25px;
+}
+
+.english-section .english-cards img{
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 16px;
 }
 
 /* Testimonios */
@@ -170,8 +183,15 @@
 .english-section .inscribete-section h3 {
   color: var(--color-accent, #2563EB);
   font-size: 1.4rem;
+  margin-bottom: 20px;
+}
+
+.english-section .inscribete-section h4 {
+  color: var(--color-accent, #2563EB);
+  font-size: 1.2rem;
   margin-bottom: 40px;
 }
+
 .english-section .inscribete-section form {
   display: flex;
   flex-direction: column;
@@ -218,13 +238,18 @@
   .english-section .resources-list {
     grid-template-columns: 1fr !important;
   }
-  .english-section {
+  .english-section  {
+    max-width: 100%;
     padding: 24px 12px 32px 12px;
+  }
+  .inscribete-section {
+    max-width: 100%;
   }
 }
 @media (max-width: 600px) {
   .english-section {
     padding: 12px 6px 18px 6px;
+    max-width: 100%;
   }
   .english-section h2 {
     font-size: 1.4rem;

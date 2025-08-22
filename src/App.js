@@ -17,14 +17,18 @@ import Perfil from './pages/perfil';
 import Servicios from './pages/services.js';
 import EnglishSection from './pages/EnglishSection.js';
 import FeaturedCoursesSection from './pages/cursos.js';
-import Consulta from './pages/consulta.js'
+import Consulta from './pages/consulta.js';
+import ClasesIndividual from './pages/clasesIndividual.js';
+import ClasesGrupo from './pages/clasesGrupo.js';
 import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
+import ScrollToTop from './components/ui/scrollToTop.js';
 
 const App = () => {
     return (
         <AuthProvider>
             <CartProvider>
                 <Router>
+                    <ScrollToTop />
                     <Routes>
                         <Route path="/login" element={<Login />} />
                         <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -42,6 +46,8 @@ const App = () => {
                         <Route path="/mis-recursos" element={<MisRecursos />} />
                         <Route path="/perfil" element={<Perfil />} />
                         <Route path="/english" element={<EnglishSection />} />
+                        <Route path="/clases-individual" element={<ClasesIndividual />} />
+                        <Route path="/clases-grupo" element={<ClasesGrupo />} />
                         <Route path="/checkout" element={<Checkout />} />
                         <Route path="/" element={<Navigate to="/home" />} />
                     </Routes>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/englishSection.css';
 import { sendEmailSolicitud } from '../services/sendEmailService';
+import { useNavigate } from 'react-router-dom';
 import InfoModal from '../components/ui/InfoModal';
 import Header from '../components/header';
 import Footer from '../components/footer';
@@ -32,10 +33,11 @@ export default function EnglishSection() {
   const [enviando, setEnviando] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-          AOS.init({ duration: 1000, once: false });
-          }, []);
+    AOS.init({ duration: 1000, once: false });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,7 +63,8 @@ export default function EnglishSection() {
         {/* HERO */}
         <div className="english-hero">
           <div className="english-hero-text">
-            <h2>Clases de Inglés Psicoeduca</h2>
+            <h2>Bienvenido a PSICOIDIOMAS</h2>
+            <h3>Clases de Inglés con Psicoeduca</h3>
             <div className="subtitle">Aprende inglés con un enfoque conversacional, divertido y psicológico.</div>
             <div className="english-icons">
               <SchoolIcon className="english-icon" />
@@ -105,18 +108,27 @@ export default function EnglishSection() {
         {/* Clases */}
         <div className="english-cards">
           <div className="english-card">
+            <img src="/baner.png" alt="Clases grupales" className="card-img" />
             <div className="card-title">Clases grupales</div>
             <div className="card-desc">Participa en sesiones grupales para practicar conversación y aprender con otros.</div>
+            <button className="btn primary" onClick={() => {navigate('/clases-grupo');}}>
+              Más Información
+            </button>
           </div>
           <div className="english-card">
+            <img src="/baner.png" alt="Clases grupales" className="card-img" />
             <div className="card-title">Clases individuales</div>
             <div className="card-desc">Recibe atención personalizada y avanza a tu propio ritmo.</div>
+            <button className="btn primary" onClick={() =>{navigate('/clases-individual');}}>
+              Más Información
+            </button>
           </div>
         </div>
 
         {/* Inscríbete */}
         <div className="inscribete-section">
-          <h3>¡Inscríbete a la lista de espera!</h3>
+          <h3>¿Necesitas algun otro tipo de sesión?</h3>
+          <h4>Llena los siguientes campos y ponto te contactaremos</h4>
           <form onSubmit={handleSubmit}>
             <input
               type="text"

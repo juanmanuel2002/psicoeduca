@@ -70,7 +70,6 @@ export default function Header() {
           {!user ? (
             <div className="header-btns-mobile">
               <button onClick={() => navigate('/login')} className="header-btn">Inicia sesión</button>
-              <button onClick={() => navigate('/signup')} className="header-btn">Regístrate</button>
             </div>
           ) : null}
         </div>

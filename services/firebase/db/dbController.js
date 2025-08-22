@@ -216,7 +216,7 @@ export async function createRecurso(req, res) {
     res.locals.responseBody = response;
     return res.status(400).json(response);
   }
-  const { costo, descripcion, descripcionLarga, nombre, imagen, type, archivoDriveId } = req.body;
+  const { costo, descripcion, descripcionLarga, nombre, imagen, type, archivoDriveId, estado, categoria, modalidad } = req.body;
 
    if (
     typeof type !== 'string' || !type.trim() ||
@@ -225,7 +225,10 @@ export async function createRecurso(req, res) {
     typeof descripcionLarga !== 'string' || !descripcionLarga.trim() ||
     typeof nombre !== 'string' || !nombre.trim() ||
     typeof imagen !== 'string' || !imagen.trim() ||
-    typeof archivoDriveId !== 'string' || !archivoDriveId.trim()
+    typeof archivoDriveId !== 'string' || !archivoDriveId.trim() ||
+    typeof categoria !== 'string' || !categoria.trim() ||
+    typeof modalidad !== 'string' || !modalidad.trim() ||
+    typeof estado !== 'string' || !estado.trim()
   ) {
     const response = { error: 'Datos inválidos o incompletos' };
     res.locals.responseBody = response;
@@ -241,6 +244,9 @@ export async function createRecurso(req, res) {
       imagen,
       type,
       archivoDriveId,
+      estado,
+      categoria,
+      modalidad,
       createdBy: req.user.uid
     });
     const response = { id: docRef.id };

@@ -51,16 +51,20 @@ export async function sendPurchaseEmail(req, res) {
       from: `Psicoeduca <${config.google.user}>`,
       to: correo,
       subject: esSolicitud
-        ? 'Solicitud a lista de clases de inglés con Psicoeduca'
+        ? 'Solicitud clases de inglés con Psicoeduca'
         : '¡Muchas gracias por tu compra!',
       text: esSolicitud
         ? `Hola ${nombre || ''},
 
         Gracias por tu interés en nuestras clases de inglés con enfoque 
-        conversacional y psicológico. Te hemos agregado a la lista de espera
-        y te notificaremos en cuanto las inscripciones estén abiertas.
+        conversacional y psicológico. Cuentanos como podemos ayudarte
+        y nos pondremos en contacto contigo a la brevedad.
 
-        Si tienes alguna duda, no dudes en escribirnos.
+
+        
+        📅 Horario de atención:
+        - Lunes a Viernes: 9:00 a.m. – 6:00 p.m.
+        - Sábados: 9:00 a.m. – 2:00 p.m.
 
         Saludos,
         El equipo de Psicoeduca`
@@ -74,8 +78,8 @@ export async function sendPurchaseEmail(req, res) {
         contactarnos por redes sociales.
 
         📅 Horario de atención:
-        - Lunes a Viernes: 9:00 a.m. – 8:00 p.m.
-        - Sábados: 9:00 a.m. – 4:00 p.m.
+        - Lunes a Viernes: 9:00 a.m. – 6:00 p.m.
+        - Sábados: 9:00 a.m. – 2:00 p.m.
 
         ¡Gracias por confiar en nosotros!
 

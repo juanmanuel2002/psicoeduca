@@ -1,6 +1,6 @@
 .header-btns-desktop {
   display: flex;
-  gap: 18px;
+  gap: 12px;
 }
 .header-btns-mobile {
   display: none;
@@ -55,7 +55,6 @@
   color: var(--color-primary, #3B82F6);
   font-weight: 600;
   font-size: 1rem;
-  padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
@@ -157,8 +156,8 @@
     background: #fff;
     position: fixed;
     top: 0;
-    right: -180px;
-    width: 180px;
+    right: -280px;
+    width: 280px;
     height: 100vh;
     z-index: 2002;
     align-items: auto;
@@ -282,7 +281,7 @@
   bottom: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 998;
+  z-index: 2004;
   display: flex;
   justify-content: flex-end;
 }

@@ -73,7 +73,9 @@ export default function Header() {
             <div className="header-btns-mobile">
               <button onClick={() => navigate('/login')} className="header-btn">Inicia sesión</button>
             </div>
-          ) : null}
+          ) : <div className="header-btns-mobile">
+              <button onClick={() => navigate('/')} className="header-btn">Cerrar sesión</button>
+            </div>}
         </div>
         {open && <div className="nav-backdrop" onClick={() => setOpen(false)} />}
       </nav>

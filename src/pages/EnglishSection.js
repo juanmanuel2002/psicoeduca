@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/englishSection.css';
 import { sendEmailSolicitud } from '../services/sendEmailService';
 import InfoModal from '../components/ui/InfoModal';
@@ -12,10 +11,11 @@ import StarIcon from '@mui/icons-material/Star';
 import GroupIcon from '@mui/icons-material/Group';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import EmailIcon from '@mui/icons-material/Email';
+import AOS from 'aos';
 
 const TESTIMONIALS = [
   { text: 'Las clases son súper dinámicas y me ayudaron a perder el miedo a hablar.', author: 'Ana G.' },
-  { text: 'Me encantó el enfoque psicológico, ¡aprendí mucho más que solo inglés!', author: 'Carlos P.' },
+  { text: 'Me encantó el enfoque psicológico, ¡Aprendí mucho más que solo inglés!', author: 'Carlos P.' },
   { text: 'Los profesores son muy pacientes y las actividades divertidas.', author: 'María L.' },
 ];
 
@@ -32,6 +32,10 @@ export default function EnglishSection() {
   const [enviando, setEnviando] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
+
+  useEffect(() => {
+          AOS.init({ duration: 1000, once: false });
+          }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,25 +56,35 @@ export default function EnglishSection() {
   return (
     <div className="home-container">
       <Header />
-      <section className="english-section">
-        <img src="/baner.png" alt="Clases de inglés" className="english-hero-img" />
-        <h2>Clases de Inglés Psicoeduca</h2>
-        <div className="subtitle">Aprende inglés con un enfoque conversacional, divertido y psicológico.</div>
-        <div className="english-icons">
-          <SchoolIcon className="english-icon" />
-          <EmojiPeopleIcon className="english-icon" />
-          <GroupIcon className="english-icon" />
+      <section data-aos="fade-up" className="english-section">
+
+        {/* HERO */}
+        <div className="english-hero">
+          <div className="english-hero-text">
+            <h2>Clases de Inglés Psicoeduca</h2>
+            <div className="subtitle">Aprende inglés con un enfoque conversacional, divertido y psicológico.</div>
+            <div className="english-icons">
+              <SchoolIcon className="english-icon" />
+              <EmojiPeopleIcon className="english-icon" />
+              <GroupIcon className="english-icon" />
+            </div>
+          </div>
+          <img src="/baner.png" alt="Clases de inglés" className="english-hero-img" />
         </div>
 
         {/* Conócenos */}
         <div className="english-cards">
           <div className="english-card">
             <div className="card-title">¿Quiénes somos?</div>
-            <div className="card-desc">Somos un equipo de psicólogos y profesores certificados que te ayudarán a aprender inglés de manera integral y divertida.</div>
+            <div className="card-desc">
+              Somos un equipo de psicólogos y profesores certificados que te ayudarán a aprender inglés de manera integral y divertida.
+            </div>
           </div>
           <div className="english-card">
             <div className="card-title">¿Por qué elegirnos?</div>
-            <div className="card-desc">Nuestro método combina técnicas psicológicas y actividades prácticas para que pierdas el miedo a hablar y disfrutes el proceso.</div>
+            <div className="card-desc">
+              Nuestro método combina técnicas psicológicas y actividades prácticas para que pierdas el miedo a hablar y disfrutes el proceso.
+            </div>
           </div>
         </div>
 
@@ -119,7 +133,7 @@ export default function EnglishSection() {
               required
             />
             <button type="submit" disabled={enviando}>
-              {enviando ? 'Enviando...' : <><EmailIcon style={{verticalAlign:'middle', marginRight:6}}/>Unirme a la lista</>}
+              {enviando ? 'Enviando...' : <><EmailIcon style={{ verticalAlign: 'middle', marginRight: 6 }} />Unirme a la lista</>}
             </button>
           </form>
         </div>
@@ -137,6 +151,7 @@ export default function EnglishSection() {
           </div>
         </div>
       </section>
+
       <InfoModal open={showModal} title="¡Solicitud enviada correctamente!" message="¡Pronto te contactaremos!" />
       <InfoModal open={showModalError} title="¡Error al enviar la solicitud! Verifica la información ingresada e intenta de nuevo. En caso de que se siga presentando el error contactanos por nuestras redes sociales" message="" />
       <WhatsAppFloat />

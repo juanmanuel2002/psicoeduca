@@ -12,6 +12,16 @@
   margin-bottom: 100px;
   margin-top: -50px;
 }
+
+@media (max-width: 768px) {
+  .recursos-filtro {
+    width: 100%;          
+    margin: 0 0 20px 0;   
+    border-radius: 10px;
+    padding: 16px;
+  }
+}
+
 .filtro-busqueda {
   width: 100%;
   display: flex;

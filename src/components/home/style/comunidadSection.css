@@ -1,61 +1,145 @@
 .comunidad-section {
-  padding: 40px 20px;
+  padding: 60px 20px;
   text-align: center;
-  margin-top: -30px;
-  margin-bottom: 35px;
-}
-
-.comunidad-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 32px;
-  margin-top: 32px;
+  margin: 40px 0;
 }
 
 .comunidad-section h2 {
-  font-size: 2.4rem;
-  color: var(--color-primary);
-  margin-bottom: 24px;
-}
-
-.comunidad-section p {
-  font-size: 1.1rem;
-  color: var(--color-text-light);
+  font-size: 2.6rem;
   margin-bottom: 32px;
+  margin-top: -70px;
+  font-weight: bold;
+  color: var(--color-primary-dark);
+  letter-spacing: 2px;
 }
 
+.comunidad-section h3{
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 50px;
+  color: var(--color-primary);
+}
+.comunidad-swiper-container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.comunidad-swiper {
+  overflow: hidden; /* 👈 las cards que salen no se ven */
+  padding: 20px 0;
+}
+/* Swiper cards */
 .comunidad-card {
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
-  padding: 24px 16px;
+  padding: 24px 18px;
+  text-align: left;
+  color: #333;
+  min-height: 220px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  min-height: 220px;
-  transition: transform 0.3s ease;
+  justify-content: flex-start;
 }
 
-.comunidad-card:hover {
-  transform: translateY(-4px);
+.comunidad-foto {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-bottom: 12px;
 }
 
-/* Star Circle */
-.star-circle {
-  width: 56px;
-  height: 56px;
-  color: #fff;
+.comunidad-nombre {
+  font-weight: bold;
+  font-size: 1.3rem;
+  margin-bottom: 4px;
+}
+
+.comunidad-servicio {
+  font-size: 1.1rem;
+  color: #6b4eff;
+  margin-bottom: 12px;
+}
+
+.comunidad-comentario {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.4;
+}
+
+/* Ver más/menos */
+.comunidad-expand {
+  color: #6b4eff;
+  cursor: pointer;
+  font-weight: 600;
+  margin-left: 6px;
+  transition: color 0.2s;
+}
+.comunidad-expand:hover {
+  color: #4a2ecc;
+}
+
+/* Swiper navigation buttons */
+.swiper-button-prev,
+.swiper-button-next {
+  color: #fff !important;
+  font-weight: bold;
+  width: 44px;
+  height: 44px;
+  font-size: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  font-size: 18px;
-  margin: 0 auto 12px auto;
-  gap: 6px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: default;
+  
+}
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  background: rgba(0, 0, 0, 0.45);
 }
 
+/* Flechas personalizadas */
+.comunidad-prev,
+.comunidad-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: #fff;
+  color: var(--color-primary);
+  font-size: 28px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Posición de flechas */
+.comunidad-prev {
+  left: -50px;  /* fuera del carrusel */
+}
+
+.comunidad-next {
+  right: -50px;
+}
+
+@media (max-width: 768px) {
+  .comunidad-card {
+    padding: 18px 12px;
+  }
+}
+
+.star-circle{
+  margin-bottom: 12px;
+}
 .star-icon {
   color: #ffd600;
   font-size: 24px;
@@ -64,87 +148,4 @@
 .star-value {
   font-size: 24px;
   color: #000;
-}
-
-/* Nombre del usuario */
-.comunidad-nombre {
-  font-weight: bold;
-  color: var(--color-primary);
-  font-size: 16px;
-  margin-bottom: 4px;
-}
-
-/* Servicio tomado */
-.comunidad-servicio {
-  color: #666;
-  font-size: 14px;
-  margin-bottom: 8px;
-}
-
-/* Comentario del testimonio */
-.comunidad-comentario {
-  color: #444;
-  font-size: 14px;
-  text-align: center;
-}
-
-/* Botón para expandir/ver más */
-.comunidad-expand {
-  color: var(--color-primary);
-  cursor: pointer;
-  font-weight: bold;
-  margin-left: 4px;
-  transition: color 0.3s;
-}
-
-.comunidad-expand:hover {
-  color: #004488;
-}
-
-/* ... estilos anteriores ... */
-
-/* 🔽 Responsive Design */
-@media (max-width: 1440px) {
-  .comunidad-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-@media (max-width: 1024px) {
-  .comunidad-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .comunidad-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .comunidad-card {
-    padding: 20px 12px;
-    min-height: 280px;
-  }
-}
-
-@media (max-width: 480px) {
-  .comunidad-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .comunidad-card {
-    margin: 0 auto;
-    width: 90%;
-    padding: 20px 16px;
-  }
-
-  .star-circle {
-    width: 48px;
-    height: 48px;
-    font-size: 16px;
-  }
-
-  .comunidad-comentario {
-    font-size: 13px;
-  }
 }

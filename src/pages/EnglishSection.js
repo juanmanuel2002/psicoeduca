@@ -15,9 +15,9 @@ import EmailIcon from '@mui/icons-material/Email';
 import AOS from 'aos';
 
 const TESTIMONIALS = [
-  { text: 'Las clases son súper dinámicas y me ayudaron a perder el miedo a hablar.', author: 'Ana G.' },
-  { text: 'Me encantó el enfoque psicológico, ¡Aprendí mucho más que solo inglés!', author: 'Carlos P.' },
-  { text: 'Los profesores son muy pacientes y las actividades divertidas.', author: 'María L.' },
+  { text: 'Las clases son súper dinámicas y me ayudaron a perder el miedo a hablar.', author: 'Ana G.', calificacion: 4.5 },
+  { text: 'Me encantó el enfoque psicológico, ¡Aprendí mucho más que solo inglés!', author: 'Carlos P.', calificacion: 4 },
+  { text: 'Los profesores son muy pacientes y las actividades divertidas.', author: 'María L.', calificacion: 5 },
 ];
 
 const RESOURCES = [
@@ -26,6 +26,15 @@ const RESOURCES = [
   { icon: <GroupIcon className="resource-icon" />, name: 'Foros de conversación' },
   { icon: <StarIcon className="resource-icon" />, name: 'Tips de aprendizaje' },
 ];
+
+function StarCircle({ calificacion }) {
+  return (
+    <div className="star-circle">
+      <span className="star-value">{calificacion}</span>
+      <span className="star-icon">★</span>
+    </div>
+  );
+}
 
 export default function EnglishSection() {
   const [correo, setCorreo] = useState('');
@@ -97,7 +106,7 @@ export default function EnglishSection() {
           <div className="testimonial-list">
             {TESTIMONIALS.map((t, i) => (
               <div className="testimonial" key={i}>
-                <StarIcon style={{ color: '#fbbf24', fontSize: 22, marginBottom: 4 }} />
+                <StarCircle calificacion={t.calificacion || 5} />
                 <div>"{t.text}"</div>
                 <div className="testimonial-author">- {t.author}</div>
               </div>

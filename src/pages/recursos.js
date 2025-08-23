@@ -53,12 +53,12 @@ export default function Recursos() {
         if (filtros.gratuitos && r.costo === 0) match = true;
         if (filtros.ayudaPersonal && r.categoria === "Ayuda personal") match = true;
         if (filtros.duelo && r.categoria === "Duelo") match = true;
-        if (filtros.nuevos && r.tipo === "Seminario" && r.estado === "Nuevo") match = true;
-        if (filtros.pasados && r.tipo === "Seminario" && r.estado === "Pasado") match = true;
-        if (filtros.sincronos && r.tipo === "Seminario" && r.modalidad === "Sincrono") match = true;
-        if (filtros.asincronos && r.tipo === "Seminario" && r.modalidad === "Asincrono") match = true;
-        if (filtros.tallerSincrono && r.tipo === "Taller" && r.modalidad === "Sincrono") match = true;
-        if (filtros.tallerAsincrono && r.tipo === "Taller" && r.modalidad === "Asincrono") match = true;
+        if (filtros.nuevos && r.type === "Seminario" && r.estado === "Nuevo") match = true;
+        if (filtros.pasados && r.type === "Seminario" && r.estado === "Pasado") match = true;
+        if (filtros.sincronos && r.type === "Seminario" && r.modalidad === "Sincrono") match = true;
+        if (filtros.asincronos && r.type === "Seminario" && r.modalidad === "Asincrono") match = true;
+        if (filtros.tallerSincrono && r.type === "Taller" && r.modalidad === "Sincrono") match = true;
+        if (filtros.tallerAsincrono && r.type === "Taller" && r.modalidad === "Asincrono") match = true;
         return match;
       });
     }
@@ -102,7 +102,7 @@ export default function Recursos() {
                   color: "#888",
                 }}
               >
-                <SentimentDissatisfiedIcon style={{ fontSize: 48, marginBottom: 8 }} />
+                <SentimentDissatisfiedIcon style={{ fontSize: 48, marginBottom: 8, color: 'var(--color-accent)' }} />
                 <div>No se encontraron recursos con los filtros seleccionados.</div>
               </div>
             ) : (

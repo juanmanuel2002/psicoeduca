@@ -261,3 +261,17 @@
     padding: 16px 8px;
   }
 }
+
+
+.star-circle{
+  margin-bottom: 12px;
+}
+.star-icon {
+  color: #ffd600;
+  font-size: 24px;
+}
+
+.star-value {
+  font-size: 24px;
+  color: #000;
+}

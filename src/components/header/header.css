@@ -1,3 +1,50 @@
+/* --- Submenú Servicios --- */
+.nav-dropdown-wrapper {
+  margin-top: 5px;
+  display: inline-block;
+}
+.nav-dropdown-toggle {
+  cursor: pointer;
+  position: relative;
+  z-index: 10;
+}
+.nav-dropdown-menu {
+  display: none;
+  position: absolute;
+  left: 170px;
+  top: 90%;
+  min-width: 220px;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  border-radius: 10px;
+  padding: 10px 0;
+  z-index: 100;
+  flex-direction: column;
+  gap: 0;
+}
+.nav-dropdown-menu button {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 12px 24px;
+  font-size: 1rem;
+  color: #2563EB;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.nav-dropdown-menu button:hover {
+  background: #e0e7ff;
+}
+.nav-dropdown-wrapper:hover .nav-dropdown-menu,
+.nav-dropdown-wrapper:focus-within .nav-dropdown-menu {
+  display: flex;
+}
+@media (max-width: 900px) {
+  .nav-dropdown-menu {
+    display: none !important;
+  }
+}
 .header-btns-desktop {
   display: flex;
   gap: 12px;

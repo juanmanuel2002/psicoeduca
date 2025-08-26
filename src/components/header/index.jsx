@@ -69,12 +69,31 @@ export default function Header() {
         <div data-aos="fade-up" className="nav-bar-inner">
            <a onClick={() => { navigate('/'); setOpen(false); }}>Inicio</a>
           <a href="#conocenos" onClick={() => { navigate('/home'); setOpen(false); }}>Conocenos</a>
-          <a href="#services" onClick={() => { navigate('/home'); setOpen(false); }}>Servicios</a>
+          <div className="nav-dropdown-wrapper">
+            <a
+              href="#services"
+              className="nav-dropdown-toggle"
+              tabIndex={0}
+              onClick={e => {
+                // En desktop, solo abre el menú, no navega
+                if (window.innerWidth > 900) {
+                  e.preventDefault();
+                } else {
+                  navigate('/home'); setOpen(false);
+                }
+              }}
+            >
+              Servicios
+            </a>
+            <div className="nav-dropdown-menu">
+              <a href="#services" onClick={() => { navigate('/home'); setOpen(false); }}>Conoce Nuestros Servicios</a>
+              <a onClick={() => { navigate('/consulta'); setOpen(false); }}>Consulta Psicológica</a>
+              <a onClick={() => { navigate('/cursos'); setOpen(false); }}>Cursos y Talleres</a>
+              <a onClick={() => { navigate('/english'); setOpen(false); }}>Inglés desde la psicología</a>
+              <a onClick={() => { navigate('/recursos'); setOpen(false); }}>Recursos</a>
+            </div>
+          </div>
 
-          <a onClick={() => { navigate('/cursos'); setOpen(false); }}>Cursos</a>
-          <a onClick={() => { navigate('/recursos'); setOpen(false); }}>Recursos Psicológicos</a>
-
-          <a onClick={() => { navigate('/english'); setOpen(false); }}>Clases de Inglés</a>
           <a href="#comunidad" onClick={() => { navigate('/home'); setOpen(false); }}>Comunidad</a>
           <a href="#contact" onClick={() => { navigate('/home'); setOpen(false); }}>Contacto</a>
           {!user ? (

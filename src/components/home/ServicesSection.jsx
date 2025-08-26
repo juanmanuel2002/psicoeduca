@@ -14,7 +14,7 @@ const services = [
 
   {
     id: '/cursos',
-    title: "Cursos psicológicos",
+    title: "Cursos y Talleres",
     description: "Capacítate y aprende sobre psicología aplicada a la vida diaria, con cursos prácticos y accesibles para todos.",
     icon: (
       <span role="img" aria-label="cursos" className="service-icon">📚</span>

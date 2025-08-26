@@ -34,7 +34,12 @@ export default function HeroSection() {
           </div>
           <InfoModal
             open={showModal}
-            title="Debes iniciar sesión para poder agendar una cita."
+            title={
+              <>
+                Debes iniciar sesión para<br />
+                poder agendar una cita.<br />
+              </>
+            }
             message="Redirigiendo..."
           />
         </div>

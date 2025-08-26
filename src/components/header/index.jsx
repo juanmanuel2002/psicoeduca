@@ -37,9 +37,16 @@ export default function Header() {
               {/*<button onClick={() => navigate('/signup')} className="header-btn">Regístrate</button>*/}
             </div>
           ) : (
-            <button className="header-btn account-btn" aria-label="Cuenta" onClick={() => setSidebarOpen(true)}>
-              <AccountCircleIcon fontSize="large" />
-            </button>
+            <div className="account-settings" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span >Bienvenido, {user.name}</span>
+              <button
+                className="header-btn account-btn"
+                aria-label="Cuenta"
+                onClick={() => setSidebarOpen(true)}
+              >
+                <AccountCircleIcon fontSize="large" />
+              </button>
+            </div>
           )}
           <button className="header-btn cart-btn" aria-label="Carrito" onClick={() => setCartOpen(true)}>
             <ShoppingCartIcon fontSize="medium" />

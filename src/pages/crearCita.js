@@ -14,23 +14,39 @@ export default function CrearCita() {
 
 function getAvailableHours(fecha, citas) {
   if (!fecha) return [];
-  const date = new Date(fecha);
-  const day = date.getDay(); // 0=Lun, 1=Mar, ..., 5=Sab
+  const [y, m, d] = fecha.split("-").map(Number);
+  const date = new Date(y, m - 1, d); 
+
+  const today = new Date();
+  const isToday =
+    date.getFullYear() === today.getFullYear() &&
+    date.getMonth() === today.getMonth() &&
+    date.getDate() === today.getDate();
+  
+    const day = date.getDay(); // 0=Dom, 1=Lun, ..., 6=Sab
   let hours = [];
-  if (day >= 0 && day <= 4) { // Lunes a Viernes
+  if (day >= 1 && day <= 5) { // Lunes a Viernes (1-5)
     for (let h = 9; h < 21; h++) hours.push(h);
-  } else if (day === 5) { // Sábado
+  } else if (day === 6) { // Sábado (6)
     for (let h = 9; h < 15; h++) hours.push(h);
-  } 
+  }
 
   // Verificar ocupados
   const ocupados = citas
     .filter(c => c.fecha === fecha)
     .map(c => parseInt(c.hora.split(':')[0], 10));
-  return hours.map(h => ({
-    hora: h.toString().padStart(2, '0') + ':00',
-    ocupado: ocupados.includes(h)
-  }));
+
+  // Si es hoy, marcar horas pasadas como "pasada"
+  const currentHour = today.getHours();
+  return hours.map(h => {
+    const ocupado = ocupados.includes(h);
+    const pasada = isToday && h <= currentHour;
+    return {
+      hora: h.toString().padStart(2, '0') + ':00',
+      ocupado,
+      pasada
+    };
+  });
 }
 
 const { user } = useContext(AuthContext);
@@ -115,22 +131,34 @@ useEffect(() => {
             {error !== 'Debes iniciar sesion para cargar los horarios de las citas' &&
               <div style={{display:'flex', flexWrap:'wrap', gap:8}}>
                 {horasDisponibles.length === 0 && <span style={{color:'#888'}}>Lo sentimos, no tenemos horarios este día. Por favor selecciona otro día</span>}
-                {horasDisponibles.map(({hora, ocupado}) => (
+                {horasDisponibles.map(({hora, ocupado, pasada}) => (
                   <button
                     type="button"
                     key={hora}
                     style={{
-                      background: ocupado ? '#f8d7da' : '#d4edda',
-                      color: ocupado ? '#a94442' : '#155724',
-                      border: ocupado ? '1px solid #a94442' : '1px solid #155724',
-                      borderRadius:6,
-                      padding:'6px 12px',
-                      cursor: ocupado ? 'not-allowed' : 'pointer',
+                      background: pasada
+                        ? '#eee'
+                        : ocupado
+                        ? '#f8d7da'
+                        : '#d4edda',
+                      color: pasada
+                        ? '#aaa'
+                        : ocupado
+                        ? '#a94442'
+                        : '#155724',
+                      border: pasada
+                        ? '1px solid #ccc'
+                        : ocupado
+                        ? '1px solid #a94442'
+                        : '1px solid #155724',
+                      borderRadius: 6,
+                      padding: '6px 12px',
+                      cursor: pasada || ocupado ? 'not-allowed' : 'pointer',
                       fontWeight: citaData.hora === hora ? 'bold' : 'normal',
-                      opacity: ocupado ? 0.6 : 1
+                      opacity: pasada || ocupado ? 0.6 : 1
                     }}
-                    disabled={ocupado}
-                    onClick={() => setCitaData(d => ({...d, hora}))}
+                    disabled={ocupado || pasada}
+                    onClick={() => !pasada && !ocupado && setCitaData(d => ({ ...d, hora }))}
                   >
                     {hora}
                   </button>

@@ -135,6 +135,10 @@
   .comunidad-card {
     padding: 18px 12px;
   }
+  .comunidad-prev,
+  .comunidad-next {
+    display: none;
+  }
 }
 
 .star-circle{

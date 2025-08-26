@@ -19,16 +19,7 @@ const services = [
     icon: (
       <span role="img" aria-label="cursos" className="service-icon">📚</span>
     ),
-  },
-  /*{
-    id: 'seminarios-gratuitos',
-    title: "Seminarios gratuitos",
-    description: "Participa en seminarios y charlas sin costo, impartidos por profesionales, para tu crecimiento personal y emocional.",
-    icon: (
-      <span role="img" aria-label="seminarios" className="service-icon">🎤</span>
-    ),
-  },*/
- 
+  }, 
   {
     id: '/english',
     title: "Inglés desde la psicología",

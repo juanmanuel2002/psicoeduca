@@ -1,3 +1,69 @@
+.quienes-grid-4col {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 32px;
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+@media (max-width: 1100px) {
+  .quienes-grid-4col {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(4, auto);
+  }
+}
+@media (max-width: 700px) {
+  .quienes-grid-4col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+.quienes-grid-img {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.quienes-row {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  align-items: center;
+  gap: 32px;
+}
+.quienes-img-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.quienes-img {
+  width: 100%;
+  max-width: 300px;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  object-fit: cover;
+}
+@media (max-width: 900px) {
+  .quienes-row {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .quienes-img {
+    display: none;
+  }
+  .quienes-card{
+    margin-bottom: -40px
+  }
+  
+  .quienes-card h3 {
+    color: var(--color-primary);
+    font-size: 1.35rem;
+    margin-bottom: 100px;
+    font-weight: 200;
+  }
+
+}
 .quienes-section {
   width: 100%;
   max-width: 1200px;
@@ -20,6 +86,7 @@
   flex-direction: column;
   align-items: flex-start;
   min-height: 200px;
+  max-width: 100%;
   border: 1.5px solid transparent;
   transition: all 0.25s ease;
   cursor: default;

@@ -25,6 +25,13 @@
   margin: 0 auto;
   display: block;
 }
+#conocenos {
+  scroll-margin-top: 100px; 
+}
+
+#services {
+  scroll-margin-top: 150px;
+}
 
 /* Responsive */
 @media (max-width: 600px) {

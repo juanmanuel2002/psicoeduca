@@ -6,41 +6,49 @@ const info = [
   {
     title: '¿Quiénes somos?',
     desc: 'Somos un equipo de profesionales dedicados al bienestar emocional y educativo, comprometidos con el desarrollo integral de las personas a través de servicios psicológicos y recursos de calidad.',
-    icon: <FaUsers />
+    icon: <FaUsers />,
+    img: '/baner.png'
   },
   {
     title: 'Misión',
     desc: 'Brindar atención psicológica y educativa accesible, confiable y de alta calidad, promoviendo el crecimiento personal y el aprendizaje en cada etapa de la vida.',
-    icon: <FaBullseye />
+    icon: <FaBullseye />,
+    img: '/baner.png'
   },
   {
     title: 'Visión',
     desc: 'Ser un referente en el ámbito de la psicología y la educación, impactando positivamente en la vida de las personas y la comunidad.',
-    icon: <FaEye />
+    icon: <FaEye />,
+    img: '/baner.png'
   },
   {
     title: 'Valores',
     desc: 'Empatía, ética, profesionalismo, innovación y compromiso social.',
-    icon: <FaHeart />
+    icon: <FaHeart />,
+    img: '/baner.png'
   }
 ];
 
 export default function QuienesSection() {
+  const gridItems = [];
+  info.forEach((item, idx) => {
+    gridItems.push(
+      <div key={item.title + '-card'} className="quienes-card" tabIndex={0} aria-label={`${item.title}: ${item.desc}`}>
+        <div className="quienes-icon">{item.icon}</div>
+        <h3>{item.title}</h3>
+        <p>{item.desc}</p>
+      </div>
+    );
+    gridItems.push(
+      <div key={item.title + '-img'} className="quienes-img-wrap">
+        <img src={item.img} alt={item.title + ' imagen'} className="quienes-img" />
+      </div>
+    );
+  });
   return (
     <section data-aos="fade-up" className="quienes-section">
-      <div className="quienes-grid">
-        {info.map((item) => (
-          <div
-            key={item.title}
-            className="quienes-card"
-            tabIndex={0}
-            aria-label={`${item.title}: ${item.desc}`}
-          >
-            <div className="quienes-icon">{item.icon}</div>
-            <h3>{item.title}</h3>
-            <p>{item.desc}</p>
-          </div>
-        ))}
+      <div className="quienes-grid-4col">
+        {gridItems}
       </div>
     </section>
   );

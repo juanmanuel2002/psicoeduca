@@ -53,3 +53,18 @@ export async function updateProductOrResources({ correo, cart }) {
   if (!res.ok) throw new Error('Error al enviar solicitud');
   return await res.json();
 }
+
+export async function inscripcionClase({ tipo, nombre, correo }) {
+  const body = { tipo, nombre, correo };
+  const token = localStorage.getItem('token');
+  const res = await fetch(`${API_URL}/inscripcion-clase`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error('Error al inscribirse a la clase');
+  return await res.json();
+}

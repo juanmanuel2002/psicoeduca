@@ -1,15 +1,68 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext, useState} from 'react';
 import '../styles/clasesIndividual.css';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';
 import AOS from 'aos';
+import { AuthContext } from '../contexts/authContext/AuthContext';
+import { useNavigate, useLocation } from 'react-router-dom';
+import InfoModal from '../components/ui/InfoModal';
+import { inscripcionClase } from '../services/sendEmailService';
 
 export default function ClasesIndividual() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMsg, setModalMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        AOS.init({ duration: 1000, once: false });
-      }, []);
+  useEffect(() => {
+      AOS.init({ duration: 1000, once: false });
+    }, []);
+
+  useEffect(() => {
+      let timer;
+      if (modalOpen) {
+        timer = setTimeout(() => {
+          setModalOpen(false);
+        }, 3000);
+      }
+      return () => clearTimeout(timer);
+    }, [modalOpen]);
+  
+  const openModal = (msg) => {
+    setModalMsg(msg);
+    setModalOpen(true);
+  };
+
+  useEffect(() => {
+      const params = new URLSearchParams(location.search);
+      if (params.get('inscribir') === 'individual' && user) {
+        handleInscripcion();
+      }
+      // eslint-disable-next-line
+    }, [user]);
+  
+  const handleInscripcion = async () => {
+    setLoading(true);
+    try {
+      await inscripcionClase({ tipo: 'individual', nombre: user?.name || user?.nombre, correo: user?.email });
+      openModal('¡Registro exitoso! Pronto nos pondremos en contacto contigo.');
+    } catch (e) {
+      openModal('Ocurrió un error al registrar. Intenta de nuevo.');
+    }
+    setLoading(false);
+  };
+
+  const handleRegistro = async () => {
+    if (!user) {
+      navigate('/login', { state: { redirectTo: '/clases-individual?inscribir=individual' } });
+    } else {
+      handleInscripcion();
+    }
+  };
+
   return (
     <div className="home-container">
       <Header />
@@ -33,8 +86,11 @@ export default function ClasesIndividual() {
           <h3>Costo</h3>
           <p><b>$350 MXN</b> por clase individual (incluye materiales y acceso a recursos digitales).</p>
         </div>
-        <button className="clases-btn">Regístrate</button>
+        <button className="clases-btn" onClick={handleRegistro} disabled={loading}>
+          {loading ? "Registrando..." : "Regístrate"}
+        </button>
       </section>
+      <InfoModal open={modalOpen} title="Registro" message={modalMsg} />
       <WhatsAppFloat />
       <Footer />
     </div>

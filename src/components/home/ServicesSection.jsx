@@ -30,7 +30,7 @@ const services = [
   },
   {
     id: '/recursos',
-    title: "Recursos gratuitos",
+    title: "Recursos",
     description: "Accede a materiales, guías y herramientas gratuitas para tu bienestar y desarrollo personal.",
     icon: (
       <span role="img" aria-label="recursos" className="service-icon">🆓</span>

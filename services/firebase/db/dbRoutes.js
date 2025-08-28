@@ -1,4 +1,4 @@
-import { sendPurchaseEmail } from '../../utils/sendEmail.js';
+import { sendPurchaseEmail, sendInscripcionClase } from '../../utils/sendEmail.js';
 import { getCitas, createCita, updateCita, deleteCita } from './dbController.js';
 import express from 'express';
 import { getCursos, getRecursos, createCurso, createRecurso, updateRecursos, updateCursos, asignarRecursosCursos, getCursosUsuario, getRecursosUsuario, getCitasUsuario} from './dbController.js';
@@ -25,5 +25,6 @@ router.get('/usuario/:uid/recursos', firebaseAuthMiddleware, getRecursosUsuario)
 router.get('/usuario/:uid/citas', firebaseAuthMiddleware, getCitasUsuario);
 
 router.post('/send-email', sendPurchaseEmail);
+router.post('/inscripcion-clase', firebaseAuthMiddleware, sendInscripcionClase);
 
 export default router;

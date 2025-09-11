@@ -1,39 +1,33 @@
-import React, { useEffect} from 'react';
+import React, { useEffect, useContext, useState} from 'react';
+import { AuthContext } from '../contexts/authContext/AuthContext';
 import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';
 import Header from "../components/header";
 import Footer from '../components/footer';
 import { useNavigate } from 'react-router-dom';
 import AOS from 'aos';
+import InfoModal from '../components/ui/InfoModal';
 
 import '../styles/consulta.css'
 
 const serviciosConsulta = [
     {
-        id: '/servicio/terapia-individual',
-        title: (
-        <>
-            Terapia individual <br />
-            <span className="subtitulo">(adultos online)</span>
-        </>
-        ),
+        id: 'individual',
+        title: "Terapia individual (adultos online)",
         description: "Atención psicológica personalizada para adultos, 100% online, enfocada en tu bienestar emocional y desarrollo personal.",
-        icon: (
-            <span role="img" aria-label="terapia" className="service-icon">🧑‍💼</span>
-        ),
+        icon: "🧑‍💼",
     },
     {
-        id: 'terapia-breve',
+        id: 'breve',
         title: "Terapia breve",
         description: "Intervenciones psicológicas de corta duración, enfocadas en resolver problemas específicos de manera efectiva.",
-        icon: (
-            <span role="img" aria-label="terapia breve" className="service-icon">⏱️</span>
-        ),
+        icon: "⏱️",
     }
 ];
 
 export default function Consulta() {
 
-
+    const { user } = useContext(AuthContext);
+    const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -54,13 +48,39 @@ export default function Consulta() {
                                     <div className="service-icon">{servicio.icon}</div>
                                     <div className="consulta-servicio-title">{servicio.title}</div>
                                     <div className="consulta-servicio-desc">{servicio.description}</div>
-                                    <button className = 'btn primary' onClick={()=> {navigate('/crear-cita')}}>Agendar Consulta</button>
+                                    <button
+                                        className="btn primary"
+                                        onClick={() => {
+                                            if (user) {
+                                                navigate('/crear-cita');
+                                            } else {
+                                                setShowModal(true);
+                                                setTimeout(() => {
+                                                navigate('/login', { state: { redirectTo: '/crear-cita' , servicio} });
+                                                }, 2500);
+                                            }
+                                        }}
+                                        >
+                                        Agendar Consulta
+                                    </button>
+
                                 </div>
                                 
                             ))}
                             
                         </div>
+                        <InfoModal
+                        open={showModal}
+                        title={
+                          <>
+                            Debes iniciar sesión para<br />
+                            poder agendar una cita.<br />
+                          </>
+                        }
+                        message="Redirigiendo..."
+                      />
             </section>
+            
             <WhatsAppFloat />
             <Footer />
         </div>

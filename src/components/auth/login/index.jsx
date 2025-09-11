@@ -32,7 +32,7 @@ const Login = () => {
                 }, 200); 
               }
             if (location.state && location.state.redirectTo) {
-                navigate(location.state.redirectTo, { replace: true });
+                navigate(location.state.redirectTo, { replace: true, state: location?.state?.servicio || null  });
             }else {
               navigate('/home', { replace: true });
             }
@@ -71,7 +71,7 @@ const Login = () => {
               
                   }
                   if (location.state && location.state.redirectTo) {
-                      navigate(location.state.redirectTo, { replace: true });
+                      navigate(location.state.redirectTo, { replace: true, state: location?.state?.servicio || null  });
                   }else {
                     navigate('/home', { replace: true });
                   }
@@ -101,6 +101,12 @@ return (
     <div className="login-form-section" data-aos="fade-up">
       <h2>Iniciar sesión</h2>
       {error && <p className="error">{error}</p>}
+      
+      
+      <div id="google-signin-btn" style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}></div>
+
+      <div className="login-or">o</div>
+
       <form onSubmit={onSubmit}>
         <div className="form-group">
           <label htmlFor="email">Email:</label>
@@ -130,8 +136,6 @@ return (
         </div>
         <button type="submit" className="login-btn">Iniciar sesión</button>
       </form>
-      <div className="login-or">o</div>
-      <div id="google-signin-btn" style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}></div>
       <div className="login-links">
         <Link to="/forgot-password" className="forgot-link">¿Olvidaste tu contraseña?</Link>
         <span> | </span>

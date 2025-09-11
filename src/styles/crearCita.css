@@ -73,3 +73,35 @@
     color: var(--color-text-light);
     margin-bottom: 5px;
 }
+
+.crear-cita-section-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+  margin: 20px auto;
+  max-width: 1000px;
+  padding: 0 16px;
+}
+
+.crear-cita-section {
+  flex: 1;
+  max-width: 400px;
+}
+
+.crear-cita-servicio-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 24px 20px;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 150px auto 0 50px;
+}
+
+.crear-cita-servicio-card .service-icon {
+  font-size: 40px;
+  margin-bottom: 16px;
+}

@@ -5,76 +5,86 @@ import Header from '../components/header';
 import Footer from '../components/footer';
 import { AuthContext } from '../contexts/authContext/AuthContext';
 import { crearCita, getCitas } from '../services/citasService';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import InfoModal from '../components/ui/InfoModal';
 import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';
 import '../styles/crearCita.css'; 
 
 export default function CrearCita() {
+  const { user } = useContext(AuthContext);
+  const [citaData, setCitaData] = useState({ fecha: '', hora: '', descripcion: '' });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
+  const [citas, setCitas] = useState([]);
+  const [horasDisponibles, setHorasDisponibles] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const selectedServicio = location.state; // card seleccionada desde /consulta
 
-function getAvailableHours(fecha, citas) {
-  if (!fecha) return [];
-  const [y, m, d] = fecha.split("-").map(Number);
-  const date = new Date(y, m - 1, d); 
+  function getAvailableHours(fecha, citas) {
+    if (!fecha) return [];
+    const [y, m, d] = fecha.split("-").map(Number);
+    const date = new Date(y, m - 1, d); 
 
-  const today = new Date();
-  const isToday =
-    date.getFullYear() === today.getFullYear() &&
-    date.getMonth() === today.getMonth() &&
-    date.getDate() === today.getDate();
-  
+    const today = new Date();
+    const isToday =
+      date.getFullYear() === today.getFullYear() &&
+      date.getMonth() === today.getMonth() &&
+      date.getDate() === today.getDate();
+    
     const day = date.getDay(); // 0=Dom, 1=Lun, ..., 6=Sab
-  let hours = [];
-  if (day >= 1 && day <= 5) { // Lunes a Viernes (1-5)
-    for (let h = 9; h < 21; h++) hours.push(h);
-  } else if (day === 6) { // Sábado (6)
-    for (let h = 9; h < 15; h++) hours.push(h);
+    let hours = [];
+    if (day >= 1 && day <= 5) { // Lunes a Viernes (1-5)
+      for (let h = 9; h < 21; h++) hours.push(h);
+    } else if (day === 6) { // Sábado (6)
+      for (let h = 9; h < 15; h++) hours.push(h);
+    }
+
+    // Verificar ocupados
+    const ocupados = citas
+      .filter(c => c.fecha === fecha)
+      .map(c => parseInt(c.hora.split(':')[0], 10));
+
+    // Si es hoy, marcar horas pasadas como "pasada"
+    const currentHour = today.getHours();
+    return hours.map(h => {
+      const ocupado = ocupados.includes(h);
+      const pasada = isToday && h <= currentHour;
+      return {
+        hora: h.toString().padStart(2, '0') + ':00',
+        ocupado,
+        pasada
+      };
+    });
   }
 
-  // Verificar ocupados
-  const ocupados = citas
-    .filter(c => c.fecha === fecha)
-    .map(c => parseInt(c.hora.split(':')[0], 10));
-
-  // Si es hoy, marcar horas pasadas como "pasada"
-  const currentHour = today.getHours();
-  return hours.map(h => {
-    const ocupado = ocupados.includes(h);
-    const pasada = isToday && h <= currentHour;
-    return {
-      hora: h.toString().padStart(2, '0') + ':00',
-      ocupado,
-      pasada
-    };
-  });
-}
-
-const { user } = useContext(AuthContext);
-const [citaData, setCitaData] = useState({ fecha: '', hora: '', descripcion: '' });
-const [loading, setLoading] = useState(false);
-const [success, setSuccess] = useState(false);
-const [error, setError] = useState('');
-const [citas, setCitas] = useState([]);
-const [horasDisponibles, setHorasDisponibles] = useState([]);
-const [showModal, setShowModal] = useState(false);
-const navigate = useNavigate();
-
-useEffect(() => {
+  useEffect(() => {
   if (!citaData.fecha) return;
-  getCitas()
-    .then(data => {
+
+  const fetchCitas = async () => {
+    try {
+      const data = await getCitas();
       setCitas(data);
-    })
-    .catch(err => {
+    } catch (err) {
       if(err?.message === "No autorizado. Debes iniciar sesión.") {
         setError('Debes iniciar sesion para cargar los horarios de las citas')
-      }else if(err?.message === "El horario ya está ocupado en el calendario."){
+      } else if(err?.message === "El horario ya está ocupado en el calendario.") {
         setError('El horario ya está ocupado en el calendario. Por favor selecciona otro horario')
-      }else{
+      } else {
         setError('Error al cargar citas. Intenta de nuevo.');
       }
       setCitas([]);
-    });
+    }
+  };
+
+  fetchCitas(); 
+
+  // cada 25s refresca
+  const interval = setInterval(fetchCitas, 25 * 1000);
+
+  return () => clearInterval(interval); 
 }, [citaData.fecha]);
 
   useEffect(() => {
@@ -82,9 +92,23 @@ useEffect(() => {
     setHorasDisponibles(getAvailableHours(citaData.fecha, citas));
   }, [citaData.fecha, citas]);
 
-   useEffect(() => {
-      AOS.init({ duration: 1000, once: false });
-    }, []);
+  useEffect(() => {
+    if (!citaData.fecha) return;
+    const interval = setInterval(() => {
+      setHorasDisponibles(getAvailableHours(citaData.fecha, citas));
+    }, 60 * 1000);
+    return () => clearInterval(interval);
+  }, [citaData.fecha, citas]);
+
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: false });
+  }, []);
+
+  useEffect(() => {
+  if (selectedServicio) {
+    setCitaData(d => ({ ...d, descripcion: selectedServicio.title }));
+  }
+}, [selectedServicio]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -115,70 +139,98 @@ useEffect(() => {
   return (
     <div className="home-container">
       <Header />
-      <section data-aos="fade-up" className="crear-cita-section">
-        <h2>Agendar Consulta</h2>
-        {success && <div className="success-message">¡Cita agendada exitosamente!</div>}
-        {error && <div className="error-message">{error}</div>}
-        <form onSubmit={handleSubmit}>
-          <div className="crear-cita-form-group">
-            <label>Fecha:</label>
-            <input type="date" required value={citaData.fecha} onChange={e => {
-              setCitaData(d => ({ ...d, fecha: e.target.value, hora: '' }));
-            }} min={new Date().toISOString().split('T')[0]} />
+      <section data-aos="fade-up" className="crear-cita-section-wrapper">
+        
+        {/* Formulario de agendar */}
+        <div className="crear-cita-section">
+          <h2>Agendar Consulta</h2>
+          {success && <div className="success-message">¡Cita agendada exitosamente!</div>}
+          {error && <div className="error-message">{error}</div>}
+          <form onSubmit={handleSubmit}>
+            <div className="crear-cita-form-group">
+              <label>Fecha:</label>
+              <input 
+                type="date" 
+                required 
+                value={citaData.fecha} 
+                onChange={e => {
+                  setCitaData(d => ({ ...d, fecha: e.target.value, hora: '' }));
+                }} 
+                min={new Date().toISOString().split('T')[0]} 
+              />
+            </div>
+
+            <div className="crear-cita-form-group">
+              <label>Hora:</label>
+              {error !== 'Debes iniciar sesion para cargar los horarios de las citas' &&
+                <div style={{display:'flex', flexWrap:'wrap', gap:8}}>
+                  {horasDisponibles.length === 0 && <span style={{color:'#888'}}>Lo sentimos, no tenemos horarios este día. Por favor selecciona otro día</span>}
+                  {horasDisponibles.map(({hora, ocupado, pasada}) => (
+                    <button
+                      type="button"
+                      key={hora}
+                      style={{
+                        background: pasada
+                          ? '#eee'
+                          : ocupado
+                          ? '#f8d7da'
+                          : '#d4edda',
+                        color: pasada
+                          ? '#aaa'
+                          : ocupado
+                          ? '#a94442'
+                          : '#155724',
+                        border: pasada
+                          ? '1px solid #ccc'
+                          : ocupado
+                          ? '1px solid #a94442'
+                          : '1px solid #155724',
+                        borderRadius: 6,
+                        padding: '6px 12px',
+                        cursor: pasada || ocupado ? 'not-allowed' : 'pointer',
+                        fontWeight: citaData.hora === hora ? 'bold' : 'normal',
+                        opacity: pasada || ocupado ? 0.6 : 1
+                      }}
+                      disabled={ocupado || pasada}
+                      onClick={() => !pasada && !ocupado && setCitaData(d => ({ ...d, hora }))}
+                    >
+                      {hora}
+                    </button>
+                  ))}
+                </div>
+              }
+            </div>
+
+            <div className="crear-cita-form-group">
+              <label>Descripción:</label>
+              <textarea 
+                required 
+                value={citaData.descripcion} 
+                onChange={e => setCitaData(d => ({ ...d, descripcion: e.target.value }))} 
+                rows={3} 
+              />
+            </div>
+
+            <div className="crear-cita-buttons">
+              <button type="submit" className="btn primary" disabled={loading || !citaData.hora}>
+                {loading ? 'Agendando...' : 'Agendar'}
+              </button>
+            </div>
+          </form>
+          <InfoModal open={showModal} title="¡Cita agendada exitosamente!" message="Te esperamos en tu consulta." />
+        </div>
+
+        {/* Card del servicio seleccionado */}
+        {selectedServicio && (
+          <div className="crear-cita-servicio-card">
+            <div className="service-icon">{selectedServicio.icon}</div>
+            <div className="consulta-servicio-title">{selectedServicio.title}</div>
+            <div className="consulta-servicio-desc">{selectedServicio.description}</div>
           </div>
-          <div className="crear-cita-form-group">
-            <label>Hora:</label>
-            {error !== 'Debes iniciar sesion para cargar los horarios de las citas' &&
-              <div style={{display:'flex', flexWrap:'wrap', gap:8}}>
-                {horasDisponibles.length === 0 && <span style={{color:'#888'}}>Lo sentimos, no tenemos horarios este día. Por favor selecciona otro día</span>}
-                {horasDisponibles.map(({hora, ocupado, pasada}) => (
-                  <button
-                    type="button"
-                    key={hora}
-                    style={{
-                      background: pasada
-                        ? '#eee'
-                        : ocupado
-                        ? '#f8d7da'
-                        : '#d4edda',
-                      color: pasada
-                        ? '#aaa'
-                        : ocupado
-                        ? '#a94442'
-                        : '#155724',
-                      border: pasada
-                        ? '1px solid #ccc'
-                        : ocupado
-                        ? '1px solid #a94442'
-                        : '1px solid #155724',
-                      borderRadius: 6,
-                      padding: '6px 12px',
-                      cursor: pasada || ocupado ? 'not-allowed' : 'pointer',
-                      fontWeight: citaData.hora === hora ? 'bold' : 'normal',
-                      opacity: pasada || ocupado ? 0.6 : 1
-                    }}
-                    disabled={ocupado || pasada}
-                    onClick={() => !pasada && !ocupado && setCitaData(d => ({ ...d, hora }))}
-                  >
-                    {hora}
-                  </button>
-                ))}
-              </div>
-            }
-          </div>
-          <div className="crear-cita-form-group">
-            <label>Descripción:</label>
-            <textarea required value={citaData.descripcion} onChange={e => setCitaData(d => ({ ...d, descripcion: e.target.value }))} rows={3} />
-          </div>
-          <div className="crear-cita-buttons">
-            <button type="submit" className="btn primary" disabled={loading || !citaData.hora}>
-              {loading ? 'Agendando...' : 'Agendar'}
-            </button>
-          </div>
-        </form>
-        <InfoModal open={showModal} title="¡Cita agendada exitosamente!" message="Te esperamos en tu consulta." />
+        )}
       </section>
-      <section data-aos="fade-up" className = "otras-citas-section">
+
+      <section data-aos="fade-up" className="otras-citas-section">
         <div className="otras-citas-header">
           <p>Si no encuentras un horario que se ajuste a tus necesidades, por favor contáctanos a través de nuestras redes sociales o correo electrónico.</p>
           <p>Estamos aquí para ayudarte a encontrar el mejor momento para tu consulta.</p>

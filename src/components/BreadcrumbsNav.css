@@ -1,0 +1,27 @@
+.breadcrumbs-nav {
+  width: 100%;
+  padding: 10px 32px;
+  font-size: 15px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 100;
+}
+.breadcrumbs-nav a {
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.breadcrumbs-nav a:last-child {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: default;
+}
+.breadcrumbs-nav span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

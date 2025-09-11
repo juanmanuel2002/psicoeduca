@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useCart } from '../../contexts/cartContext/CartContext';
 import "./header.css";
+import BreadcrumbsNav from '../BreadcrumbsNav';
 import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -46,6 +47,7 @@ export default function Header() {
               >
                 <AccountCircleIcon fontSize="large" />
               </button>
+
             </div>
           )}
           <button className="header-btn cart-btn" aria-label="Carrito" onClick={() => setCartOpen(true)}>
@@ -61,15 +63,23 @@ export default function Header() {
             </span>
           </button>
         </div>
+
       </header>
       
-
+  
       {/* Barra de navegación */}
       <nav className={`nav-bar ${open ? "open" : ""}`}>
-        <div data-aos="fade-up" className="nav-bar-inner">
-           <a onClick={() => { navigate('/'); setOpen(false); }}>Inicio</a>
-          <a href="#conocenos" onClick={() => { navigate('/home'); setOpen(false); }}>Conocenos</a>
-          <div className="nav-dropdown-wrapper">
+        <div data-aos="fade-up" className="nav-bar-inner nav-bar-flex">
+          
+          {typeof window !== 'undefined' && window.innerWidth >= 900 && (
+            <div className="nav-breadcrumbs-wrapper">
+              <BreadcrumbsNav />
+            </div>
+          )}
+          <div className="nav-menu-wrapper">
+            <a onClick={() => { navigate('/'); setOpen(false); }}>Inicio</a>
+            <a href="#conocenos" onClick={() => { navigate('/home'); setOpen(false); }}>Conocenos</a>
+            <div className="nav-dropdown-wrapper">
             
             <a
               
@@ -91,8 +101,8 @@ export default function Header() {
               <a href="#services" onClick={() => { navigate('/home'); setOpen(false); }}>Conoce Nuestros Servicios</a>
               <a onClick={() => { navigate('/consulta'); setOpen(false); }}>Consulta Psicológica</a>
               <a onClick={() => { navigate('/cursos'); setOpen(false); }}>Cursos y Talleres</a>
-              <a onClick={() => { navigate('/english'); setOpen(false); }}>Inglés desde la psicología</a>
               <a onClick={() => { navigate('/recursos'); setOpen(false); }}>Recursos</a>
+              <a onClick={() => { navigate('/english'); setOpen(false); }}>Inglés desde la psicología</a>
             </div>
           </div>
           
@@ -105,6 +115,7 @@ export default function Header() {
           ) : <div className="header-btns-mobile">
               <button onClick={() => navigate('/')} className="header-btn">Cerrar sesión</button>
             </div>}
+          </div>
         </div>
         {open && <div className="nav-backdrop" onClick={() => setOpen(false)} />}
       </nav>

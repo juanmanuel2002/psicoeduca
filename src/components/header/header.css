@@ -1,3 +1,39 @@
+/* Flex para barra de navegación y breadcrumb */
+.nav-bar-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.nav-breadcrumbs-wrapper {
+  min-width: 0;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  min-width: 220px;
+}
+.nav-menu-wrapper {
+  flex: 2 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  justify-content: center;
+  position: relative;
+}
+.nav-menu-wrapper > a, .nav-menu-wrapper .nav-dropdown-wrapper {
+  margin-right: 8px;
+}
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
 /* --- Submenú Servicios --- */
 .nav-dropdown-wrapper {
   margin-top: 5px;
@@ -11,8 +47,9 @@
 .nav-dropdown-menu {
   display: none;
   position: absolute;
-  left: 170px;
-  top: 90%;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 100%;
   min-width: 220px;
   background: #fff;
   box-shadow: 0 4px 16px rgba(0,0,0,0.10);

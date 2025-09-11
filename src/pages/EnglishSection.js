@@ -120,7 +120,7 @@ export default function EnglishSection() {
             <img src="/baner.png" alt="Clases grupales" className="card-img" />
             <div className="card-title">Clases grupales</div>
             <div className="card-desc">Participa en sesiones grupales para practicar conversación y aprender con otros.</div>
-            <button className="btn primary" onClick={() => {navigate('/clases-grupo');}}>
+            <button className="btn primary" onClick={() => {navigate('/english/clases-grupo');}}>
               Más Información
             </button>
           </div>
@@ -128,7 +128,7 @@ export default function EnglishSection() {
             <img src="/baner.png" alt="Clases grupales" className="card-img" />
             <div className="card-title">Clases individuales</div>
             <div className="card-desc">Recibe atención personalizada y avanza a tu propio ritmo.</div>
-            <button className="btn primary" onClick={() =>{navigate('/clases-individual');}}>
+            <button className="btn primary" onClick={() =>{navigate('/english/clases-individual');}}>
               Más Información
             </button>
           </div>

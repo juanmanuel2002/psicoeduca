@@ -52,7 +52,7 @@ export default function Consulta() {
                                         className="btn primary"
                                         onClick={() => {
                                             if (user) {
-                                                navigate('/crear-cita');
+                                                navigate('/crear-cita', {state: servicio});
                                             } else {
                                                 setShowModal(true);
                                                 setTimeout(() => {

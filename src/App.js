@@ -46,8 +46,8 @@ const App = () => {
                         <Route path="/mis-recursos" element={<MisRecursos />} />
                         <Route path="/perfil" element={<Perfil />} />
                         <Route path="/english" element={<EnglishSection />} />
-                        <Route path="/clases-individual" element={<ClasesIndividual />} />
-                        <Route path="/clases-grupo" element={<ClasesGrupo />} />
+                        <Route path="/english/clases-individual" element={<ClasesIndividual />} />
+                        <Route path="/english/clases-grupo" element={<ClasesGrupo />} />
                         <Route path="/checkout" element={<Checkout />} />
                         <Route path="/" element={<Navigate to="/home" />} />
                     </Routes>

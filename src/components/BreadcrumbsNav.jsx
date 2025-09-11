@@ -18,17 +18,52 @@ const routeMap = [
   { path: '/english/clases-grupo', label: 'Clases Grupales' },
   { path: '/english/clases-individual', label: 'Clases Individuales' },
   
-  // ...agrega más rutas según sea necesario
 ];
 
 function getBreadcrumbs(pathname) {
-  // Divide el pathname y busca coincidencias en routeMap
   const segments = pathname.split('/').filter(Boolean);
   let breadcrumbs = [];
   let paths = [];
   segments.forEach((seg, i) => {
-    const currentPath = '/' + segments.slice(0, i + 1).join('/');
-    paths.push(currentPath);
+    let currentPath = '/' + segments.slice(0, i + 1).join('/');
+
+    // Manejo especial para recursos
+    if (segments[0] === 'recurso' && i === 0) {
+      breadcrumbs.push({ label: 'Recursos', path: '/recursos' });
+      return;
+    }
+    if (segments[0] === 'recurso' && i === 1) {
+      const recursoData = window.localStorage.getItem('breadcrumbRecurso');
+      let nombre = seg;
+      if (recursoData) {
+        try {
+          const obj = JSON.parse(recursoData);
+          if (obj.id === seg && obj.nombre) nombre = obj.nombre;
+        } catch {}
+      }
+      breadcrumbs.push({ label: nombre, path: currentPath });
+      return;
+    }
+
+    // Manejo especial para cursos
+    if (segments[0] === 'curso' && i === 0) {
+      breadcrumbs.push({ label: 'Cursos', path: '/cursos' });
+      return;
+    }
+    if (segments[0] === 'curso' && i === 1) {
+      const cursoData = window.localStorage.getItem('breadcrumbCurso');
+      let nombre = seg; 
+      if (cursoData) {
+        try {
+          const obj = JSON.parse(cursoData);
+          if (obj.id === seg && obj.nombre) nombre = obj.nombre;
+        } catch {}
+      }
+      breadcrumbs.push({ label: nombre, path: currentPath });
+      return;
+    }
+
+    // Para el resto de rutas
     const found = routeMap.find(r => r.path === currentPath);
     if (found) {
       breadcrumbs.push({ ...found, path: currentPath });
@@ -45,9 +80,9 @@ function getBreadcrumbs(pathname) {
 export default function BreadcrumbsNav() {
   const location = useLocation();
   const navigate = useNavigate();
+  
   const breadcrumbs = getBreadcrumbs(location.pathname);
 
-  // Solo mostrar en web (no móvil)
   if (window.innerWidth < 900) return null;
 
   return (

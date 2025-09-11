@@ -34,6 +34,15 @@ export default function RecursoDetalle() {
       AOS.init({ duration: 1000, once: false });
     }, []);
 
+  useEffect(() => {
+    if (recurso) { 
+      window.localStorage.setItem(
+        'breadcrumbRecurso',
+        JSON.stringify({ id: recurso.id, nombre: recurso.nombre })
+      );
+    }
+  }, [recurso]);
+
   const descargarPDF = () => {
     if (!recurso || !recurso.archivoDriveId) return;
     const url = `https://drive.google.com/uc?export=download&id=${recurso.archivoDriveId}`;

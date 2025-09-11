@@ -34,6 +34,15 @@ export default function CursoDetalle() {
   useEffect(() => {
       AOS.init({ duration: 1000, once: false });
     }, []);
+  
+  useEffect(() => {
+    if (curso) {
+      window.localStorage.setItem(
+        'breadcrumbCurso',
+        JSON.stringify({ id: curso.id, nombre: curso.nombre })
+      );
+    }
+  }, [curso]);
 
   if (loading) return <div className="home-container"><Header /><div style={{textAlign:'center', display: 'center',marginTop:64}}><CircularProgress /><p>Cargando...</p></div></div>;
   

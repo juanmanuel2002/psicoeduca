@@ -70,7 +70,7 @@ export default function Header() {
       {/* Barra de navegación */}
       <nav className={`nav-bar ${open ? "open" : ""}`}>
         <div data-aos="fade-up" className="nav-bar-inner nav-bar-flex">
-          
+
           {typeof window !== 'undefined' && window.innerWidth >= 900 && (
             <div className="nav-breadcrumbs-wrapper">
               <BreadcrumbsNav />
@@ -82,7 +82,7 @@ export default function Header() {
             <div className="nav-dropdown-wrapper">
             
             <a
-              
+              href="#services"
               className="nav-dropdown-toggle"
               tabIndex={0}
               onClick={e => {

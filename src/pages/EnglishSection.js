@@ -85,7 +85,7 @@ export default function EnglishSection() {
         </div>
 
         {/* Conócenos */}
-        <div className="english-cards">
+        <div className="english-cards-conocenos">
           <div className="english-card">
             <div className="card-title">¿Quiénes somos?</div>
             <div className="card-desc">
@@ -125,10 +125,18 @@ export default function EnglishSection() {
             </button>
           </div>
           <div className="english-card">
-            <img src="/baner.png" alt="Clases grupales" className="card-img" />
+            <img src="/baner.png" alt="Clases individuales" className="card-img" />
             <div className="card-title">Clases individuales</div>
             <div className="card-desc">Recibe atención personalizada y avanza a tu propio ritmo.</div>
             <button className="btn primary" onClick={() =>{navigate('/english/clases-individual');}}>
+              Más Información
+            </button>
+          </div>
+          <div className="english-card">
+            <img src="/baner.png" alt="Programa conviértete en aprendiz" className="card-img" />
+            <div className="card-title">Conviértete en aprendiz</div>
+            <div className="card-desc">Conoce nuestro nuevo programa para poder convertirte en aprendiz.</div>
+            <button className="btn primary" onClick={() => {navigate('/english/aprendiz');}}>
               Más Información
             </button>
           </div>

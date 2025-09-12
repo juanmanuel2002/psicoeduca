@@ -20,6 +20,7 @@ import FeaturedCoursesSection from './pages/cursos.js';
 import Consulta from './pages/consulta.js';
 import ClasesIndividual from './pages/clasesIndividual.js';
 import ClasesGrupo from './pages/clasesGrupo.js';
+import Aprendiz from './pages/aprendiz.js';
 import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
 import ScrollToTop from './components/ui/scrollToTop.js';
 
@@ -48,6 +49,7 @@ const App = () => {
                         <Route path="/english" element={<EnglishSection />} />
                         <Route path="/english/clases-individual" element={<ClasesIndividual />} />
                         <Route path="/english/clases-grupo" element={<ClasesGrupo />} />
+                        <Route path="/english/aprendiz" element={<Aprendiz />} />
                         <Route path="/checkout" element={<Checkout />} />
                         <Route path="/" element={<Navigate to="/home" />} />
                     </Routes>

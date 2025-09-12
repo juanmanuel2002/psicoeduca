@@ -17,6 +17,7 @@ const routeMap = [
   { path: '/english', label: 'Clases de Inglés' },
   { path: '/english/clases-grupo', label: 'Clases Grupales' },
   { path: '/english/clases-individual', label: 'Clases Individuales' },
+  { path: '/english/aprendiz', label: 'Aprendiz' },
   
 ];
 

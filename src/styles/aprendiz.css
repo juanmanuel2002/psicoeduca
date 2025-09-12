@@ -1,11 +1,11 @@
-/* Estilos para la página de Conviértete en aprendiz */
 .aprendiz-section {
   max-width: 900px;
-  margin: 80px auto 32px auto;
+  margin: 45px auto 45px auto;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 2px 16px rgba(0,0,0,0.08);
   padding: 32px 24px;
+  text-align: right;
 }
 .aprendiz-hero {
   display: flex;
@@ -15,8 +15,8 @@
   margin-bottom: 32px;
 }
 .aprendiz-hero-img {
-  width: 160px;
-  height: 160px;
+  width: 200px;
+  height: 200px;
   object-fit: cover;
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
@@ -29,19 +29,16 @@
   color: var(--color-primary, #2563EB);
   font-size: 2.2rem;
   margin-bottom: 8px;
-  justify-self: right;
 }
 .aprendiz-hero-text h3 {
   color: #3B82F6;
   font-size: 1.3rem;
   margin-bottom: 12px;
-  justify-self: right;
 }
 .aprendiz-desc {
   font-size: 1.1rem;
   color: #444;
   margin-bottom: 18px;
-  
 }
 .aprendiz-btn {
   background: var(--color-primary, #2563EB);
@@ -53,6 +50,7 @@
   margin-bottom: 8px;
   box-shadow: 0 2px 8px rgba(59,130,246,0.08);
   transition: background 0.2s;
+  display: inline-block;
 }
 .aprendiz-btn:hover {
   background: #1d4ed8;

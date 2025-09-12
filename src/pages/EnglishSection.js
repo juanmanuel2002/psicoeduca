@@ -21,10 +21,10 @@ const TESTIMONIALS = [
 ];
 
 const RESOURCES = [
-  { icon: <MenuBookIcon className="resource-icon" />, name: 'Guías PDF' },
-  { icon: <SchoolIcon className="resource-icon" />, name: 'Videos interactivos' },
-  { icon: <GroupIcon className="resource-icon" />, name: 'Foros de conversación' },
-  { icon: <StarIcon className="resource-icon" />, name: 'Tips de aprendizaje' },
+  { icon: <MenuBookIcon className="resource-icon" />, name: 'Guías PDF', path: '/english/guias' },
+  { icon: <SchoolIcon className="resource-icon" />, name: 'Videos interactivos', path: '/english/videos' },
+  { icon: <GroupIcon className="resource-icon" />, name: 'Foros de conversación', path: '/english/foro' },
+  { icon: <StarIcon className="resource-icon" />, name: 'Tips de aprendizaje', path: '/english/tips' },
 ];
 
 function StarCircle({ calificacion }) {
@@ -172,7 +172,7 @@ export default function EnglishSection() {
           <h3>Recursos para tu aprendizaje</h3>
           <div className="resources-list">
             {RESOURCES.map((r, i) => (
-              <div className="resource" key={i}>
+              <div className="resource" key={i}  onClick={() => {navigate(r.path);}}>
                 {r.icon}
                 <div>{r.name}</div>
               </div>

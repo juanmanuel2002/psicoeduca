@@ -6,10 +6,10 @@ import WhatsAppFloat from '../components/whatsapp/WhatsAppFloat';
 import StarIcon from '@mui/icons-material/Star';
 import SchoolIcon from '@mui/icons-material/School';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { useNavigate } from 'react-router-dom';
 
 export default function Aprendiz() {
-  const navigate = useNavigate();
+
+    
   return (
     <div className="home-container">
       <Header />
@@ -23,7 +23,6 @@ export default function Aprendiz() {
             <button className="btn primary aprendiz-btn" onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfEupmJUzqXON6bQ4Kn8ibqSfs5P4gs6lnVsei8_NmSQr6Nhw/viewform', '_blank')}>
               Conviértete en aprendiz - 4 clases gratis
             </button>
-            <span className="aprendiz-restriccion">*Consulta restricciones</span>
           </div>
         </div>
         <div className="aprendiz-beneficios">
@@ -43,6 +42,7 @@ export default function Aprendiz() {
             <SchoolIcon className="beneficio-icon" />
             <div className="beneficio-title">Material de apoyo y clases personalizadas</div>
           </div>
+          <span className="aprendiz-restriccion">*Consulta restricciones</span>
         </div>
       </section>
       <WhatsAppFloat />

@@ -18,6 +18,10 @@ const routeMap = [
   { path: '/english/clases-grupo', label: 'Clases Grupales' },
   { path: '/english/clases-individual', label: 'Clases Individuales' },
   { path: '/english/aprendiz', label: 'Aprendiz' },
+  { path: '/english/guias', label: 'Guías' },
+  { path: '/english/foro', label: 'Foro' },
+  { path: '/english/tips', label: 'Tips' },
+  { path: '/english/videos', label: 'Videos' },
   
 ];
 

@@ -25,6 +25,6 @@ router.get('/usuario/:uid/recursos', firebaseAuthMiddleware, getRecursosUsuario)
 router.get('/usuario/:uid/citas', firebaseAuthMiddleware, getCitasUsuario);
 
 router.post('/send-email', sendPurchaseEmail);
-router.post('/inscripcion-clase', firebaseAuthMiddleware, sendInscripcionClase);
+router.post('/inscripcion-clase', logAfterResponse('inscribirClase'), firebaseAuthMiddleware, sendInscripcionClase);
 
 export default router;

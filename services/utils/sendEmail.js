@@ -1,3 +1,4 @@
+import admin from 'firebase-admin';
 import nodemailer from 'nodemailer';
 import { google } from 'googleapis';
 import config from '../../config.js';
@@ -96,7 +97,80 @@ export async function sendPurchaseEmail(req, res) {
   }
 }
 
+export async function sendInscripcionClase(req, res) {
+  const { correo, nombre, tipo } = req.body;
+  try {
+    // Buscar usuario por email
+    const usuariosSnap = await admin.firestore().collection('usuarios').where('email', '==', correo).get();
+    if (usuariosSnap.empty) {
+      return res.status(404).json({ error: 'Usuario no encontrado.' });
+    }
+    const usuarioRef = usuariosSnap.docs[0].ref;
+    const usuario = usuariosSnap.docs[0].data();
+    const inscripciones = usuario.inscripciones || [];
+    const inscripcionActual = tipo === 'grupo' ? 'claseGrupo' : 'claseIndividual';
+    if (inscripciones.includes(inscripcionActual)) {
+      return res.status(200).json({ message: 'Ya estás inscrito a esta clase.' });
+    }
+    // Agregar inscripción
+    await usuarioRef.update({
+      inscripciones: admin.firestore.FieldValue.arrayUnion(inscripcionActual)
+    });
 
+    // Enviar correo
+    let subject = 'Inscripción a clase de inglés con Psicoeduca';
+    let text = '';
+    if (tipo === 'grupo') {
+      text = `Hola ${nombre || ''},\n\n¡Gracias por tu interés en nuestras clases grupales de inglés!\n\nPor favor, completa el siguiente formulario para finalizar tu inscripción:\nhttps://docs.google.com/forms/d/e/1FAIpQLSdiuTPUSSZB1FG4nm-pDnA68ZVu4Ee5oYmdlXxMu5Q5T5zNcQ/viewform?usp=header\n\nCualquier duda, contáctanos.\n\n 
+      
+      📅 Horario de atención:
+        - Lunes a Viernes: 9:00 a.m. – 6:00 p.m.
+        - Sábados: 9:00 a.m. – 2:00 p.m.
+
+        Saludos,
+        El equipo de Psicoeduca`;
+    } else {
+      text = `Hola ${nombre || ''},\n\n¡Gracias por tu interés en nuestras clases individuales de inglés!\n\nEn breve nos pondremos en contacto contigo para coordinar tu clase personalizada.\n\nCualquier duda, contáctanos.\n\n 
+
+      📅 Horario de atención:
+        - Lunes a Viernes: 9:00 a.m. – 6:00 p.m.
+        - Sábados: 9:00 a.m. – 2:00 p.m.
+
+        Saludos,
+        El equipo de Psicoeduca`;
+    }
+
+    
+    const accessToken = await oAuth2Client.getAccessToken();
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: config.google.user,
+        clientId: config.google.clientId,
+        clientSecret: config.google.clientSecret,
+        refreshToken: config.google.refreshToken,
+        accessToken: accessToken.token
+      },
+       //(10s)
+        timeout: 10000 
+    });
+
+
+    const mailOptions = {
+      from: `Psicoeduca <${config.google.user}>`,
+      to: correo,
+      subject,
+      text
+    };
+
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ message: 'Correo de inscripción enviado correctamente.' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+/*
 export async function sendInscripcionClase(req, res) {
   const { correo, nombre, tipo } = req.body;
   try {
@@ -150,3 +224,4 @@ export async function sendInscripcionClase(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
+*/

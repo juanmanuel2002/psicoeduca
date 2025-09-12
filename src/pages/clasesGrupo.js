@@ -102,7 +102,7 @@ export default function ClasesGrupo() {
           <h3>Seguimiento</h3>
           <p>Recibe retroalimentación constante y seguimiento de tu progreso por parte de nuestros profesores y psicólogos educativos.</p>
         </div>
-        <div className="clases-costo">
+        <div className="clases-costo-grupo">
           <h3>Costo</h3>
           <p><b>$800 MXN</b> al mes (incluye materiales y acceso a recursos digitales).</p>
         </div>

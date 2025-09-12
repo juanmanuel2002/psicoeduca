@@ -247,6 +247,12 @@
   .english-section .resources-list {
     grid-template-columns: 1fr !important;
   }
+
+  .english-cards-conocenos {
+    grid-template-columns: 1fr !important;
+    gap: 52px;
+  }
+
   .english-section  {
     max-width: 100%;
     padding: 24px 12px 32px 12px;

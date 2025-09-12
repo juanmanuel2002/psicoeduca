@@ -92,8 +92,25 @@ export default function ClasesIndividual() {
           <p>Recibe retroalimentación constante y seguimiento de tu progreso, con ajustes al plan según tus avances.</p>
         </div>
         <div className="clases-costo">
-          <h3>Costo</h3>
-          <p><b>$350 MXN</b> por clase individual (incluye materiales y acceso a recursos digitales).</p>
+          <h3>Costos</h3>
+          <h3>Por sesión</h3>
+          <ul>
+            <li>$150 MXN por sesión  (incluye materiales y acceso a recursos digitales).</li>
+          </ul>
+          <h3>Plan Basico</h3>
+          <ul>
+            <li>6 horas al mes</li>
+            <li>90 minutos por sesión</li>
+            <li>Costo regular $540 MXN</li>
+            <li>Costo de promoción $480 MXN ($28.99 dls)</li>
+          </ul>
+          <h3>Plan intensivo</h3>
+          <ul>
+            <li>12 horas al mes</li>
+            <li>90 minutos por sesión</li>
+            <li>Costo regular $1080 MXN</li>
+            <li>Costo de promoción $960 MXN ($57.99 dls)</li>
+          </ul>
         </div>
         {loading && (
           <div style={{ display: 'flex', justifyContent: 'center', margin: '16px 0' }}>

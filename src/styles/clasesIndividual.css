@@ -27,11 +27,30 @@
   padding: 24px 18px;
   margin-bottom: 0;
 }
+.clases-metodologia h3:first-of-type, .clases-seguimiento h3:first-of-type, .clases-costo h3:first-of-type {
+  color: var(--color-accent, #2563EB);
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+}
+
+.clases-costo h3:first-of-type {
+  color: var(--color-accent, #2563EB);
+  font-size: 1.4rem;
+  margin-bottom: 25px;
+}
+
 .clases-metodologia h3, .clases-seguimiento h3, .clases-costo h3 {
   color: var(--color-accent, #2563EB);
   font-size: 1.15rem;
   margin-bottom: 8px;
 }
+
+.clases-costo ul {
+  margin-left: 18px;
+  margin-bottom: 25px;
+}
+
+
 .clases-metodologia ul {
   margin-left: 18px;
   margin-bottom: 0;

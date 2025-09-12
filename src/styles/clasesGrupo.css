@@ -20,16 +20,16 @@
   font-size: 1.15rem;
   margin-bottom: 18px;
 }
-.clases-metodologia, .clases-ruta, .clases-seguimiento, .clases-costo {
+.clases-metodologia, .clases-ruta, .clases-seguimiento, .clases-costo-grupo {
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.07);
   padding: 24px 18px;
   margin-bottom: 0;
 }
-.clases-metodologia h3, .clases-ruta h3, .clases-seguimiento h3, .clases-costo h3 {
+.clases-metodologia h3:first-of-type, .clases-ruta h3:first-of-type, .clases-seguimiento h3:first-of-type, .clases-costo-grupo h3:first-of-type {
   color: var(--color-accent, #2563EB);
-  font-size: 1.15rem;
+  font-size: 1.4rem;
   margin-bottom: 8px;
 }
 .clases-metodologia ul, .clases-ruta ol {

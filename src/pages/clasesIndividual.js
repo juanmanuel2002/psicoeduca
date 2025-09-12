@@ -8,6 +8,7 @@ import { AuthContext } from '../contexts/authContext/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import InfoModal from '../components/ui/InfoModal';
 import { inscripcionClase } from '../services/sendEmailService';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function ClasesIndividual() {
   const { user } = useContext(AuthContext);
@@ -94,8 +95,17 @@ export default function ClasesIndividual() {
           <h3>Costo</h3>
           <p><b>$350 MXN</b> por clase individual (incluye materiales y acceso a recursos digitales).</p>
         </div>
-        <button className="clases-btn" onClick={handleRegistro} disabled={loading}>
-          {loading ? "Registrando..." : "Regístrate"}
+        {loading && (
+          <div style={{ display: 'flex', justifyContent: 'center', margin: '16px 0' }}>
+            <CircularProgress />
+          </div>
+        )}
+        <button
+          className="clases-btn"
+          onClick={handleRegistro}
+          disabled={loading}
+        >
+          {loading ? 'Registrando...' : 'Regístrate'}
         </button>
       </section>
       <InfoModal open={modalOpen} title="Registro" message={modalMsg} />

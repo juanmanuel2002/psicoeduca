@@ -8,6 +8,7 @@ import { AuthContext } from '../contexts/authContext/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import InfoModal from '../components/ui/InfoModal';
 import { inscripcionClase } from '../services/sendEmailService';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 export default function ClasesGrupo() {
@@ -105,6 +106,11 @@ export default function ClasesGrupo() {
           <h3>Costo</h3>
           <p><b>$800 MXN</b> al mes (incluye materiales y acceso a recursos digitales).</p>
         </div>
+        {loading && (
+          <div style={{ display: 'flex', justifyContent: 'center', margin: '16px 0' }}>
+            <CircularProgress />
+          </div>
+        )}
         <button className="clases-btn" onClick={handleRegistro} disabled={loading}>
           {loading ? "Registrando..." : "Regístrate"}
         </button>

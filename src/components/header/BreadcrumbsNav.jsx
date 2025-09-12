@@ -23,7 +23,7 @@ const routeMap = [
 function getBreadcrumbs(pathname) {
   const segments = pathname.split('/').filter(Boolean);
   let breadcrumbs = [];
-  let paths = [];
+  //let paths = [];
   segments.forEach((seg, i) => {
     let currentPath = '/' + segments.slice(0, i + 1).join('/');
 

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useCart } from '../../contexts/cartContext/CartContext';
 import "./header.css";
-import BreadcrumbsNav from '../BreadcrumbsNav';
+import BreadcrumbsNav from './BreadcrumbsNav';
 import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';

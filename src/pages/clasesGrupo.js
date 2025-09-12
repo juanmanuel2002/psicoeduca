@@ -17,6 +17,7 @@ export default function ClasesGrupo() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMsg, setModalMsg] = useState("");
   const [loading, setLoading] = useState(false);
+  const [modalInicioSesion, setModalInicioSesion] = useState(false);
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: false });
@@ -49,8 +50,12 @@ export default function ClasesGrupo() {
   const handleInscripcion = async () => {
     setLoading(true);
     try {
-      await inscripcionClase({ tipo: 'grupo', nombre: user?.name || user?.nombre, correo: user?.email });
-      openModal('¡Registro exitoso! Pronto nos pondremos en contacto contigo.');
+      let result = await inscripcionClase({ tipo: 'grupo', nombre: user?.name || user?.nombre, correo: user?.email });
+      if (result.message === 'Ya estás inscrito a esta clase.'){
+        openModal('Ya tienes un registro a esta clase');
+      }else{
+        openModal('¡Registro exitoso! Pronto nos pondremos en contacto contigo.');
+      }
     } catch (e) {
       openModal('Ocurrió un error al registrar. Intenta de nuevo.');
     }
@@ -59,7 +64,10 @@ export default function ClasesGrupo() {
 
   const handleRegistro = async () => {
     if (!user) {
-      navigate('/login', { state: { redirectTo: '/clases-grupo?inscribir=grupo' } });
+      setModalInicioSesion(true);
+      setTimeout(() => {
+        navigate('/login', { state: { redirectTo: '/english/clases-grupo?inscribir=grupo' } });
+      }, 2500);
     } else {
       handleInscripcion();
     }
@@ -103,6 +111,11 @@ export default function ClasesGrupo() {
 
       </section>
       <InfoModal open={modalOpen} title="Registro" message={modalMsg} />
+      <InfoModal
+        open={modalInicioSesion}
+        title="Debes iniciar sesión para poder registrarte a esta clase"
+        message="Redirigiendo..."
+      />
       <WhatsAppFloat />
       <Footer />
     </div>

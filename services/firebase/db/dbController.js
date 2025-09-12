@@ -150,55 +150,52 @@ export async function createCurso(req, res) {
     return res.status(401).json(response);
   }
 
-  const extraFields = Object.keys(req.body).filter(
-    key => !allowedFields.includes(key)
-  );
+  const cursos = Array.isArray(req.body) ? req.body : [req.body];
+  const results = [];
 
-  if (extraFields.length > 0) {
-    const response = { error: `Campos no permitidos: ${extraFields.join(', ')}` };
-    res.locals.responseBody = response;
-    return res.status(400).json(response);
+  for (const curso of cursos) {
+    const extraFields = Object.keys(curso).filter(
+      key => !allowedFields.includes(key)
+    );
+    if (extraFields.length > 0) {
+      results.push({ error: `Campos no permitidos: ${extraFields.join(', ')}` });
+      continue;
+    }
+    const { costo, descripcion, descripcionLarga, nombre, tipo, imagen, type, archivoDriveId, estado} = curso;
+    if (
+      typeof type !== 'string' || !type.trim() ||
+      typeof costo !== 'number' || isNaN(costo) ||
+      typeof descripcion !== 'string' || !descripcion.trim() ||
+      typeof descripcionLarga !== 'string' || !descripcionLarga.trim() ||
+      typeof nombre !== 'string' || !nombre.trim() ||
+      typeof tipo !== 'string' || !tipo.trim() ||
+      typeof imagen !== 'string' || !imagen.trim() ||
+      typeof archivoDriveId !== 'string' || !archivoDriveId.trim() ||
+      typeof estado !== 'string' || !estado.trim()
+    ) {
+      results.push({ error: 'Datos inválidos o incompletos' });
+      continue;
+    }
+    try {
+      const docRef = await admin.firestore().collection('cursos').add({
+        costo,
+        descripcion,
+        descripcionLarga,
+        nombre,
+        tipo,
+        imagen,
+        type,
+        archivoDriveId,
+        estado,
+        createdBy: req.user.uid
+      });
+      results.push({ id: docRef.id });
+    } catch (error) {
+      results.push({ error: error.message });
+    }
   }
-
-  const { costo, descripcion, descripcionLarga, nombre, tipo, imagen, type, archivoDriveId, estado} = req.body;
-
-  if (
-    typeof type !== 'string' || !type.trim() ||
-    typeof costo !== 'number' || isNaN(costo) ||
-    typeof descripcion !== 'string' || !descripcion.trim() ||
-    typeof descripcionLarga !== 'string' || !descripcionLarga.trim() ||
-    typeof nombre !== 'string' || !nombre.trim() ||
-    typeof tipo !== 'string' || !tipo.trim() ||
-    typeof imagen !== 'string' || !imagen.trim() ||
-    typeof archivoDriveId !== 'string' || !archivoDriveId.trim() ||
-    typeof estado !== 'string' || !estado.trim()
-  ) {
-    const response = { error: 'Datos inválidos o incompletos' };
-    res.locals.responseBody = response;
-    return res.status(400).json(response);
-  }
-
-  try {
-    const docRef = await admin.firestore().collection('cursos').add({
-      costo,
-      descripcion,
-      descripcionLarga,
-      nombre,
-      tipo,
-      imagen,
-      type,
-      archivoDriveId,
-      estado,
-      createdBy: req.user.uid
-    });
-    const response = { id: docRef.id };
-    res.locals.responseBody = response;
-    res.status(201).json(response);
-  } catch (error) {
-    const response = { error: error.message };
-    res.locals.responseBody = response;
-    res.status(500).json(response);
-  }
+  res.locals.responseBody = results;
+  res.status(201).json(results);
 }
 
 export async function createRecurso(req, res) {
@@ -207,56 +204,54 @@ export async function createRecurso(req, res) {
     res.locals.responseBody = response
     return res.status(401).json(response);
   }
-   const extraFields = Object.keys(req.body).filter(
-    key => !allowedFields.includes(key)
-  );
+  const recursos = Array.isArray(req.body) ? req.body : [req.body];
+  const results = [];
 
-  if (extraFields.length > 0) {
-    const response = { error: `Campos no permitidos: ${extraFields.join(', ')}` };
-    res.locals.responseBody = response;
-    return res.status(400).json(response);
+  for (const recurso of recursos) {
+    const extraFields = Object.keys(recurso).filter(
+      key => !allowedFields.includes(key)
+    );
+    if (extraFields.length > 0) {
+      results.push({ error: `Campos no permitidos: ${extraFields.join(', ')}` });
+      continue;
+    }
+    const { costo, descripcion, descripcionLarga, nombre, imagen, type, archivoDriveId, estado, categoria, modalidad } = recurso;
+    if (
+      typeof type !== 'string' || !type.trim() ||
+      typeof costo !== 'number' || isNaN(costo) ||
+      typeof descripcion !== 'string' || !descripcion.trim() ||
+      typeof descripcionLarga !== 'string' || !descripcionLarga.trim() ||
+      typeof nombre !== 'string' || !nombre.trim() ||
+      typeof imagen !== 'string' || !imagen.trim() ||
+      typeof archivoDriveId !== 'string' || !archivoDriveId.trim() ||
+      typeof categoria !== 'string' || !categoria.trim() ||
+      typeof modalidad !== 'string' || !modalidad.trim() ||
+      typeof estado !== 'string' || !estado.trim()
+    ) {
+      results.push({ error: 'Datos inválidos o incompletos' });
+      continue;
+    }
+    try {
+      const docRef = await admin.firestore().collection('recursos').add({
+        costo,
+        descripcion,
+        descripcionLarga,
+        nombre,
+        imagen,
+        type,
+        archivoDriveId,
+        estado,
+        categoria,
+        modalidad,
+        createdBy: req.user.uid
+      });
+      results.push({ id: docRef.id });
+    } catch (error) {
+      results.push({ error: error.message });
+    }
   }
-  const { costo, descripcion, descripcionLarga, nombre, imagen, type, archivoDriveId, estado, categoria, modalidad } = req.body;
-
-   if (
-    typeof type !== 'string' || !type.trim() ||
-    typeof costo !== 'number' || isNaN(costo) ||
-    typeof descripcion !== 'string' || !descripcion.trim() ||
-    typeof descripcionLarga !== 'string' || !descripcionLarga.trim() ||
-    typeof nombre !== 'string' || !nombre.trim() ||
-    typeof imagen !== 'string' || !imagen.trim() ||
-    typeof archivoDriveId !== 'string' || !archivoDriveId.trim() ||
-    typeof categoria !== 'string' || !categoria.trim() ||
-    typeof modalidad !== 'string' || !modalidad.trim() ||
-    typeof estado !== 'string' || !estado.trim()
-  ) {
-    const response = { error: 'Datos inválidos o incompletos' };
-    res.locals.responseBody = response;
-    return res.status(400).json(response);
-  }
-
-  try {
-    const docRef = await admin.firestore().collection('recursos').add({
-      costo,
-      descripcion,
-      descripcionLarga,
-      nombre,
-      imagen,
-      type,
-      archivoDriveId,
-      estado,
-      categoria,
-      modalidad,
-      createdBy: req.user.uid
-    });
-    const response = { id: docRef.id };
-    res.locals.responseBody = response;
-    res.status(201).json(response);
-  } catch (error) {
-    const response = { error: error.message };
-    res.locals.responseBody = response;
-    res.status(500).json(response);
-  }
+  res.locals.responseBody = results;
+  res.status(201).json(results);
 }
 
 export async function updateRecursos(req, res) {

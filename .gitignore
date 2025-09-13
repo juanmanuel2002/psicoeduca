@@ -3,6 +3,7 @@
 /.env
 .env
 .env*
+/services/scripts
 # dependencies
 /node_modules
 /.pnp

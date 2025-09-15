@@ -1,7 +1,10 @@
-import { sendPurchaseEmail, sendInscripcionClase } from '../../utils/sendEmail.js';
-import { getCitas, createCita, updateCita, deleteCita } from './dbController.js';
 import express from 'express';
-import { getCursos, getRecursos, createCurso, createRecurso, updateRecursos, updateCursos, asignarRecursosCursos, getCursosUsuario, getRecursosUsuario, getCitasUsuario} from './dbController.js';
+
+import { sendPurchaseEmail, sendInscripcionClase } from '../../utils/sendEmail.js';
+import { getCitas, createCita, updateCita, deleteCita, getCitasUsuario } from './citasController.js';
+import { getCursos, createCurso, updateCursos, getCursosUsuario } from './cursosController.js';
+import { getRecursos, createRecurso, updateRecursos, getRecursosUsuario } from './recursosController.js';
+import {  asignarRecursosCursos, downloadRecurso } from './usuariosController.js';
 import { firebaseAuthMiddleware, firebaseAdminMiddleware } from '../middleware/firebaseAuthMiddleware.js';
 import { logAfterResponse } from '../../utils/logService.js'
 
@@ -26,5 +29,7 @@ router.get('/usuario/:uid/citas', firebaseAuthMiddleware, getCitasUsuario);
 
 router.post('/send-email', sendPurchaseEmail);
 router.post('/inscripcion-clase', logAfterResponse('inscribirClase'), firebaseAuthMiddleware, sendInscripcionClase);
+
+router.get('/download/:collection/:id', downloadRecurso);
 
 export default router;

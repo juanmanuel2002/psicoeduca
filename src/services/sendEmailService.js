@@ -22,7 +22,7 @@ export async function sendEmailCompra({ correo, nombre, cart }) {
   const body = {
     correo,
     nombre,
-    items:[cart],
+    items:cart,
     tipo: 'compra'
   };
   const res = await fetch(`${API_URL}/send-email`, {
@@ -67,4 +67,16 @@ export async function inscripcionClase({ tipo, nombre, correo }) {
   });
   if (!res.ok) throw new Error('Error al inscribirse a la clase');
   return await res.json();
+}
+
+export async function download(collection, id) {
+  const res = await fetch(`${API_URL}/download/${collection}/${id}`,{
+  method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+  if (!res.ok) throw new Error('Error al descargar el archivo');
+  return await res.blob();
+
 }

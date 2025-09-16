@@ -11,6 +11,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import InfoModal from '../components/ui/InfoModal';
 import { useCart } from '../contexts/cartContext/CartContext';
 import { AuthContext } from '../contexts/authContext/AuthContext';
+import { download } from '../services/sendEmailService';
+
 
 export default function RecursoDetalle() {
   const { addToCart } = useCart();
@@ -19,6 +21,8 @@ export default function RecursoDetalle() {
   const [loading, setLoading] = useState(true);
   const [showModalAdquirir, setShowModalAdquirir] = useState(false);
   const [showModalCarrito, setShowModalCarrito] = useState(false);
+  const [msjError, setMsjError] = useState(false);
+  const [descarga, setDescarga] = useState(false);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
@@ -43,11 +47,31 @@ export default function RecursoDetalle() {
     }
   }, [recurso]);
 
-  const descargarPDF = () => {
-    if (!recurso || !recurso.archivoDriveId) return;
-    const url = `https://drive.google.com/uc?export=download&id=${recurso.archivoDriveId}`;
-    window.open(url, '_blank');
-  }
+  const descargarPDF = async () => {
+    if (!recurso?.id) return;
+    try {
+      setDescarga(true);
+      const blob = await download("recursos", recurso.id);
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${recurso.nombre || "archivo"}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+      setDescarga(false)
+    } catch (error) {
+      setDescarga(false)
+      setMsjError(true); 
+      setTimeout(() => {
+        setMsjError(false);
+      }, 4000);
+      
+    }
+  };
+
   
   if (loading) return <div className="home-container"><Header /><div style={{textAlign:'center', display: 'center',marginTop:64}}><CircularProgress /><p>Cargando...</p></div></div>;
   
@@ -110,6 +134,15 @@ export default function RecursoDetalle() {
         
       </section>
       
+      {descarga && (
+        <div className="overlay-loading">
+          <div className="overlay-content">
+            <CircularProgress />
+            <p>Descargando...</p>
+          </div>
+        </div>
+      )}
+      
       <InfoModal
         open={showModalAdquirir}
         title="Debes iniciar sesión para poder comenzar a agregar artitulos al carrito."
@@ -119,6 +152,11 @@ export default function RecursoDetalle() {
         open={showModalCarrito}
         title="Debes iniciar sesión para poder inscribirte a este curso."
         message="Redirigiendo..."
+      />
+      <InfoModal
+        open={msjError}
+        title="Hubo un error al descargar el archivo"
+        message="Favor de intentarlo mas tarde, en caso de seguir presentando fallas, porfavor contactanos para que podamos ayduarte"
       />
       <WhatsAppFloat />
       <Footer />

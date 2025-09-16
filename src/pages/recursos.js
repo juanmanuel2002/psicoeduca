@@ -29,8 +29,16 @@ export default function Recursos() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getRecursos().then(data => setRecursos(data));
-  }, []);
+  getRecursos()
+    .then(data => {
+      const filteredData = data.filter(item => 
+        !item.type || item.type.trim().toLowerCase() !== 'libro'
+      );
+      setRecursos(filteredData);
+    })
+    .catch(err => console.error(err));
+}, []);
+
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: false });

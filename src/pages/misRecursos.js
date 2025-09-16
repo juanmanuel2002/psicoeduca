@@ -7,12 +7,17 @@ import '../styles/misRecursos.css';
 import { getRecursosUsuario } from '../services/recursosService';
 import { AuthContext } from '../contexts/authContext/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { download } from '../services/sendEmailService';
+import InfoModal from '../components/ui/InfoModal';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function MisRecursos() {
   const { user } = useContext(AuthContext);
   const [recursos, setRecursos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [msjError, setMsjError] = useState(false);
+  const [descarga, setDescarga] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +28,31 @@ export default function MisRecursos() {
       .catch(() => setError('No se pudieron cargar los recursos.'))
       .finally(() => setLoading(false));
   }, [user]);
+
+  const descargarPDF = async (recursos) => {
+    if (!recursos?.id) return;
+    try {
+      setDescarga(true);
+  
+      const blob = await download("recursos", recursos.id);
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${recursos.nombre || "archivo"}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+      setDescarga(false)
+    } catch (error) {
+      setDescarga(false)
+      setMsjError(true); 
+      setTimeout(() => {
+        setMsjError(false);
+      }, 4000);
+    }
+  };
 
   return (
     <div className="home-container">
@@ -58,22 +88,35 @@ export default function MisRecursos() {
                   <h3 className="mis-recurso-title">{recurso.nombre}</h3>
                   <div className="mis-recurso-short">{recurso.descripcion}</div>
                   <div className="mis-recurso-long">{recurso.descripcionLarga}</div>
-                  {recurso.archivoDriveId && (
-                    <a
-                      href={`https://drive.google.com/uc?export=download&id=${recurso.archivoDriveId}`}
-                      className="btn outline mis-recurso-download"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Descargar
-                    </a>
-                  )}
+                  {recurso.id && (
+                    <button className="btn outline mis-recurso-download"
+                       onClick={() => {
+                        descargarPDF(recurso);
+                      }}>
+                        Descargar
+                    </button> )
+                  }
                 </div>
               </div>
             ))}
           </div>
         )}
       </section>
+
+      {descarga && (
+        <div className="overlay-loading">
+          <div className="overlay-content">
+            <CircularProgress />
+            <p>Descargando...</p>
+          </div>
+        </div>
+      )}
+      
+      <InfoModal
+        open={msjError}
+        title="Hubo un error al descargar el archivo"
+        message="Favor de intentarlo mas tarde, en caso de seguir presentando fallas, porfavor contactanos para que podamos ayduarte"
+      />
       <WhatsAppFloat />
       <Footer />
     </div>

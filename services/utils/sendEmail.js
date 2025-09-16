@@ -2,6 +2,7 @@ import admin from 'firebase-admin';
 import nodemailer from 'nodemailer';
 import { google } from 'googleapis';
 import config from '../../config.js';
+import { connectDataConnectEmulator } from 'firebase/data-connect';
 
 const oAuth2Client = new google.auth.OAuth2(
   config.google.clientId,
@@ -16,12 +17,32 @@ async function getDriveFileBuffer(fileId) {
   return Buffer.from(res.data);
 }
 
+async function findId(item){
+  const docRef = admin.firestore().collection('recursos').doc(item.id);
+  const docSnap = await docRef.get();
+
+  if (!docSnap.exists) {
+    return res.status(404).send('Recurso no encontrado');
+  }
+
+  const recurso = docSnap.data();
+  const archivoDriveId = recurso.archivoDriveId;
+
+  if (!archivoDriveId) {
+    return null
+  }
+
+  return archivoDriveId
+}
+
 export async function sendPurchaseEmail(req, res) {
   const { items, correo, nombre, tipo } = req.body;
   try {
     let attachments = [];
     if (Array.isArray(items) && items.length > 0) {
       for (const item of items) {
+        let archivoId = await findId(item)
+        item.archivoDriveId = archivoId
         if (item.archivoDriveId) {
           const buffer = await getDriveFileBuffer(item.archivoDriveId);
           attachments.push({

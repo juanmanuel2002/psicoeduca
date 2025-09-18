@@ -1,2 +1,2 @@
 # psicoeduca
-Administracion de la pagina de psicoeduca
+Servicio para generacion y envio de imagenes

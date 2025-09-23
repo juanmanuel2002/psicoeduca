@@ -62,6 +62,9 @@ export async function sendImageEmail(img, correo, nivel, nombre) {
 
         <!-- Programa promocional -->
         <h3 style="color: #007bff;">⭐ Conoce nuestro programa <em>Conviértete en Aprendiz</em></h3>
+        <p style="font-size: 15px; line-height: 1.7; color: #444; margin: 12px 0 18px; text-align: justify;">
+          Un programa práctico y flexible para aprender inglés paso a paso, con enfoque profesional, donde conocerás nuestra metodología y procesos de aprendizaje que impulsan tu confianza y desarrollo.
+        </p>
         <ul style="font-size: 15px; line-height: 1.6;">
           <li>🎁 <strong>4 clases gratuitas</strong> de 1 hora*</li>
           <li>💸 Descuento adicional en tu primer mes*</li>
@@ -88,7 +91,7 @@ export async function sendImageEmail(img, correo, nivel, nombre) {
           Sábados: 9:00 a.m. – 2:00 p.m.
         </p>
 
-        <p>Saludos,<br><strong>El equipo de Psicoeduca</strong></p>
+        <p>Saludos,<br><strong>Equipo Psicoeduca</strong></p>
 
         <hr style="margin: 20px 0;" />
 

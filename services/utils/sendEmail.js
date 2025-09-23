@@ -157,12 +157,18 @@ export async function sendInscripcionClase(req, res) {
         </ul>
 
         <p>Por favor, completa el siguiente formulario para finalizar tu inscripción:</p>
-        <p>
+        
+        <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin: 20px 0; text-align: center; margin-right: 15px;">
           <a href="https://docs.google.com/forms/d/e/1FAIpQLSdiuTPUSSZB1FG4nm-pDnA68ZVu4Ee5oYmdlXxMu5Q5T5zNcQ/viewform?usp=header"
-            style="background: #28a745; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px; font-weight: bold;">
-            📋 Completar formulario
+            style="background: #28a745; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+            📋 Exámen de colocación
           </a>
-        </p>
+
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdeC8UbFsoZ10L-rAP8j1CQoSWLwG_7_xFzPfeV6isINImdgA/viewform"
+            style="background: #286aa7ff; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+            📋 Inscripción a clases
+          </a>
+        </div>
 
         <h3 style="color: #444;">📅 Horario de atención:</h3>
         <p>
@@ -170,14 +176,16 @@ export async function sendInscripcionClase(req, res) {
           Sábados: 9:00 a.m. – 2:00 p.m.
         </p>
 
-        <p>Saludos,<br><strong>El equipo de Psicoeduca</strong></p>
+        <p>Saludos,<br><strong>Equipo Psicoeduca</strong></p>
 
         <hr style="margin: 20px 0;" />
 
-        <p style="text-align: center;">
+        <div style="text-align: center;">
+          <p style="font-size: 12px; color: #888; ">2025 © Psicoeduca</p>
           🌐 <a href="https://instagram.com/p.siedu" style="color: #E1306C;">Instagram @p.siedu</a> | 
           👍 <a href="https://www.facebook.com/profile.php?id=100063462581485" style="color: #1877F2;">Facebook Psicoeduca</a>
-        </p>
+        </div>
+
         <img src="https://drive.google.com/uc?export=view&id=18U9hEM-IWMFVwItXjmaH4aDqB6sx29jU" alt="Psicoeduca Inglés" style="width: 100%; border-radius: 10px; margin-bottom: 20px;" />
       </div>
       `;
@@ -200,12 +208,18 @@ export async function sendInscripcionClase(req, res) {
         </ul>
 
         <p>Para confirmar tu inscripción, completa el siguiente formulario:</p>
-        <p>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdeC8UbFsoZ10L-rAP8j1CQoSWLwG_7_xFzPfeV6isINImdgA/viewform"
-            style="background: #28a745; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px; font-weight: bold;">
-            📋 Completar formulario
+
+        <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin: 20px 0; text-align: center; margin-right: 15px;">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdiuTPUSSZB1FG4nm-pDnA68ZVu4Ee5oYmdlXxMu5Q5T5zNcQ/viewform?usp=header"
+            style="background: #28a745; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+            📋 Exámen de colocación
           </a>
-        </p>
+
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdeC8UbFsoZ10L-rAP8j1CQoSWLwG_7_xFzPfeV6isINImdgA/viewform"
+            style="background: #286aa7ff; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+            📋 Inscripción a clases
+          </a>
+        </div>
 
         <h3 style="color: #444;">📅 Horario de atención:</h3>
         <p>
@@ -213,15 +227,18 @@ export async function sendInscripcionClase(req, res) {
           Sábados: 9:00 a.m. – 2:00 p.m.
         </p>
 
-        <p>Saludos,<br><strong>El equipo de Psicoeduca</strong></p>
+        <p>Saludos,<br><strong>Equipo Psicoeduca</strong></p>
 
         <hr style="margin: 20px 0;" />
 
-        <p style="text-align: center;">
+        <div style="text-align: center;">
+          <p style="font-size: 12px; color: #888; ">2025 © Psicoeduca</p>
           🌐 <a href="https://instagram.com/p.siedu" style="color: #E1306C;">Instagram @p.siedu</a> | 
           👍 <a href="https://www.facebook.com/profile.php?id=100063462581485" style="color: #1877F2;">Facebook Psicoeduca</a>
-        </p>
+        </div>
+
         <img src="https://drive.google.com/uc?export=view&id=18U9hEM-IWMFVwItXjmaH4aDqB6sx29jU" alt="Psicoeduca Inglés" style="width: 100%; border-radius: 10px; margin-bottom: 20px;" />
+        
       </div>
       `;
     }

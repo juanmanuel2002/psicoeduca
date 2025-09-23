@@ -50,7 +50,7 @@ export async function generateImage(req, res) {
     ctx.shadowBlur = 0;
 
     const buffer = canvas.toBuffer('image/png');
-    await sendImageEmail(buffer, correo);
+    await sendImageEmail(buffer, correo, nivel, nombre);
     res.status(200).json({ message: 'Imagen generada y enviada por correo.' });
   } catch (error) {
     res.status(500).json({ error: error.message });

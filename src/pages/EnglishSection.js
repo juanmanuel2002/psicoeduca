@@ -22,8 +22,6 @@ const TESTIMONIALS = [
 
 const RESOURCES = [
   { icon: <MenuBookIcon className="resource-icon" />, name: 'Guías y Libros PDF', path: '/english/guias' },
-  { icon: <SchoolIcon className="resource-icon" />, name: 'Videos interactivos', path: '/english/videos' },
-  { icon: <GroupIcon className="resource-icon" />, name: 'Foros de conversación', path: '/english/foro' },
   { icon: <StarIcon className="resource-icon" />, name: 'Tips de aprendizaje', path: '/english/tips' },
 ];
 
@@ -170,6 +168,7 @@ export default function EnglishSection() {
         {/* Recursos */}
         <div className="english-resources">
           <h3>Recursos para tu aprendizaje</h3>
+          <p>Da click y descubre lo que tenemos para ti</p>
           <div className="resources-list">
             {RESOURCES.map((r, i) => (
               <div className="resource" key={i}  onClick={() => {navigate(r.path);}}>

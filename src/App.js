@@ -21,8 +21,6 @@ import Consulta from './pages/consulta.js';
 import ClasesIndividual from './pages/clasesIndividual.js';
 import ClasesGrupo from './pages/clasesGrupo.js';
 import Aprendiz from './pages/aprendiz.js';
-import RecursoVideos from './pages/recursoVideos.js';
-import RecursoForos from './pages/recursoForos.js';
 import RecursoTips from './pages/recursoTips.js';
 import RecursoGuia from './pages/recursoGuia.js';
 import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
@@ -54,8 +52,6 @@ const App = () => {
                         <Route path="/english/clases-individual" element={<ClasesIndividual />} />
                         <Route path="/english/clases-grupo" element={<ClasesGrupo />} />
                         <Route path="/english/aprendiz" element={<Aprendiz />} />
-                        <Route path="/english/videos" element={<RecursoVideos />} />
-                        <Route path="/english/foro" element={<RecursoForos />} />
                         <Route path="/english/tips" element={<RecursoTips />} />
                         <Route path="/english/guias" element={<RecursoGuia />} />
                         <Route path="/checkout" element={<Checkout />} />

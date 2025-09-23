@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 const routeMap = [
   { path: '/home', label: 'Inicio' },
-  { path: '/consulta', label: 'Citas' },
+  { path: '/consulta', label: 'Consulta' },
   { path: '/crear-cita', label: 'Agendar Cita' },
   { path: '/cursos', label: 'Cursos' },
   { path: '/cursoDetalle', label: 'Detalle del Curso' },
@@ -22,9 +22,7 @@ const routeMap = [
   { path: '/english/clases-individual', label: 'Clases Individuales' },
   { path: '/english/aprendiz', label: 'Aprendiz' },
   { path: '/english/guias', label: 'Guías' },
-  { path: '/english/foro', label: 'Foro' },
   { path: '/english/tips', label: 'Tips' },
-  { path: '/english/videos', label: 'Videos' },
   
 ];
 

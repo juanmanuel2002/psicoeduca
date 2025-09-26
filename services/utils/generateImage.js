@@ -1,7 +1,7 @@
 import { createCanvas, loadImage  } from 'canvas';
+import { sendImageEmail } from './sendEmail.js';
 import path, { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { sendImageEmail } from './sendEmail.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -19,6 +19,9 @@ export async function generateImage(req, res) {
     return res.status(400).json({ error: 'Faltan datos requeridos' });
   }
   const imagenBase = nivelesImagen[nivel];
+  console.log('imagen base:', imagenBase);
+  console.log('imagen path', join(__dirname, imagenBase));
+  console.log('dirname:', __dirname);
   if (!imagenBase) {
     return res.status(400).json({ error: 'Nivel no válido.' });
   }

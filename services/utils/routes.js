@@ -7,5 +7,7 @@ const router = express.Router();
 
 router.post('/generate-image', generateImage);
 router.post('/inscripcion-status', sendEmailInscripcionStatus);
-
+router.post('/test', (req, res) => {
+  res.json({ ok: true });
+});
 export default router;

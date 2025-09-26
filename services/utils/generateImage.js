@@ -53,6 +53,7 @@ export async function generateImage(req, res) {
     ctx.shadowBlur = 0;
 
     const buffer = canvas.toBuffer('image/png');
+    console.log('Buffer length:', buffer.length);
     await sendImageEmail(buffer, correo, nivel, nombre);
     res.status(200).json({ message: 'Imagen generada y enviada por correo.' });
   } catch (error) {

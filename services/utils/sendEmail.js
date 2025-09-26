@@ -12,6 +12,7 @@ oAuth2Client.setCredentials({ refresh_token: config.google.refreshToken });
 export async function sendImageEmail(img, correo, nivel, nombre) {
   try{
     if(!img || !correo) return;
+    console.log('Entrando a mandar correo')
     const accessToken = await oAuth2Client.getAccessToken();
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -26,6 +27,7 @@ export async function sendImageEmail(img, correo, nivel, nombre) {
        //(10s)
         timeout: 10000 
     });
+    console.log('transporter creado');
 
     const mailOptions = {
       from: `Psicoeduca <${config.google.user}>`,
@@ -114,6 +116,7 @@ export async function sendImageEmail(img, correo, nivel, nombre) {
 
 
     await transporter.sendMail(mailOptions);
+    console.log('Correo enviado');
   }catch(error){
     console.log('Error mandado el correo', error.message)
     throw new Error(error.message);
@@ -127,11 +130,16 @@ export async function sendEmailInscripcionStatus(req, res){
 		return res.status(400).json({ error: 'Faltan datos requeridos.' });
 	}
 	try {
+    console.log('estado de la inscripcion', estatusInscripcion)
 		if (estatusInscripcion === 'confirmado') {
+      console.log('Mandando correo de confirmado')
 			await sendInscripcionEmail(nombre, correo, horario);
+      console.log('Correo de confirmado enviado')
 			return res.json({ success: true, message: 'Correo de confirmación enviado.' });
 		} else {
+      console.log('Mandando correo de lista de espera')
 			await sendListaEsperaEmail(nombre, correo, horario);
+      console.log('Correo de lista de espera enviado')
 			return res.json({ success: true, message: 'Correo de lista de espera enviado.' });
 		}
 	} catch (error) {

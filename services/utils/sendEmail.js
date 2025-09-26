@@ -9,31 +9,58 @@ const oAuth2Client = new google.auth.OAuth2(
 );
 oAuth2Client.setCredentials({ refresh_token: config.google.refreshToken });
 
+
+function buildMimeMessage(from, to, subject, text, attachments) {
+  const boundary = '----=_Boundary_' + Date.now();
+  const nl = '\r\n';
+
+  let mime = '';
+  mime += `From: ${from}${nl}`;
+  mime += `To: ${to}${nl}`;
+  mime += `Subject: ${encodeSubject(subject)}${nl}`;
+  mime += `MIME-Version: 1.0${nl}`;
+  mime += `Content-Type: multipart/mixed; boundary="${boundary}"${nl}${nl}`;
+
+  // Parte de texto
+  mime += `--${boundary}${nl}`;
+  mime += `Content-Type: text/html; charset="UTF-8"${nl}`;
+  mime += `Content-Transfer-Encoding: 7bit${nl}${nl}`;
+  mime += text + nl + nl;
+
+  // Adjuntos
+  if (attachments && attachments.length > 0) {
+    for (const file of attachments) {
+      const content = file.content.toString('base64');
+      mime += `--${boundary}${nl}`;
+      mime += `Content-Type: application/pdf; name="${file.filename}"${nl}`;
+      mime += `Content-Disposition: attachment; filename="${file.filename}"${nl}`;
+      mime += `Content-Transfer-Encoding: base64${nl}${nl}`;
+      mime += `${content}${nl}${nl}`;
+    }
+  }
+
+  mime += `--${boundary}--`;
+
+  return Buffer.from(mime)
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
+}
+
+function encodeSubject(subject) {
+  const base64 = Buffer.from(subject, 'utf8').toString('base64');
+  return `=?UTF-8?B?${base64}?=`;
+}
+
+
 export async function sendImageEmail(img, correo, nivel, nombre) {
   try{
     if(!img || !correo) return;
-    console.log('Entrando a mandar correo')
-    const accessToken = await oAuth2Client.getAccessToken();
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        type: 'OAuth2',
-        user: config.google.user,
-        clientId: config.google.clientId,
-        clientSecret: config.google.clientSecret,
-        refreshToken: config.google.refreshToken,
-        accessToken: accessToken.token
-      },
-       //(10s)
-        timeout: 10000 
-    });
-    console.log('transporter creado');
+    
+    const subject = "¡Felicidades! Ya tenemos tu nivel de inglés"
 
-    const mailOptions = {
-      from: `Psicoeduca <${config.google.user}>`,
-      to: correo,
-      subject: "¡Felicidades! Ya tenemos tu nivel de inglés",
-      html: `
+    const text =  `
       <div style="font-family: Arial, sans-serif; color: #333; max-width: 650px; margin: auto; padding: 25px; border: 1px solid #eee; border-radius: 12px; background: #fafafa;">
         
         <h2 style="color: #007bff;">Hola ${nombre || ''}, 🎉</h2>
@@ -104,18 +131,30 @@ export async function sendImageEmail(img, correo, nivel, nombre) {
         </div>
         
       </div>
-      `,
-      attachments: [
-        {
-          filename: 'Nivel.png',
-          content: img,
-          contentType: 'image/png'
-        }
-      ]
-    };
+    `;
 
+    const attachments = [
+      {
+        filename: 'Nivel.png',
+        content: img,
+        contentType: 'image/png'
+      }
+    ]
 
-    await transporter.sendMail(mailOptions);
+    // Construir MIME
+    const raw = buildMimeMessage(
+      `Psicoeduca <${config.google.user}>`,
+      correo,
+      subject,
+      text,
+      attachments
+    );
+
+    const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
+    await gmail.users.messages.send({
+      userId: 'me',
+      requestBody: { raw }
+    });
     console.log('Correo enviado');
   }catch(error){
     console.log('Error mandado el correo', error.message)
@@ -134,12 +173,10 @@ export async function sendEmailInscripcionStatus(req, res){
 		if (estatusInscripcion === 'confirmado') {
       console.log('Mandando correo de confirmado')
 			await sendInscripcionEmail(nombre, correo, horario);
-      console.log('Correo de confirmado enviado')
 			return res.json({ success: true, message: 'Correo de confirmación enviado.' });
 		} else {
       console.log('Mandando correo de lista de espera')
 			await sendListaEsperaEmail(nombre, correo, horario);
-      console.log('Correo de lista de espera enviado')
 			return res.json({ success: true, message: 'Correo de lista de espera enviado.' });
 		}
 	} catch (error) {
@@ -149,25 +186,9 @@ export async function sendEmailInscripcionStatus(req, res){
 
 async function sendInscripcionEmail(nombre, correo, horario) {
   try {
-    const accessToken = await oAuth2Client.getAccessToken();
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        type: 'OAuth2',
-        user: config.google.user,
-        clientId: config.google.clientId,
-        clientSecret: config.google.clientSecret,
-        refreshToken: config.google.refreshToken,
-        accessToken: accessToken.token
-      },
-      timeout: 10000
-    });
-
-    const mailOptions = {
-      from: `Psicoeduca <${config.google.user}>`,
-      to: correo,
-      subject: '¡Inscripción confirmada! 🎉',
-      html: `
+    
+    const subject = "¡Inscripción confirmada! 🎉"
+    const text = `
         <div style="font-family: Arial, sans-serif; color: #333; max-width: 650px; margin: auto; padding: 25px; border: 1px solid #eee; border-radius: 12px; background: #fafafa;">
           <h2 style="color: #007bff;">Hola ${nombre},</h2>
           <p style="font-size: 14px; line-height: 1.6;">¡Tu inscripción ha sido <strong>confirmada</strong> en el horario: <span style='color:#28a745;'>${horario}</span>!</p>
@@ -199,9 +220,24 @@ async function sendInscripcionEmail(nombre, correo, horario) {
             👍 <a href="https://www.facebook.com/profile.php?id=100063462581485" style="color: #1877F2;">Facebook Psicoeduca</a>
           </div>
         </div>
-      `
-    };
-    await transporter.sendMail(mailOptions);
+     `;
+
+    const attachments = null;
+    const raw = buildMimeMessage(
+      `Psicoeduca <${config.google.user}>`,
+      correo,
+      subject,
+      text,
+      attachments
+    );
+
+    const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
+    await gmail.users.messages.send({
+      userId: 'me',
+      requestBody: { raw }
+    });
+    console.log('envio exitoso')
+
   } catch (error) {
     console.log('Error mandando correo de inscripción', error.message);
     throw new Error(error.message);
@@ -210,25 +246,10 @@ async function sendInscripcionEmail(nombre, correo, horario) {
 
 async function sendListaEsperaEmail(nombre, correo, horario) {
   try {
-    const accessToken = await oAuth2Client.getAccessToken();
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        type: 'OAuth2',
-        user: config.google.user,
-        clientId: config.google.clientId,
-        clientSecret: config.google.clientSecret,
-        refreshToken: config.google.refreshToken,
-        accessToken: accessToken.token
-      },
-      timeout: 10000
-    });
 
-    const mailOptions = {
-      from: `Psicoeduca <${config.google.user}>`,
-      to: correo,
-      subject: 'Estás en la lista de espera',
-      html: `
+    const subject = 'Estás en la lista de espera'
+
+    const text = `
         <div style="font-family: Arial, sans-serif; color: #333; max-width: 650px; margin: auto; padding: 25px; border: 1px solid #eee; border-radius: 12px; background: #fafafa;">
           <h2 style="color: #007bff;">Hola ${nombre},</h2>
           <p style="font-size: 14px;">Actualmente el horario <span style='color:#dc3545;'>${horario}</span> está completo, pero te hemos agregado a la <strong>lista de espera</strong>.</p>
@@ -260,9 +281,26 @@ async function sendListaEsperaEmail(nombre, correo, horario) {
             👍 <a href="https://www.facebook.com/profile.php?id=100063462581485" style="color: #1877F2;">Facebook Psicoeduca</a>
           </div>
         </div>
-      `
-    };
-    await transporter.sendMail(mailOptions);
+      `;
+
+    const attachments = null;
+
+    const raw = buildMimeMessage(
+      `Psicoeduca <${config.google.user}>`,
+      correo,
+      subject,
+      text,
+      attachments
+    );
+
+    const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
+    await gmail.users.messages.send({
+      userId: 'me',
+      requestBody: { raw }
+    });
+    console.log('envio exitoso')
+
+
   } catch (error) {
     console.log('Error mandando correo de lista de espera', error.message);
     throw new Error(error.message);

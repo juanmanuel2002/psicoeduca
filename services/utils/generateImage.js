@@ -19,9 +19,6 @@ export async function generateImage(req, res) {
     return res.status(400).json({ error: 'Faltan datos requeridos' });
   }
   const imagenBase = nivelesImagen[nivel];
-  console.log('imagen base:', imagenBase);
-  console.log('imagen path', join(__dirname, imagenBase));
-  console.log('dirname:', __dirname);
   if (!imagenBase) {
     return res.status(400).json({ error: 'Nivel no válido.' });
   }
@@ -53,7 +50,6 @@ export async function generateImage(req, res) {
     ctx.shadowBlur = 0;
 
     const buffer = canvas.toBuffer('image/png');
-    console.log('Buffer length:', buffer.length);
     await sendImageEmail(buffer, correo, nivel, nombre);
     res.status(200).json({ message: 'Imagen generada y enviada por correo.' });
   } catch (error) {

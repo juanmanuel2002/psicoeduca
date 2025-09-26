@@ -120,3 +120,143 @@ export async function sendImageEmail(img, correo, nivel, nombre) {
   }
    
 }
+
+export async function sendEmailInscripcionStatus(req, res){
+  const { nombre, correo, estatusInscripcion, horario } = req.body;
+	if (!nombre || !correo || !estatusInscripcion || !horario) {
+		return res.status(400).json({ error: 'Faltan datos requeridos.' });
+	}
+	try {
+		if (estatusInscripcion === 'confirmado') {
+			await sendInscripcionEmail(nombre, correo, horario);
+			return res.json({ success: true, message: 'Correo de confirmación enviado.' });
+		} else {
+			await sendListaEsperaEmail(nombre, correo, horario);
+			return res.json({ success: true, message: 'Correo de lista de espera enviado.' });
+		}
+	} catch (error) {
+		return res.status(500).json({ error: error.message });
+	}
+}
+
+async function sendInscripcionEmail(nombre, correo, horario) {
+  try {
+    const accessToken = await oAuth2Client.getAccessToken();
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: config.google.user,
+        clientId: config.google.clientId,
+        clientSecret: config.google.clientSecret,
+        refreshToken: config.google.refreshToken,
+        accessToken: accessToken.token
+      },
+      timeout: 10000
+    });
+
+    const mailOptions = {
+      from: `Psicoeduca <${config.google.user}>`,
+      to: correo,
+      subject: '¡Inscripción confirmada! 🎉',
+      html: `
+        <div style="font-family: Arial, sans-serif; color: #333; max-width: 650px; margin: auto; padding: 25px; border: 1px solid #eee; border-radius: 12px; background: #fafafa;">
+          <h2 style="color: #007bff;">Hola ${nombre},</h2>
+          <p style="font-size: 14px; line-height: 1.6;">¡Tu inscripción ha sido <strong>confirmada</strong> en el horario: <span style='color:#28a745;'>${horario}</span>!</p>
+          <p style="font-size: 14px; line-height: 1.6;">Estamos emocionados de que formes parte de nuestra comunidad de aprendizaje. Prepárate para una experiencia educativa enriquecedora y divertida.</p>
+
+          <h3 style="color: #444;">👉 ¿Qué sigue?</h3>
+          <p style="font-size: 14px; line-height: 1.6;">
+            Te esperamos en tu primera clase. Asegúrate de revisar tu correo para cualquier actualización o información adicional que podamos enviarte antes de que comencemos.
+          </p>
+
+          <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;" />
+
+          <p style="font-size: 14px;">Si tienes alguna duda o comentario, no dudes en escribirnos.  
+          Agradecemos tu interés y participación.</p>
+
+          <h3 style="color: #444;">📅 Horario de atención:</h3>
+          <p style="font-size: 14px; line-height: 1.6;">
+            Lunes a Viernes: 9:00 a.m. – 6:00 p.m.<br>
+            Sábados: 9:00 a.m. – 2:00 p.m.
+          </p>
+
+          <p style="font-size: 15px; line-height: 1.6;">Saludos,<br><strong>Equipo Psicoeduca</strong></p>
+
+          <hr style="margin: 20px 0;" />
+
+          <div style="text-align: center;">
+            <p style="font-size: 12px; color: #888; ">2025 © Psicoeduca</p>
+            🌐 <a href="https://instagram.com/p.siedu" style="color: #E1306C;">Instagram @p.siedu</a> | 
+            👍 <a href="https://www.facebook.com/profile.php?id=100063462581485" style="color: #1877F2;">Facebook Psicoeduca</a>
+          </div>
+        </div>
+      `
+    };
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.log('Error mandando correo de inscripción', error.message);
+    throw new Error(error.message);
+  }
+}
+
+async function sendListaEsperaEmail(nombre, correo, horario) {
+  try {
+    const accessToken = await oAuth2Client.getAccessToken();
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: config.google.user,
+        clientId: config.google.clientId,
+        clientSecret: config.google.clientSecret,
+        refreshToken: config.google.refreshToken,
+        accessToken: accessToken.token
+      },
+      timeout: 10000
+    });
+
+    const mailOptions = {
+      from: `Psicoeduca <${config.google.user}>`,
+      to: correo,
+      subject: 'Estás en la lista de espera',
+      html: `
+        <div style="font-family: Arial, sans-serif; color: #333; max-width: 650px; margin: auto; padding: 25px; border: 1px solid #eee; border-radius: 12px; background: #fafafa;">
+          <h2 style="color: #007bff;">Hola ${nombre},</h2>
+          <p style="font-size: 14px;">Actualmente el horario <span style='color:#dc3545;'>${horario}</span> está completo, pero te hemos agregado a la <strong>lista de espera</strong>.</p>
+          
+          <p style="font-size: 14px;">Pero no te preocupes! En cuanto se libere algun lugar te notificaremos. Agradecemos tu paciencia y comprensión.</p>
+          <h3 style="color: #444;">👉 ¿Qué puedes hacer mientras tanto?</h3>
+          <p style="font-size: 14px; line-height: 1.6;">
+            Considera explorar otros horarios disponibles o nuestro programa <strong>Conviértete en Aprendiz</strong>, que ofrece una excelente oportunidad para comenzar tu aprendizaje de inmediato.
+          </p>
+          
+          <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;" />
+
+          <p style="font-size: 14px;">Si tienes alguna duda o comentario, no dudes en escribirnos.  
+          Agradecemos tu interés y participación.</p>
+
+          <h3 style="color: #444;">📅 Horario de atención:</h3>
+          <p style="font-size: 14px; line-height: 1.6;">
+            Lunes a Viernes: 9:00 a.m. – 6:00 p.m.<br>
+            Sábados: 9:00 a.m. – 2:00 p.m.
+          </p>
+
+          <p style="font-size: 15px; line-height: 1.6;">Saludos,<br><strong>Equipo Psicoeduca</strong></p>
+
+          <hr style="margin: 20px 0;" />
+
+          <div style="text-align: center;">
+            <p style="font-size: 12px; color: #888; ">2025 © Psicoeduca</p>
+            🌐 <a href="https://instagram.com/p.siedu" style="color: #E1306C;">Instagram @p.siedu</a> | 
+            👍 <a href="https://www.facebook.com/profile.php?id=100063462581485" style="color: #1877F2;">Facebook Psicoeduca</a>
+          </div>
+        </div>
+      `
+    };
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.log('Error mandando correo de lista de espera', error.message);
+    throw new Error(error.message);
+  }
+}

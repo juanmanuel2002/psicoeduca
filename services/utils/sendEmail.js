@@ -35,8 +35,53 @@ async function findId(item){
   return archivoDriveId
 }
 
+// 🔑 Helper para construir el mensaje MIME (texto + adjuntos)
+function buildMimeMessage(from, to, subject, text, attachments) {
+  const boundary = '----=_Boundary_' + Date.now();
+  const nl = '\r\n';
+
+  let mime = '';
+  mime += `From: ${from}${nl}`;
+  mime += `To: ${to}${nl}`;
+  mime += `Subject: ${encodeSubject(subject)}${nl}`;
+  mime += `MIME-Version: 1.0${nl}`;
+  mime += `Content-Type: multipart/mixed; boundary="${boundary}"${nl}${nl}`;
+
+  // Parte de texto
+  mime += `--${boundary}${nl}`;
+  mime += `Content-Type: text/plain; charset="UTF-8"${nl}${nl}`;
+  mime += `${text}${nl}${nl}`;
+
+  // Adjuntos
+  if (attachments && attachments.length > 0) {
+    for (const file of attachments) {
+      const content = file.content.toString('base64');
+      mime += `--${boundary}${nl}`;
+      mime += `Content-Type: application/pdf; name="${file.filename}"${nl}`;
+      mime += `Content-Disposition: attachment; filename="${file.filename}"${nl}`;
+      mime += `Content-Transfer-Encoding: base64${nl}${nl}`;
+      mime += `${content}${nl}${nl}`;
+    }
+  }
+
+  mime += `--${boundary}--`;
+
+  // Gmail requiere base64url
+  return Buffer.from(mime)
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
+}
+function encodeSubject(subject) {
+  const base64 = Buffer.from(subject, 'utf8').toString('base64');
+  return `=?UTF-8?B?${base64}?=`;
+}
+
+
 export async function sendPurchaseEmail(req, res) {
   const { items, correo, nombre, tipo } = req.body;
+  console.log('entrabdo a enviar correo')
   try {
     let attachments = [];
     if (Array.isArray(items) && items.length > 0) {
@@ -53,65 +98,56 @@ export async function sendPurchaseEmail(req, res) {
       }
     }
 
-    const accessToken = await oAuth2Client.getAccessToken();
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        type: 'OAuth2',
-        user: config.google.user,
-        clientId: config.google.clientId,
-        clientSecret: config.google.clientSecret,
-        refreshToken: config.google.refreshToken,
-        accessToken: accessToken.token
-      },
-       //(10s)
-        timeout: 10000 
-    });
     const esSolicitud = tipo === 'solicitud';
 
-    const mailOptions = {
-      from: `Psicoeduca <${config.google.user}>`,
-      to: correo,
-      subject: esSolicitud
-        ? 'Solicitud clases de inglés con Psicoeduca'
-        : '¡Muchas gracias por tu compra!',
-      text: esSolicitud
-        ? `Hola ${nombre || ''},
+    const subject = esSolicitud
+      ? 'Solicitud clases de inglés con Psicoeduca'
+      : '¡Muchas gracias por tu compra!';
+    const text = esSolicitud
+      ? `Hola ${nombre || ''},
 
-        Gracias por tu interés en nuestras clases de inglés con enfoque 
-        conversacional y psicológico. Cuentanos como podemos ayudarte
-        y nos pondremos en contacto contigo a la brevedad.
+    Gracias por tu interés en nuestras clases de inglés con enfoque conversacional y psicológico. Cuéntanos cómo podemos ayudarte y nos pondremos en contacto contigo a la brevedad.
 
+    📅 Horario de atención:
+    - Lunes a Viernes: 9:00 a.m. – 6:00 p.m.
+    - Sábados: 9:00 a.m. – 2:00 p.m.
 
-        
-        📅 Horario de atención:
-        - Lunes a Viernes: 9:00 a.m. – 6:00 p.m.
-        - Sábados: 9:00 a.m. – 2:00 p.m.
+    Saludos,
+    El equipo de Psicoeduca`
+          : `Hola ${nombre || ''},
 
-        Saludos,
-        El equipo de Psicoeduca`
-        
-        : `Hola ${nombre || ''},
+    Agradecemos mucho tu compra. Esperamos que el material adquirido sea de gran utilidad para tu crecimiento personal.
 
-        Agradecemos mucho tu compra. Esperamos que el material adquirido sea 
-        de gran utilidad para tu crecimiento personal.
+    Si tienes alguna duda adicional, puedes escribirnos a este mismo correo o contactarnos por redes sociales.
 
-        Si tienes alguna duda adicional, puedes escribirnos a este mismo correo o
-        contactarnos por redes sociales.
+    📅 Horario de atención:
+    - Lunes a Viernes: 9:00 a.m. – 6:00 p.m.
+    - Sábados: 9:00 a.m. – 2:00 p.m.
 
-        📅 Horario de atención:
-        - Lunes a Viernes: 9:00 a.m. – 6:00 p.m.
-        - Sábados: 9:00 a.m. – 2:00 p.m.
+    ¡Gracias por confiar en nosotros!
 
-        ¡Gracias por confiar en nosotros!
+    Atentamente,
+    El equipo de Psicoeduca`;
+    // Construir MIME
+    console.log('construccion de raw')
+    const raw = buildMimeMessage(
+      `Psicoeduca <${config.google.user}>`,
+      correo,
+      subject,
+      text,
+      attachments
+    );
 
-        Atentamente,
-        El equipo de Psicoeduca`,
-        attachments
-        };
-    
-    await transporter.sendMail(mailOptions);
-    res.status(200).json({ message: 'Correo enviado correctamente.' });
+    console.log('raw construido')
+    const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
+    console.log('envio con api')
+    await gmail.users.messages.send({
+      userId: 'me',
+      requestBody: { raw }
+    });
+    console.log('envio exitoso')
+
+    res.status(200).json({ message: 'Correo enviado correctamente con Gmail API.' });
 
   } catch (error) {
     res.status(500).json({ error: error.message });

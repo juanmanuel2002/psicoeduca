@@ -11,6 +11,24 @@ const oAuth2Client = new google.auth.OAuth2(
 );
 oAuth2Client.setCredentials({ refresh_token: config.google.refreshToken });
 
+const footerEmail = `
+  <h3 style="color: #444;">📅 Horario de atención:</h3>
+  <p>
+    Lunes a Viernes: 9:00 a.m. – 6:00 p.m.<br>
+    Sábados: 9:00 a.m. – 2:00 p.m.
+  </p>
+
+  <p>Saludos,<br><strong>Equipo Psicoeduca</strong></p>
+
+  <hr style="margin: 20px 0;" />
+
+  <div style="text-align: center;">
+    <p style="font-size: 12px; color: #888; ">2025 © Psicoeduca</p>
+    🌐 <a href="https://instagram.com/p.siedu" style="color: #1877F2;">Instagram @p.siedu</a> | 
+    👍 <a href="https://www.facebook.com/profile.php?id=100063462581485" style="color: #1877F2;">Facebook Psicoeduca</a>
+  </div>
+`
+
 async function getDriveFileBuffer(fileId) {
   const drive = google.drive({ version: 'v3', auth: oAuth2Client });
   const res = await drive.files.get({ fileId, alt: 'media' }, { responseType: 'arraybuffer' });
@@ -35,7 +53,6 @@ async function findId(item){
   return archivoDriveId
 }
 
-// 🔑 Helper para construir el mensaje MIME (texto + adjuntos)
 function buildMimeMessage(from, to, subject, text, attachments) {
   const boundary = '----=_Boundary_' + Date.now();
   const nl = '\r\n';
@@ -49,8 +66,9 @@ function buildMimeMessage(from, to, subject, text, attachments) {
 
   // Parte de texto
   mime += `--${boundary}${nl}`;
-  mime += `Content-Type: text/plain; charset="UTF-8"${nl}${nl}`;
-  mime += `${text}${nl}${nl}`;
+  mime += `Content-Type: text/html; charset="UTF-8"${nl}`;
+  mime += `Content-Transfer-Encoding: 7bit${nl}${nl}`;
+  mime += text + nl + nl;
 
   // Adjuntos
   if (attachments && attachments.length > 0) {
@@ -66,7 +84,6 @@ function buildMimeMessage(from, to, subject, text, attachments) {
 
   mime += `--${boundary}--`;
 
-  // Gmail requiere base64url
   return Buffer.from(mime)
     .toString('base64')
     .replace(/\+/g, '-')
@@ -81,7 +98,6 @@ function encodeSubject(subject) {
 
 export async function sendPurchaseEmail(req, res) {
   const { items, correo, nombre, tipo } = req.body;
-  console.log('entrabdo a enviar correo')
   try {
     let attachments = [];
     if (Array.isArray(items) && items.length > 0) {
@@ -104,32 +120,47 @@ export async function sendPurchaseEmail(req, res) {
       ? 'Solicitud clases de inglés con Psicoeduca'
       : '¡Muchas gracias por tu compra!';
     const text = esSolicitud
-      ? `Hola ${nombre || ''},
+      ? `
+      <div style="font-family: Arial, sans-serif; color: #333; max-width: 650px; margin: auto; padding: 25px; border: 1px solid #eee; border-radius: 12px; background: #fafafa;">
+        <h2 style="color: #007bff;">Hola ${nombre || ''},</h2>
+        <p style="font-size: 14px; line-height: 1.6;">
+          Gracias por tu interés en nuestras clases de inglés con enfoque 
+          <strong>conversacional y psicológico</strong>.
+        </p>
+        <p style="font-size: 14px; line-height: 1.6;">
+          Cuéntanos cómo podemos ayudarte y nos pondremos en contacto contigo a la brevedad.
+        </p>
+        <p style="font-size: 14px; line-height: 1.6;">
+          No olvides seguirnos en nuestras redes para que descubras tips, ejercicios y recursos que pueden ayudarte desde hoy a mejorar tu inglés. 📚✨
+        </p>
 
-    Gracias por tu interés en nuestras clases de inglés con enfoque conversacional y psicológico. Cuéntanos cómo podemos ayudarte y nos pondremos en contacto contigo a la brevedad.
+        ${footerEmail}
 
-    📅 Horario de atención:
-    - Lunes a Viernes: 9:00 a.m. – 6:00 p.m.
-    - Sábados: 9:00 a.m. – 2:00 p.m.
+      </div>
+      `
+      : `
+      <div style="font-family: Arial, sans-serif; color: #333; max-width: 650px; margin: auto; padding: 25px; border: 1px solid #eee; border-radius: 12px; background: #fafafa;">
+        <h2 style="color: #007bff;">Hola ${nombre || ''},</h2>
+        <p style="font-size: 14px; line-height: 1.6;">
+          Queremos agradecerte de corazón por confiar en <strong>Psicoeduca</strong>.  
+          Tu compra no solo es un paso hacia tu crecimiento personal, sino también una inversión en ti mismo. 💡
+        </p>
+        
+        <p style="font-size: 14px; line-height: 1.6;">
+          Aprovecha al máximo tu recurso, y recuerda: el aprendizaje es más poderoso cuando se aplica día a día.  
+          ¡Estamos emocionados de acompañarte en este proceso! 🚀
+        </p>
+        
+        <p style="font-size: 14px; line-height: 1.6;">
+          Si tienes alguna duda adicional, puedes escribirnos a este mismo correo o
+          contactarnos por redes sociales.
+        </p>
 
-    Saludos,
-    El equipo de Psicoeduca`
-          : `Hola ${nombre || ''},
+        ${footerEmail}
+      </div>
+      `;
 
-    Agradecemos mucho tu compra. Esperamos que el material adquirido sea de gran utilidad para tu crecimiento personal.
-
-    Si tienes alguna duda adicional, puedes escribirnos a este mismo correo o contactarnos por redes sociales.
-
-    📅 Horario de atención:
-    - Lunes a Viernes: 9:00 a.m. – 6:00 p.m.
-    - Sábados: 9:00 a.m. – 2:00 p.m.
-
-    ¡Gracias por confiar en nosotros!
-
-    Atentamente,
-    El equipo de Psicoeduca`;
     // Construir MIME
-    console.log('construccion de raw')
     const raw = buildMimeMessage(
       `Psicoeduca <${config.google.user}>`,
       correo,
@@ -138,9 +169,7 @@ export async function sendPurchaseEmail(req, res) {
       attachments
     );
 
-    console.log('raw construido')
     const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
-    console.log('envio con api')
     await gmail.users.messages.send({
       userId: 'me',
       requestBody: { raw }
@@ -171,7 +200,7 @@ export async function sendInscripcionClase(req, res) {
     }
 
     // Enviar correo
-    let subject = 'Inscripción a clase de inglés con Psicoeduca';
+    const subject = 'Inscripción a clase de inglés con Psicoeduca';
     let html = "";
 
     if (tipo === 'grupo') {
@@ -206,21 +235,7 @@ export async function sendInscripcionClase(req, res) {
           </a>
         </div>
 
-        <h3 style="color: #444;">📅 Horario de atención:</h3>
-        <p>
-          Lunes a Viernes: 9:00 a.m. – 6:00 p.m.<br>
-          Sábados: 9:00 a.m. – 2:00 p.m.
-        </p>
-
-        <p>Saludos,<br><strong>Equipo Psicoeduca</strong></p>
-
-        <hr style="margin: 20px 0;" />
-
-        <div style="text-align: center;">
-          <p style="font-size: 12px; color: #888; ">2025 © Psicoeduca</p>
-          🌐 <a href="https://instagram.com/p.siedu" style="color: #E1306C;">Instagram @p.siedu</a> | 
-          👍 <a href="https://www.facebook.com/profile.php?id=100063462581485" style="color: #1877F2;">Facebook Psicoeduca</a>
-        </div>
+        ${footerEmail}
 
         <img src="https://drive.google.com/uc?export=view&id=18U9hEM-IWMFVwItXjmaH4aDqB6sx29jU" alt="Psicoeduca Inglés" style="width: 100%; border-radius: 10px; margin-bottom: 20px;" />
       </div>
@@ -257,53 +272,31 @@ export async function sendInscripcionClase(req, res) {
           </a>
         </div>
 
-        <h3 style="color: #444;">📅 Horario de atención:</h3>
-        <p>
-          Lunes a Viernes: 9:00 a.m. – 6:00 p.m.<br>
-          Sábados: 9:00 a.m. – 2:00 p.m.
-        </p>
-
-        <p>Saludos,<br><strong>Equipo Psicoeduca</strong></p>
-
-        <hr style="margin: 20px 0;" />
-
-        <div style="text-align: center;">
-          <p style="font-size: 12px; color: #888; ">2025 © Psicoeduca</p>
-          🌐 <a href="https://instagram.com/p.siedu" style="color: #E1306C;">Instagram @p.siedu</a> | 
-          👍 <a href="https://www.facebook.com/profile.php?id=100063462581485" style="color: #1877F2;">Facebook Psicoeduca</a>
-        </div>
+        ${footerEmail}
 
         <img src="https://drive.google.com/uc?export=view&id=18U9hEM-IWMFVwItXjmaH4aDqB6sx29jU" alt="Psicoeduca Inglés" style="width: 100%; border-radius: 10px; margin-bottom: 20px;" />
         
       </div>
       `;
     }
-    
-    const accessToken = await oAuth2Client.getAccessToken();
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        type: 'OAuth2',
-        user: config.google.user,
-        clientId: config.google.clientId,
-        clientSecret: config.google.clientSecret,
-        refreshToken: config.google.refreshToken,
-        accessToken: accessToken.token
-      },
-       //(10s)
-        timeout: 10000 
-    });
-
-
-    const mailOptions = {
-      from: `Psicoeduca <${config.google.user}>`,
-      to: correo,
+    const attachments = [];
+    // Construir MIME
+    const raw = buildMimeMessage(
+      `Psicoeduca <${config.google.user}>`,
+      correo,
       subject,
-      html
-    };
+      html,
+      attachments
+    );
 
-    await transporter.sendMail(mailOptions);
-     // Agregar inscripción
+    const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
+    await gmail.users.messages.send({
+      userId: 'me',
+      requestBody: { raw }
+    });
+    console.log('envio exitoso')
+
+    // Agregar inscripción
     await usuarioRef.update({
       inscripciones: admin.firestore.FieldValue.arrayUnion(inscripcionActual)
     });

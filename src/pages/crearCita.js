@@ -12,7 +12,21 @@ import '../styles/crearCita.css';
 
 export default function CrearCita() {
   const { user } = useContext(AuthContext);
-  const [citaData, setCitaData] = useState({ fecha: '', hora: '', descripcion: '' });
+  const [citaData, setCitaData] = useState({
+    nombre: user?.name || '',
+    edad: '',
+    whatsapp: '',
+    correo: user?.email || '',
+    ciudad: '',
+    ocupacion: '',
+    trabajo: '',
+    motivo: '',
+    tipoPsicoterapia: '',
+    fecha: '',
+    hora: '',
+    descripcion: ''
+  });
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -110,6 +124,15 @@ export default function CrearCita() {
   }
 }, [selectedServicio]);
 
+  const handleNext = (e) => {
+    e && e.preventDefault();
+    setStep(s => Math.min(s + 1, 3));
+  };
+  const handleBack = (e) => {
+    e && e.preventDefault();
+    setStep(s => Math.max(s - 1, 1));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -117,13 +140,24 @@ export default function CrearCita() {
     setSuccess(false);
     try {
       await crearCita({
-        fecha: citaData.fecha,
-        hora: citaData.hora,
-        usuarioId: user?.name || user?.email || user?.id ,
-        descripcion: citaData.descripcion,
+        ...citaData,
+        usuarioId: user?.name || user?.email || user?.id,
       });
       setSuccess(true);
-      setCitaData({ fecha: '', hora: '', descripcion: '' });
+      setCitaData({
+        nombre: user?.name || '',
+        edad: '',
+        whatsapp: '',
+        correo: user?.email || '',
+        ciudad: '',
+        ocupacion: '',
+        trabajo: '',
+        motivo: '',
+        tipoPsicoterapia: '',
+        fecha: '',
+        hora: '',
+        descripcion: ''
+      });
       setShowModal(true);
       setTimeout(() => {
         navigate('/home');
@@ -136,86 +170,179 @@ export default function CrearCita() {
     setLoading(false);
   };
 
+if (!user) {
+  return (
+    <div className="home-container">
+      <Header />
+      <section className="crear-cita-section-wrapper">
+        <div className="error-message" style={{margin: '40px auto', maxWidth: 600, textAlign: 'center'}}>
+          Debes iniciar sesión para poder agendar una cita.
+        </div>
+      </section>
+      <Footer />
+    </div>
+  );
+}
+
+
   return (
     <div className="home-container">
       <Header />
       <section data-aos="fade-up" className="crear-cita-section-wrapper">
-        
-        {/* Formulario de agendar */}
         <div className="crear-cita-section">
           <h2>Agendar Consulta</h2>
+          
           {success && <div className="success-message">¡Cita agendada exitosamente!</div>}
           {error && <div className="error-message">{error}</div>}
-          <form onSubmit={handleSubmit}>
-            <div className="crear-cita-form-group">
-              <label>Fecha:</label>
-              <input 
-                type="date" 
-                required 
-                value={citaData.fecha} 
-                onChange={e => {
-                  setCitaData(d => ({ ...d, fecha: e.target.value, hora: '' }));
-                }} 
-                min={new Date().toISOString().split('T')[0]} 
-              />
-            </div>
-
-            <div className="crear-cita-form-group">
-              <label>Hora:</label>
-              {error !== 'Debes iniciar sesion para cargar los horarios de las citas' &&
-                <div style={{display:'flex', flexWrap:'wrap', gap:8}}>
-                  {horasDisponibles.length === 0 && <span style={{color:'#888'}}>Lo sentimos, no tenemos horarios este día. Por favor selecciona otro día</span>}
-                  {horasDisponibles.map(({hora, ocupado, pasada}) => (
-                    <button
-                      type="button"
-                      key={hora}
-                      style={{
-                        background: pasada
-                          ? '#eee'
-                          : ocupado
-                          ? '#f8d7da'
-                          : '#d4edda',
-                        color: pasada
-                          ? '#aaa'
-                          : ocupado
-                          ? '#a94442'
-                          : '#155724',
-                        border: pasada
-                          ? '1px solid #ccc'
-                          : ocupado
-                          ? '1px solid #a94442'
-                          : '1px solid #155724',
-                        borderRadius: 6,
-                        padding: '6px 12px',
-                        cursor: pasada || ocupado ? 'not-allowed' : 'pointer',
-                        fontWeight: citaData.hora === hora ? 'bold' : 'normal',
-                        opacity: pasada || ocupado ? 0.6 : 1
-                      }}
-                      disabled={ocupado || pasada}
-                      onClick={() => !pasada && !ocupado && setCitaData(d => ({ ...d, hora }))}
-                    >
-                      {hora}
-                    </button>
-                  ))}
+          <form onSubmit={step === 3 ? handleSubmit : handleNext}>
+            {step === 1 && (
+              <>
+                <div className="crear-cita-form-group">
+                  <label>Nombre completo:</label>
+                  <input type="text" required value={citaData.nombre} onChange={e => setCitaData(d => ({ ...d, nombre: e.target.value }))} disabled={!!citaData.nombre}/>
                 </div>
-              }
-            </div>
+                <div className="crear-cita-form-group">
+                  <label>Edad:</label>
+                  <input type="number" required min={1} max={120} value={citaData.edad} onChange={e => setCitaData(d => ({ ...d, edad: e.target.value }))} />
+                </div>
+                <div className="crear-cita-form-group">
+                  <label>Número WhatsApp:</label>
+                  <input
+                    type="tel"
+                    required
+                    value={citaData.whatsapp}
+                    onChange={e => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      if (value.length <= 10) { 
+                        setCitaData(d => ({ ...d, whatsapp: value }));
+                      }
+                    }}
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    maxLength={10}
+                  />
 
-            <div className="crear-cita-form-group">
-              <label>Descripción:</label>
-              <textarea 
-                required 
-                value={citaData.descripcion} 
-                onChange={e => setCitaData(d => ({ ...d, descripcion: e.target.value }))} 
-                rows={3} 
-              />
-            </div>
-
-            <div className="crear-cita-buttons">
-              <button type="submit" className="btn primary" disabled={loading || !citaData.hora}>
-                {loading ? 'Agendando...' : 'Agendar'}
-              </button>
-            </div>
+                </div>
+                <div className="crear-cita-form-group">
+                  <label>Correo electrónico:</label>
+                  <input type="email" required value={citaData.correo} onChange={e => setCitaData(d => ({ ...d, correo: e.target.value }))} disabled={!!citaData.correo}/>
+                </div>
+                <div className="crear-cita-form-group">
+                  <label>Ciudad:</label>
+                  <input type="text" required value={citaData.ciudad} onChange={e => setCitaData(d => ({ ...d, ciudad: e.target.value }))} />
+                </div>
+                <div className="crear-cita-buttons">
+                  <button type="submit" className="btn primary">Siguiente</button>
+                </div>
+              </>
+            )}
+            {step === 2 && (
+              <>
+                <div className="crear-cita-form-group">
+                  <label>¿A qué te dedicas?</label>
+                  <input type="text" required value={citaData.ocupacion} onChange={e => setCitaData(d => ({ ...d, ocupacion: e.target.value }))} />
+                </div>
+                <div className="crear-cita-form-group">
+                  <label>¿En qué trabajas?</label>
+                  <input type="text" required value={citaData.trabajo} onChange={e => setCitaData(d => ({ ...d, trabajo: e.target.value }))} />
+                </div>
+                <div className="crear-cita-form-group">
+                  <label>Motivo de consulta:</label>
+                  <textarea required value={citaData.motivo} onChange={e => setCitaData(d => ({ ...d, motivo: e.target.value }))} rows={2} />
+                </div>
+                <div className="crear-cita-form-group">
+                  <label>Tipo de psicoterapia:</label>
+                  <select required value={citaData.tipoPsicoterapia} onChange={e => setCitaData(d => ({ ...d, tipoPsicoterapia: e.target.value }))}>
+                    <option value="">Selecciona una opción</option>
+                    <option value="TCC">TCC</option>
+                    <option value="Sistémico">Sistémico</option>
+                    <option value="Existencial">Existencial</option>
+                    <option value="Humanista">Humanista</option>
+                    <option value="Otro">Otro</option>
+                  </select>
+                </div>
+                <div className="crear-cita-buttons" >
+                  <button type="button" className="btn outline" onClick={handleBack}>Atrás</button>
+                  <button type="submit" className="btn primary">Siguiente</button>
+                </div>
+              </>
+            )}
+            {step === 3 && (
+              <>
+                <div className="crear-cita-form-group">
+                  <label>Fecha:</label>
+                  <input 
+                    type="date" 
+                    required 
+                    value={citaData.fecha} 
+                    onChange={e => {
+                      setCitaData(d => ({ ...d, fecha: e.target.value, hora: '' }));
+                    }} 
+                    min={new Date().toISOString().split('T')[0]} 
+                  />
+                </div>
+                <div className="crear-cita-form-group">
+                  <label>Hora:</label>
+                  {error !== 'Debes iniciar sesion para cargar los horarios de las citas' &&
+                    <div style={{display:'flex', flexWrap:'wrap', gap:8}}>
+                      {horasDisponibles.length === 0 && <span style={{color:'#888'}}>Lo sentimos, no tenemos horarios este día. Por favor selecciona otro día</span>}
+                      {horasDisponibles.map(({hora, ocupado, pasada}) => (
+                        <button
+                          type="button"
+                          key={hora}
+                          style={{
+                            background: pasada
+                              ? '#eee'
+                              : ocupado
+                              ? '#f8d7da'
+                              : '#d4edda',
+                            color: pasada
+                              ? '#aaa'
+                              : ocupado
+                              ? '#a94442'
+                              : '#155724',
+                            border: pasada
+                              ? '1px solid #ccc'
+                              : ocupado
+                              ? '1px solid #a94442'
+                              : '1px solid #155724',
+                            borderRadius: 6,
+                            padding: '6px 12px',
+                            cursor: pasada || ocupado ? 'not-allowed' : 'pointer',
+                            fontWeight: citaData.hora === hora ? 'bold' : 'normal',
+                            opacity: pasada || ocupado ? 0.6 : 1
+                          }}
+                          disabled={ocupado || pasada}
+                          onClick={() => !pasada && !ocupado && setCitaData(d => ({ ...d, hora }))
+                          }
+                        >
+                          {hora}
+                        </button>
+                      ))}
+                    </div>
+                  }
+                </div>
+                {/*<div className="crear-cita-form-group">
+                  <label>Descripción:</label>
+                  <textarea 
+                    required 
+                    value={citaData.descripcion} 
+                    onChange={e => setCitaData(d => ({ ...d, descripcion: e.target.value }))} 
+                    rows={3} 
+                  />
+                </div>*/}
+                <p className="crear-cita-leyenda" style={{marginTop:16, fontSize:14, color:'#2563EB'}}>
+                  Tus datos estarán siempre protegidos. Te asignaremos un terapeuta certificado, acorde a tu disponibilidad y necesidades. Puedes solicitar sus credenciales en cualquier momento para tu total confianza y tranquilidad.
+                </p>
+                <div className="crear-cita-buttons" >
+                  <button type="button" className="btn outline" onClick={handleBack}>Atrás</button>
+                  <button type="submit" className="btn primary" disabled={loading || !citaData.hora || !citaData.fecha}>
+                    {loading ? 'Agendando...' : 'Agendar'}
+                  </button>
+                </div>
+        
+              </>
+            )}
           </form>
           <InfoModal open={showModal} title="¡Cita agendada exitosamente!" message="Te esperamos en tu consulta." />
         </div>

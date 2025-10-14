@@ -1,10 +1,13 @@
 .crear-cita-section {
-  max-width: 400px;
+  flex: 1;
+  max-width: 480px;
+  min-width: 320px;
   margin: 70px auto;
   background: #fff;
-  border-radius: 12px;
-  padding: 32px;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 40px 32px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
+  transition: box-shadow 0.2s, max-width 0.2s;
 }
 
 .crear-cita-section h2 {
@@ -34,33 +37,53 @@
 }
 
 .crear-cita-form-group input,
-.crear-cita-form-group textarea {
+.crear-cita-form-group textarea,
+.crear-cita-form-group select {
   width: 100%;
-  padding: 6px;
+  padding: 10px 12px;
+  font-size: 1.08rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #f7f7fa;
+  margin-top: 4px;
+  box-sizing: border-box;
+  transition: border 0.2s;
 }
 
-.crear-cita-form-group textarea {
-  resize: vertical;
+.crear-cita-form-group input:focus,
+.crear-cita-form-group textarea:focus,
+.crear-cita-form-group select:focus {
+  border: 1.5px solid #2563EB;
+  outline: none;
 }
 
-.crear-cita-buttons {
+.crear-cita-form-group select {
+  appearance: none;
+  background: #f7f7fa url('data:image/svg+xml;utf8,<svg fill="%232563EB" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7.293 7.293a1 1 0 011.414 0L10 8.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z"/></svg>') no-repeat right 12px center/18px 18px;
+}
+
+.stepper {
+  margin-bottom: 32px;
+}
+.step-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #eee;
+  color: #2563EB;
   display: flex;
-  gap: 12px;
-  justify-content: flex-end;
-}
-
-.btn.primary {
-  background-color: #007bff;
-  color: #fff;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.btn.primary:disabled {
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.15rem;
+  border: 2px solid #2563EB;
   opacity: 0.7;
-  cursor: not-allowed;
+  transition: background 0.2s, color 0.2s;
+}
+.step-circle.active {
+  background: #2563EB;
+  color: #fff;
+  opacity: 1;
 }
 
 .otras-citas-header{
@@ -71,37 +94,32 @@
 .otras-citas-header p{
     font-size: 0.9rem;
     color: var(--color-text-light);
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
-.crear-cita-section-wrapper {
+.crear-cita-buttons {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 32px;
-  margin: 20px auto;
-  max-width: 1000px;
-  padding: 0 16px;
+  justify-content: space-between;
+  margin-top: 24px;
 }
 
-.crear-cita-section {
-  flex: 1;
-  max-width: 400px;
+/* Animación entre pasos */
+.crear-cita-section form > * {
+  animation: fadeInStep 0.3s;
+}
+@keyframes fadeInStep {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.crear-cita-servicio-card {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-  padding: 24px 20px;
-  max-width: 340px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 150px auto 0 50px;
-}
-
-.crear-cita-servicio-card .service-icon {
-  font-size: 40px;
-  margin-bottom: 16px;
+/* Responsive */
+@media (max-width: 700px) {
+  .crear-cita-section {
+    max-width: 98vw;
+    padding: 18px 4px;
+  }
+  .crear-cita-servicio-card {
+    margin: 40px auto 0 auto;
+    max-width: 98vw;
+  }
 }

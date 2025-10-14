@@ -78,8 +78,15 @@ export default function EnglishSection() {
               <EmojiPeopleIcon className="english-icon" />
               <GroupIcon className="english-icon" />
             </div>
+            <button
+              className="btn primary"
+              style={{marginTop: 40, fontWeight: 'bold', fontSize: '1.08rem', padding: '10px 24px'}}
+              onClick={() => navigate('/english/guias')}
+            >
+              Obtener nuestro libro: "English for everyone - Basic book"
+            </button>
           </div>
-          <img src="/principal_ingles.jpg" alt="Clases de inglés" className="english-hero-img" />
+          <img src="/baner.png" alt="Clases de inglés" className="english-hero-img" />
         </div>
 
         {/* Conócenos */}
